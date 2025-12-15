@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PlumbLink – Admin Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* =============================
+   GLOBAL STYLES
+============================= */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #f5f8ff;
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* =============================
+   SIDEBAR
+============================= */
+.sidebar {
+  width: 250px;
+  background: #2a9d66;
+  color: #fff;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+.sidebar h2 {
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 30px;
+}
+.sidebar a {
+  padding: 12px 15px;
+  color: #fff;
+  text-decoration: none;
+  display: block;
+  margin-bottom: 6px;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: 0.2s;
+}
+.sidebar a:hover, .sidebar a.active {
+  background: #196f3d;
+}
+
+/* =============================
+   MAIN CONTENT
+============================= */
+.main {
+  flex: 1;
+  padding: 30px;
+  overflow-y: auto;
+}
+.header {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 25px;
+  color: #0f2446;
+}
+.section-title {
+  font-weight: 600;
+  font-size: 1.3rem;
+  margin: 15px 0;
+  color: #2a9d66;
+}
+
+/* =============================
+   CARDS + TABLES
+============================= */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px,1fr));
+  gap: 20px;
+}
+.stat-card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0px 5px 20px rgba(0,0,0,0.08);
+  text-align: center;
+}
+.stat-card h3 { font-size: 1rem; color: #555; }
+.stat-card p { margin-top: 8px; font-size: 1.6rem; color: #2a9d66; font-weight: 700; }
+
+.table-box {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0px 5px 20px rgba(0,0,0,0.08);
+  margin-bottom: 30px;
+}
+table { width: 100%; border-collapse: collapse; }
+table th, table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+table th { background: #eef7ee; color: #0b3d2e; }
+
+.status {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.success { background: #d4f7d8; color: #1d7e2f; }
+.pending { background: #fff3cd; color: #977400; }
+.failed { background: #ffd6d6; color: #b60000; }
+
+</style>
+</head>
+<body>
+
+<!-- =============================
+     SIDEBAR
+============================= -->
+<div class="sidebar">
+  <h2>Admin Panel</h2>
+  <a class="active" onclick="showPage('dashboard')">Dashboard</a>
+  <a onclick="showPage('customers')">Customers</a>
+  <a onclick="showPage('plumbers')">Plumbers</a>
+  <a onclick="showPage('bookings')">Bookings</a>
+  <a onclick="showPage('payments')">Payments</a>
+  <a onclick="showPage('inventory')">Inventory</a>
+  <a onclick="showPage('reports')">Reports</a>
+  <a onclick="showPage('support')">Support</a>
+</div>
+
+<!-- =============================
+     MAIN CONTENT
+============================= -->
+<div class="main">
+
+  <!-- ========== DASHBOARD ========== -->
+  <div id="dashboard" class="page">
+    <div class="header">Dashboard Overview
+      <select id="langSelect" style="float:right;padding:6px 8px;border-radius:6px;border:1px solid #e6efe7;">
+        <option value="en">English</option>
+        <option value="hi">हिंदी</option>
+      </select>
+    </div>
+
+    <div style="display:flex;gap:2rem;margin-bottom:2rem;align-items:center;background:#fff;padding:2rem;border-radius:12px;box-shadow:0 5px 20px rgba(0,0,0,0.08);">
+      <div style="flex:1;">
+        <p style="font-size:1.05rem;color:#555;line-height:1.8;">Welcome to the PlumbLink Admin Portal. Manage customers, plumbers, bookings, payments, reports, and store inventory in one place.</p>
+      </div>
+      <div style="flex:1;text-align:center;">
+        <img src="../images/admin-management.svg" alt="Admin management" style="width:100%;max-width:350px;border-radius:12px;box-shadow:0 8px 20px rgba(0,0,0,0.12);">
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat-card"><h3 data-i18n="total_customers">Total Customers</h3><p id="totalCustomers">1,245</p></div>
+      <div class="stat-card"><h3 data-i18n="total_plumbers">Total Plumbers</h3><p id="totalPlumbers">132</p></div>
+      <div class="stat-card"><h3 data-i18n="active_jobs">Active Jobs</h3><p id="activeJobs">48</p></div>
+      <div class="stat-card"><h3 data-i18n="total_revenue">Total Revenue</h3><p id="totalRevenue">₹4,82,500</p></div>
+    </div>
+
+    <div class="section-title">System Overview</div>
+    <div class="table-box">
+      <p>Real-time monitoring and control of all platform operations.</p>
+    </div>
+  </div>
+
+  <!-- ========== CUSTOMERS ========== -->
+  <div id="customers" class="page" style="display:none">
+    <div class="header">Customers</div>
+
+    <div class="section-title">All Registered Customers</div>
+    <div class="table-box">
+      <table>
+        <tr>
+          <th>ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Bookings</th><th>Status</th>
+        </tr>
+        <tr><td>C001</td><td>Rahul Kumar</td><td>rahul@example.com</td><td>9876543210</td><td>15</td><td><span class="status success">Active</span></td></tr>
+        <tr><td>C002</td><td>Meena Devi</td><td>meena@example.com</td><td>9774453211</td><td>8</td><td><span class="status success">Active</span></td></tr>
+        <tr><td>C003</td><td>Arun</td><td>arun@example.com</td><td>7689045543</td><td>2</td><td><span class="status pending">Pending</span></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+  <script>
+    // Fetch analytics and populate dashboard
+    async function loadAnalytics(){
+      try{
+        const res = await fetch('http://localhost:5000/api/analytics/overview');
+        const data = await res.json();
+        document.getElementById('totalCustomers').textContent = data.total_customers;
+        document.getElementById('totalPlumbers').textContent = data.total_plumbers;
+        document.getElementById('activeJobs').textContent = data.active_jobs;
+        document.getElementById('totalRevenue').textContent = '₹' + (data.total_revenue).toLocaleString();
+      }catch(err){
+        console.error('Analytics load failed', err);
+      }
+    }
+
+    // Socket.IO realtime updates: refresh overview on order_update
+    (function realtime(){
+      try{
+        const socket = io('http://localhost:5000');
+        socket.on('connect', ()=> console.info('Socket connected'));
+        socket.on('order_update', (payload)=>{
+          console.info('order_update', payload);
+          // Refresh analytics when orders change
+          loadAnalytics();
+        });
+      }catch(err){ console.warn('SocketIO unavailable', err); }
+    })();
+
+    // Simple i18n switcher (loads locale JSON from /FRONTEND/locales)
+    async function applyLocale(lang){
+      try{
+        const res = await fetch(`./locales/${lang}.json`);
+        const map = await res.json();
+        document.querySelectorAll('[data-i18n]').forEach(el=>{
+          const key = el.getAttribute('data-i18n');
+          if (map[key]) el.textContent = map[key];
+        });
+      }catch(err){console.error('i18n load failed', err);}    
+    }
+    document.getElementById('langSelect').addEventListener('change', (e)=> applyLocale(e.target.value));
+    // initial load
+    loadAnalytics(); applyLocale('en');
+  </script>
+
+  <!-- ========== PLUMBERS ========== -->
+  <div id="plumbers" class="page" style="display:none">
+    <div class="header">Plumbers</div>
+
+    <div class="section-title">Verified Plumbers</div>
+    <div class="table-box">
+      <table>
+        <tr>
+          <th>ID</th><th>Name</th><th>Experience</th><th>Rating</th><th>Completed Jobs</th><th>Status</th>
+        </tr>
+        <tr><td>P101</td><td>Vijay</td><td>8 yrs</td><td>4.9 ★</td><td>212</td><td><span class="status success">Active</span></td></tr>
+        <tr><td>P102</td><td>Rajesh</td><td>5 yrs</td><td>4.7 ★</td><td>189</td><td><span class="status pending">Busy</span></td></tr>
+        <tr><td>P103</td><td>Mohan</td><td>3 yrs</td><td>4.6 ★</td><td>140</td><td><span class="status failed">Inactive</span></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- ========== BOOKINGS ========== -->
+  <div id="bookings" class="page" style="display:none">
+    <div class="header">Bookings</div>
+
+    <div class="section-title">All Bookings</div>
+    <div class="table-box">
+      <table>
+        <tr>
+          <th>Booking ID</th><th>Customer (Name / Phone)</th><th>Issue</th><th>Preferred Time</th><th>Urgency</th><th>Status</th>
+        </tr>
+        <tbody id="bookingsTableBody">
+          <tr><td colspan="6" style="text-align: center; padding: 20px;">Loading bookings...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ========== PAYMENTS ========== -->
+  <div id="payments" class="page" style="display:none">
+    <div class="header">Payments</div>
+
+    <div class="section-title">Recent Transactions</div>
+    <div class="table-box">
+      <table>
+        <tr>
+          <th>TX ID</th><th>Customer</th><th>Amount</th><th>Mode</th><th>Date</th><th>Status</th>
+        </tr>
+        <tr><td>TX9001</td><td>Rahul</td><td>₹799</td><td>UPI</td><td>12 Feb</td><td><span class="status success">Success</span></td></tr>
+        <tr><td>TX9002</td><td>Meena</td><td>₹1499</td><td>Card</td><td>12 Feb</td><td><span class="status pending">Pending</span></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- ========== INVENTORY ========== -->
+  <div id="inventory" class="page" style="display:none">
+    <div class="header">Inventory</div>
+
+    <div class="section-title">Store Items</div>
+    <div class="table-box">
+      <table>
+        <tr>
+          <th>Item ID</th><th>Name</th><th>Stock</th><th>Price</th><th>Supplier</th><th>Status</th>
+        </tr>
+        <tr><td>I101</td><td>PVC Pipe</td><td>120</td><td>₹120</td><td>PrimePlast</td><td><span class="status success">Available</span></td></tr>
+        <tr><td>I102</td><td>Shower Mixer</td><td>20</td><td>₹900</td><td>AquaCo</td><td><span class="status pending">Low</span></td></tr>
+        <tr><td>I103</td><td>Heater Coil</td><td>0</td><td>₹300</td><td>HeatWorks</td><td><span class="status failed">Out</span></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- ========== REPORTS ========== -->
+  <div id="reports" class="page" style="display:none">
+    <div class="header">Reports & Analytics</div>
+
+    <div class="section-title">Monthly Summary</div>
+
+    <div class="table-box">
+      <table>
+        <tr>
+          <th>Month</th><th>Total Bookings</th><th>Completed</th><th>Cancelled</th><th>Revenue</th>
+        </tr>
+        <tr><td>January</td><td>402</td><td>381</td><td>21</td><td>₹7,84,000</td></tr>
+        <tr><td>February</td><td>356</td><td>341</td><td>15</td><td>₹6,21,500</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- ========== SUPPORT ========== -->
+  <div id="support" class="page" style="display:none">
+    <div class="header">Support Tickets</div>
+
+    <div class="section-title">Active Tickets</div>
+    <div class="table-box">
+      <table>
+        <tr>
+          <th>Ticket ID</th><th>User</th><th>Issue</th><th>Priority</th><th>Status</th>
+        </tr>
+        <tr><td>T1001</td><td>Rahul</td><td>Payment not updated</td><td>High</td><td><span class="status pending">Open</span></td></tr>
+        <tr><td>T1002</td><td>Arun</td><td>Plumber delayed</td><td>Medium</td><td><span class="status success">Resolved</span></td></tr>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- =============================
+     JS – PAGE SWITCHING & BOOKINGS
+============================= -->
+<script>
+  const API_BASE_URL = "http://127.0.0.1:5000";
+
+  function showPage(pageId) {
+    document.querySelectorAll('.page').forEach(p => p.style.display = "none");
+    document.getElementById(pageId).style.display = "block";
+
+    document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
+    event.target.classList.add('active');
+
+    // Load bookings when showing bookings page
+    if (pageId === 'bookings') {
+      loadAllBookings();
+    }
+  }
+
+  // Fetch all bookings from backend (admin should see all)
+  async function loadAllBookings() {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      document.getElementById("bookingsTableBody").innerHTML = '<tr><td colspan="6" style="text-align: center; color: red;">Not logged in</td></tr>';
+      return;
+    }
+
+    try {
+      const res = await fetch(API_BASE_URL + "/api/bookings/admin", {
+        headers: {
+          "Authorization": "Bearer " + token
+        }
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        // If admin endpoint doesn't exist, try regular endpoint
+        return loadAllBookingsRegular(token);
+      }
+
+      const bookings = data.bookings || [];
+      displayBookings(bookings);
+    } catch (err) {
+      console.error("Error:", err);
+      // Fallback to regular endpoint
+      loadAllBookingsRegular(token);
+    }
+  }
+
+  // Fallback to regular endpoint (get all bookings)
+  async function loadAllBookingsRegular(token) {
+    try {
+      const res = await fetch(API_BASE_URL + "/api/bookings", {
+        headers: {
+          "Authorization": "Bearer " + token
+        }
+      });
+
+      const data = await res.json();
+      const bookings = data.bookings || [];
+      displayBookings(bookings);
+    } catch (err) {
+      console.error("Error loading bookings:", err);
+      document.getElementById("bookingsTableBody").innerHTML = '<tr><td colspan="6" style="text-align: center; color: red;">Error loading bookings</td></tr>';
+    }
+  }
+
+  function displayBookings(bookings) {
+    const tbody = document.getElementById("bookingsTableBody");
+    
+    if (bookings.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px;">No bookings yet</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = bookings.map((b, idx) => {
+      const custName = b.user_name || b.customer_name || b.name || b.user_email || b.email || b.user_id || 'N/A';
+      const custPhone = b.user_mobile || b.mobile || '';
+      const custDisplay = custPhone ? `${custName} / ${custPhone}` : custName;
+      const urgencyText = b.urgency === 1 ? 'Low' : b.urgency === 2 ? 'Medium' : 'High';
+      const urgencyClass = b.urgency === 1 ? 'pending' : b.urgency === 2 ? 'warning' : 'failed';
+      const statusClass = b.status === 'pending' ? 'pending' : b.status === 'confirmed' ? 'success' : 'failed';
+      return `
+      <tr>
+        <td>B${1000 + idx + 1}</td>
+        <td>${custDisplay}</td>
+        <td>${b.issue}</td>
+        <td>${new Date(b.preferred_time).toLocaleString()}</td>
+        <td><span class="status ${urgencyClass}">${urgencyText}</span></td>
+        <td><span class="status ${statusClass}">${b.status}</span></td>
+      </tr>
+    `}).join("");
+  }
+
+  // Load bookings on page load if on bookings page
+  window.addEventListener("load", () => {
+    const bookingsPage = document.getElementById("bookings");
+    if (bookingsPage && bookingsPage.style.display !== "none") {
+      loadAllBookings();
+    }
+  });
+</script>
+
+</body>
+</html>

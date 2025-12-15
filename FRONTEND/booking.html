@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Book a Plumber – PlumbLink</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --primary: #2a9d66;
+    --secondary: #1f7a4d;
+    --accent: #ff6b35;
+    --background: #f6fbf6;
+    --card: #ffffff;
+    --text-dark: #0b3d2e;
+    --text-muted: #555;
+    --radius: 12px;
+    --shadow: 0 8px 20px rgba(42,157,102,0.12);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+  body { background: var(--background); color: var(--text-dark); overflow-x: hidden; }
+
+  header {
+    position: fixed; top: 0; width: 100%;
+    background: #fff;
+    border-bottom: 2px solid #e8ecf3;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    z-index: 1000;
+  }
+  .header-inner {
+    max-width: 1200px; margin: auto;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1rem 2rem;
+  }
+  .logo { font-size: 1.8rem; font-weight: 700; color: var(--secondary); }
+
+  .nav-links { display: flex; gap: 2rem; }
+  .nav-links a { color: var(--text-dark); font-weight: 500; position: relative; transition: 0.3s; }
+  .nav-links a:hover { color: var(--primary); }
+  
+  .hero {
+    background: linear-gradient(100deg, var(--primary), var(--secondary));
+    color: #fff; padding: 160px 20px 100px; margin-top: 80px; text-align: center;
+    box-shadow: 0 8px 32px rgba(42,157,102,0.15);
+  }
+  .hero h1 { font-size: 2.8rem; font-weight: 700; margin-bottom: 1rem; text-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+  .hero p { font-size: 1.15rem; opacity: 0.95; max-width: 600px; margin: auto; line-height: 1.6; }
+
+  .booking-form-card {
+    background: var(--card);
+    max-width: 850px;
+    margin: -60px auto 3rem;
+    padding: 2.5rem 2rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    border: 1px solid #e8ecf3;
+  }
+
+  label { display: block; font-weight: 600; color: var(--secondary); margin: 1.2rem 0 0.5rem; font-size: 0.95rem; }
+  input, select, textarea {
+    width: 100%; padding: 13px 14px; border: 2px solid #d9e3f3;
+    border-radius: var(--radius); background: #f9fbff; transition: all 0.3s ease; font-family: 'Poppins', sans-serif; font-size: 0.95rem;
+  }
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--primary); box-shadow: 0 0 0 4px rgba(42,157,102,0.1); background: #fff; outline: none;
+  }
+
+  textarea { resize: vertical; min-height: 110px; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+
+  .file-upload {
+    margin-top: 1rem; border: 2px dashed var(--primary); padding: 1.2rem;
+    border-radius: var(--radius); text-align: center; color: var(--primary);
+    background: #f0f6ff; cursor: pointer; transition: 0.3s;
+  }
+
+  .urgency-options { display: flex; gap: 1.2rem; margin-top: 1rem; flex-wrap: wrap; }
+  .urgency-option {
+    flex: 1; border: 2px solid #e0e7f1;
+    border-radius: var(--radius); padding: 1.3rem; text-align: center;
+    background: #f6fbf6; cursor: pointer; transition: all 0.3s ease; font-weight: 500;
+  }
+  .urgency-option.selected { border-color: var(--accent); background: linear-gradient(135deg, #fff5f0, #fffbf7); box-shadow: 0 6px 16px rgba(255, 107, 53, 0.1); }
+  .urgency-option:hover { border-color: var(--accent); background: #f0f6ff; }
+
+  .booking-submit {
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    color: #fff; border: none; border-radius: 10px; padding: 14px;
+    width: 100%; margin-top: 2rem; font-size: 1.05rem; cursor: pointer; font-weight: 600;
+    transition: all 0.3s ease; box-shadow: 0 8px 20px rgba(42,157,102,0.2);
+  }
+  .booking-submit:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(42,157,102,0.3); }
+  .booking-submit:active { 
+    transform: translateY(0); 
+  }
+
+  .success-msg {
+    display: none; background: #e8f5e9;
+    border-left: 5px solid #43a047; padding: 1rem;
+    margin-top: 1.5rem; text-align: center;
+  }
+  .success-msg.show { display: block; }
+
+  footer { background: #fff; text-align: center; padding: 2rem 0; }
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">PlumbLink</div>
+    <nav class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="services.html">Services</a>
+      <a href="store.html">Store</a>
+      <a href="book.html">Book</a>
+      <a href="#" onclick="logout()">Logout</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:2rem;padding:0 20px;flex-wrap:wrap;">
+    <div style="flex:1;min-width:300px;">
+      <h1>Book Your Plumbing Expert</h1>
+      <p>Fast, reliable, and professional service for homes & offices.</p>
+    </div>
+    <div style="flex:1;min-width:300px;text-align:center;">
+      <img src="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=400&h=300&fit=crop" alt="Professional plumber" style="width:100%;max-width:380px;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.2);">
+    </div>
+  </div>
+</section>
+
+<div class="booking-form-card">
+
+<form id="bookingForm">
+
+  <div class="form-grid">
+    <div>
+      <label>Issue Type</label>
+      <select id="issue" required>
+        <option value="">Select issue...</option>
+        <option>Leak Repair</option>
+        <option>Pipe Installation</option>
+        <option>Drain Unclogging</option>
+        <option>Water Heater</option>
+        <option>Toilet Repair</option>
+        <option>Other</option>
+      </select>
+    </div>
+    <div>
+      <label>Preferred Time</label>
+      <input type="datetime-local" id="preferredTime" required>
+    </div>
+  </div>
+
+  <label>Description</label>
+  <textarea id="desc" required placeholder="Describe your plumbing issue..."></textarea>
+
+  <label>Urgency Level</label>
+  <div class="urgency-options">
+    <div class="urgency-option selected">
+      <input type="radio" name="urgency" value="low" checked>
+      <div>Low</div>
+    </div>
+    <div class="urgency-option">
+      <input type="radio" name="urgency" value="medium">
+      <div>Medium</div>
+    </div>
+    <div class="urgency-option">
+      <input type="radio" name="urgency" value="high">
+      <div>High</div>
+    </div>
+  </div>
+
+  <button type="submit" class="booking-submit" id="bookingBtn">Book My Plumber</button>
+  <div id="bookingMsg" class="success-msg"></div>
+
+</form>
+
+</div>
+
+<footer>© 2025 AspirecodeAI. All Rights Reserved.</footer>
+
+<script>
+// Base URL of your Flask backend
+const API_BASE_URL = "http://localhost:5000";
+
+// Path for the bookings endpoint – this MUST match your Flask blueprint
+// Example in Flask: Blueprint("bookings_bp", __name__, url_prefix="/api/bookings")
+const BOOKINGS_PATH = "/api/bookings";
+
+function logout() {
+  localStorage.clear();
+  window.location.href = "login.html";
+}
+
+// Pre-fill preferred time to current time + 1 hour (optional)
+(function setDefaultPreferredTime() {
+  const input = document.getElementById("preferredTime");
+  const now = new Date();
+  now.setHours(now.getHours() + 1);
+  const iso = now.toISOString().slice(0, 16); // "YYYY-MM-DDTHH:MM"
+  input.value = iso;
+})();
+
+// Select urgency option
+document.querySelectorAll(".urgency-option").forEach(opt => {
+  opt.addEventListener("click", () => {
+    document.querySelectorAll(".urgency-option").forEach(o => o.classList.remove("selected"));
+    opt.classList.add("selected");
+    opt.querySelector("input").checked = true;
+  });
+});
+
+async function parseJsonSafe(res) {
+  try {
+    return await res.json();
+  } catch (e) {
+    console.warn("Response is not valid JSON, status:", res.status);
+    const text = await res.text();
+    console.warn("Raw response text:", text);
+    return { raw: text };
+  }
+}
+
+// -------- BACKEND SUBMIT ----------
+document.getElementById("bookingForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const token = localStorage.getItem("token");
+  if (!token) {
+    alert("Please login first");
+    window.location.href = "login.html";
+    return;
+  }
+
+  const issue = document.getElementById("issue").value.trim();
+  const desc = document.getElementById("desc").value.trim();
+  const urgency = document.querySelector("input[name='urgency']:checked").value;
+  const preferredTime = document.getElementById("preferredTime").value;
+
+  if (!issue || !desc || !urgency || !preferredTime) {
+    alert("Please fill in all fields");
+    return;
+  }
+
+  const msg = document.getElementById("bookingMsg");
+  const btn = document.getElementById("bookingBtn");
+
+  msg.classList.add("show");
+  msg.textContent = "Submitting booking...";
+  btn.disabled = true;
+
+  try {
+    console.log("Token:", token);
+    console.log("Request body:", {
+      issue: issue,
+      description: desc,
+      urgency: urgency,
+      preferred_time: preferredTime
+    });
+
+    // Important: no trailing slash here; matches most Flask blueprints better
+    const endpoint = API_BASE_URL + BOOKINGS_PATH;
+
+    console.log("Calling endpoint:", endpoint);
+
+    const res = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + token
+      },
+      body: JSON.stringify({
+        issue: issue,
+        description: desc,
+        urgency: urgency,
+        preferred_time: preferredTime
+      })
+    });
+
+    const data = await parseJsonSafe(res);
+    console.log("Response status:", res.status);
+    console.log("Response data:", data);
+
+    if (res.ok) {
+      msg.textContent = "✔ Booking created successfully!";
+      setTimeout(() => window.location.href = "dashboard.html", 1500);
+    } else {
+      let errorText = data.error || data.message || ("HTTP " + res.status);
+
+      // If it is a 404, be explicit – likely wrong backend route
+      if (res.status === 404) {
+        errorText = "Backend route not found (404). Check that Flask has a POST route at '" + BOOKINGS_PATH + "'.";
+      }
+
+      msg.textContent = "❌ Error: " + errorText;
+
+      if (res.status === 401 || res.status === 403) {
+        setTimeout(() => {
+          alert("Session expired or unauthorized. Please login again.");
+          logout();
+        }, 1000);
+      }
+    }
+
+  } catch (err) {
+    console.error("Fetch error:", err);
+    msg.textContent = "❌ Backend not reachable (network error)";
+  } finally {
+    btn.disabled = false;
+  }
+});
+</script>
+
+</body>
+</html>

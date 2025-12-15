@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PlumbLink Register</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Poppins",sans-serif;}
+body{
+  background:linear-gradient(135deg,#2a9d66 0%,#1f7a4d 100%);
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  padding:20px;
+}
+
+.register-box{
+  width:100%;max-width:450px;
+  background:rgba(255,255,255,0.14);
+  backdrop-filter:blur(18px);
+  border-radius:20px;
+  padding:45px 35px;
+  color:#fff;text-align:center;
+  box-shadow:0 18px 55px rgba(0,0,0,0.35);
+  animation:fadeIn .6s ease;
+  border:1px solid rgba(255,255,255,0.2);
+}
+
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(25px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+.logo{font-size:2rem;font-weight:700;margin-bottom:8px;letter-spacing:1px;}
+.subtitle{font-size:0.9rem;opacity:0.85;margin-bottom:25px;}
+
+.form-section{text-align:left;}
+
+.input-box{margin-bottom:16px;position:relative;}
+.input-box input{
+  width:100%;padding:13px 14px;border-radius:12px;
+  background:rgba(255,255,255,0.25);border:2px solid rgba(255,255,255,0.3);
+  color:#fff;font-size:15px;outline:none;transition:.3s;font-weight:500;
+}
+.input-box input::placeholder{color:#f4f4f4;opacity:0.8;}
+.input-box input:focus{border-color:rgba(255,255,255,0.6);background:rgba(255,255,255,0.35);box-shadow:0 0 8px rgba(255,255,255,0.2);}
+
+.btn{
+  width:100%;padding:14px;border-radius:12px;margin-top:15px;
+  background:#fff;color:#2a9d66;font-weight:700;border:none;
+  cursor:pointer;font-size:16px;transition:.3s;box-shadow:0 8px 20px rgba(0,0,0,0.15);
+}
+.btn:hover{background:#ffe6d9;transform:translateY(-2px);box-shadow:0 10px 26px rgba(0,0,0,0.2);}
+.btn:active{transform:translateY(0);}
+
+.login-link{margin-top:16px;font-size:14px;}
+.login-link a{color:#ffe6d9;font-weight:600;text-decoration:none;transition:.3s;}
+.login-link a:hover{color:#fff;text-decoration:underline;}
+
+.loading{
+  display:none;
+  color:#fff;
+  margin-top:10px;
+  text-align:center;
+  font-size:14px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="register-box">
+
+  <div style="text-align:center;margin-bottom:20px;">
+    <img src="../images/premium_photo-1663045495725-89f23b57cfc5.avif" alt="Team collaboration" style="width:100%;max-width:280px;border-radius:12px;box-shadow:0 8px 20px rgba(0,0,0,0.25);">
+  </div>
+  <div class="logo">PlumbLink</div>
+  <div class="subtitle">Create Your Account</div>
+
+  <div class="form-section">
+    <div class="input-box">
+      <input id="name" placeholder="Full Name" required>
+    </div>
+
+    <div class="input-box">
+      <input id="email" placeholder="Email Address" type="email" required>
+    </div>
+
+    <div class="input-box">
+      <input id="password" type="password" placeholder="Password" required>
+    </div>
+
+    <div class="input-box">
+      <input id="confirmPassword" type="password" placeholder="Confirm Password" required>
+    </div>
+
+    <button class="btn" onclick="register()">Create Account</button>
+    <div class="loading" id="loadingMsg">Creating account...</div>
+
+    <div class="login-link">
+      Already have an account? <a href="login.html">Sign In</a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+async function register(){
+  const name = document.getElementById("name").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+  const confirmPassword = document.getElementById("confirmPassword").value;
+
+  if(!name || !email || !password || !confirmPassword){
+    alert("All fields are required");
+    return;
+  }
+
+  if(password !== confirmPassword){
+    alert("Passwords do not match");
+    return;
+  }
+
+  if(password.length < 6){
+    alert("Password must be at least 6 characters");
+    return;
+  }
+
+  document.getElementById("loadingMsg").style.display = "block";
+
+  try {
+    const res = await fetch("http://127.0.0.1:5000/auth/register",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        email: email,
+        password: password,
+        name: name
+      })
+    });
+
+    const data = await res.json();
+    document.getElementById("loadingMsg").style.display = "none";
+
+    if(data.message && data.message.includes("success")){
+      alert("Account created successfully! Redirecting to login...");
+      window.location.href = "login.html";
+    } else {
+      alert("Error: " + (data.error || data.message || "Registration failed"));
+    }
+
+  } catch(err){
+    document.getElementById("loadingMsg").style.display = "none";
+    alert("Backend not reachable");
+  }
+}
+</script>
+
+</body>
+</html>

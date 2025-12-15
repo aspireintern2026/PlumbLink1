@@ -1,0 +1,124 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin — System Overview</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body{font-family:Inter,system-ui,Arial;margin:0;background:#2a9d66;color:#000}
+    header{background:linear-gradient(90deg,#2a9d66,#1f7a4d);padding:18px;color:#fff}
+    .wrap{max-width:1100px;margin:20px auto;padding:20px;background:#fff;border-radius:12px}
+    .metrics{display:flex;gap:12px;margin-bottom:16px}
+    .metric{flex:1;padding:16px;background:#f6fbf9;border-radius:10px;border:1px solid #e6f2ea}
+    .metric h3{margin:0 0 8px 0}
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:10px;border-bottom:1px solid #eee;text-align:left}
+    .status{padding:6px 10px;border-radius:8px;font-weight:700}
+    .status.pending{background:#fff7e6;color:#ff9500}
+    .status.assigned{background:#e8fff5;color:#06d6a0}
+    .status.in_progress{background:#e6f7ff;color:#1565c0}
+    .status.completed{background:#f0fff4;color:#007a3d}
+    .controls{display:flex;gap:8px;align-items:center}
+    .btn{padding:8px 12px;border-radius:8px;border:1px solid #dfe7e1;background:#fff;cursor:pointer}
+    .connected{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:8px}
+    .conn-ok{background:#00c853}
+    .conn-bad{background:#ff5252}
+  </style>
+</head>
+<body>
+  <header>
+    <div style="max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center">
+      <div><strong>PlumbLink Admin</strong> — System Overview</div>
+      <div><span id="connDot" class="connected conn-bad"></span><span id="connText">Disconnected</span></div>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div class="metrics">
+      <div class="metric"><h3 id="mBookings">0</h3><div>Active Bookings</div></div>
+      <div class="metric"><h3 id="mPlumbers">0</h3><div>Total Plumbers</div></div>
+      <div class="metric"><h3 id="mCustomers">0</h3><div>Total Customers</div></div>
+      <div class="metric"><h3 id="mRevenue">₹0</h3><div>Revenue (est)</div></div>
+    </div>
+
+    <h3>Recent Bookings</h3>
+    <table id="bookingsTable">
+      <thead><tr><th>ID</th><th>Issue</th><th>Status</th><th>Urgency</th><th>Preferred</th><th>Actions</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script>
+    const API_BASE_URL = 'http://localhost:5000';
+    const token = localStorage.getItem('token');
+
+    async function loadOverview(){
+      try{
+        const res = await fetch(API_BASE_URL + '/api/analytics/overview');
+        if(!res.ok) return;
+        const j = await res.json();
+        document.getElementById('mBookings').textContent = j.active_jobs || 0;
+        document.getElementById('mPlumbers').textContent = j.total_plumbers || 0;
+        document.getElementById('mCustomers').textContent = j.total_customers || 0;
+        document.getElementById('mRevenue').textContent = '₹' + (j.total_revenue || 0);
+      }catch(e){console.warn(e)}
+    }
+
+    async function loadBookings(){
+      try{
+        const res = await fetch(API_BASE_URL + '/api/bookings/admin', { headers: token ? { Authorization: 'Bearer ' + token } : {} });
+        if(!res.ok) throw new Error('Failed');
+        const j = await res.json();
+        const rows = j.bookings || [];
+        const tbody = document.querySelector('#bookingsTable tbody');
+        tbody.innerHTML = '';
+        rows.slice(0,30).forEach(b => tbody.appendChild(renderRow(b)));
+      }catch(e){ console.warn(e); document.querySelector('#bookingsTable tbody').innerHTML = '<tr><td colspan="6">Failed to load bookings</td></tr>' }
+    }
+
+    function renderRow(b){
+      const tr = document.createElement('tr');
+      tr.id = 'bk-'+b.id;
+      tr.innerHTML = `
+        <td>${b.id}</td>
+        <td>${b.issue || ''}</td>
+        <td><span class="status ${ (b.status||'pending').toLowerCase() }">${(b.status||'PENDING').toUpperCase()}</span></td>
+        <td>${b.urgency === 1 ? 'Low' : b.urgency === 2 ? 'Medium' : 'High'}</td>
+        <td>${b.preferred_time ? new Date(b.preferred_time).toLocaleString() : '-'}</td>
+        <td class="controls">
+          <a class="btn" href="booking-details.html?id=${b.id}">View</a>
+          <select data-id="${b.id}" class="statusSelect">
+            <option value="assigned">Assign</option>
+            <option value="in_progress">In Progress</option>
+            <option value="completed">Completed</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+          <button class="btn updateBtn" data-id="${b.id}">Update</button>
+        </td>
+      `;
+      return tr;
+    }
+
+    document.addEventListener('click', async (e)=>{
+      if(e.target.classList.contains('updateBtn')){
+        const id = e.target.dataset.id;
+        const sel = document.querySelector(`select[data-id="${id}"]`);
+        const status = sel.value;
+        try{
+          const res = await fetch(`${API_BASE_URL}/api/bookings/${id}/admin_status`, {
+            method:'POST', headers: { 'Content-Type':'application/json', ...(token?{Authorization:'Bearer '+token}:{}) },
+            body: JSON.stringify({ status })
+          });
+          if(!res.ok) throw new Error('Update failed');
+          alert('Status updated');
+        }catch(err){ alert('Error: '+err.message) }
+      }
+    });
+
+    // Polling fallback (Socket.IO removed). Refresh every 8 seconds.
+    async function refreshAll(){ await loadOverview(); await loadBookings(); }
+    (async function(){ await refreshAll(); setInterval(refreshAll, 8000); })();
+  </script>
+</body>
+</html>

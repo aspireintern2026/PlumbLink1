@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Professional Dashboard – PlumbLink</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Default palette — Green background, use white & black for content */
+      --primary: #2a9d66;
+      --primary-dark: #1f7a4d;
+      --accent: #1f7a4d;
+      --success: #06d6a0;
+      --warning: #ff9500;
+      --danger: #ff6b6b;
+      --bg-dark: #2a9d66; /* page background (green) */
+      --bg-card: #ffffff; /* cards are white */
+      --bg-light: #1f7a4d;
+      --text-primary: #000000; /* primary text is black */
+      --text-secondary: #333333; /* subtle secondary text */
+      --border: rgba(0,0,0,0.08);
+      --radius: 16px;
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+      /* Ensure readable text on cards */
+      --card-text: #000000;
+    }
+
+    /* Blue theme overrides */
+    .theme-blue {
+      --primary: #1565c0; /* blue */
+      --primary-dark: #0d47a1;
+      --accent: #00bfa5; /* teal accent */
+      --success: #00c853;
+      --warning: #ffab00;
+      --danger: #ff5252;
+      --bg-dark: #1565c0;
+      --bg-light: #0d47a1;
+      --bg-card: rgba(255,255,255,0.96);
+      --text-primary: #ffffff;
+      --text-secondary: #cbd6e6;
+      --border: rgba(255,255,255,0.06);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; width: 100%; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-light) 100%);
+      color: var(--text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+    button { cursor: pointer; border: none; font-family: inherit; }
+
+    /* ===== HEADER ===== */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 80px;
+      /* Use the primary gradient from the site for a professional header */
+      background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+      color: white;
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+    }
+
+    .logo {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: 0.4px;
+      display: inline-block;
+      padding: 6px 10px;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .notification-bell {
+      position: relative;
+      width: 44px;
+      height: 44px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: #fff;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.18s ease, background 0.18s ease;
+      font-size: 1.1rem;
+    }
+
+    .notification-bell:hover {
+      transform: translateY(-3px);
+      background: rgba(255,255,255,0.14);
+    }
+
+    .notification-badge {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      width: 24px;
+      height: 24px;
+      background: var(--danger);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 700;
+    }
+
+    .profile-menu {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .profile-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.06));
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+    }
+
+    .logout-btn {
+      padding: 8px 14px;
+      background: rgba(255,255,255,0.12);
+      color: #fff;
+      border-radius: 10px;
+      font-weight: 700;
+      transition: all 0.18s ease;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .logout-btn:hover {
+      background: rgba(255,255,255,0.18);
+      transform: translateY(-3px);
+    }
+
+    /* ===== MAIN LAYOUT ===== */
+    main {
+      margin-top: 100px;
+      padding: 40px 32px;
+      min-height: calc(100vh - 100px);
+      max-width: 1600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .page-header {
+      margin-bottom: 40px;
+    }
+
+    .page-header h1 {
+      font-size: 2.4rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+      color: var(--text-primary);
+    }
+
+    .page-header p {
+      color: var(--text-secondary);
+      font-size: 1rem;
+    }
+
+    /* ===== GRID LAYOUTS ===== */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+
+    .dashboard-grid.wide {
+      grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    }
+
+    /* ===== STAT CARDS ===== */
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      color: var(--card-text);
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+
+    .stat-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0, 180, 216, 0.1);
+    }
+
+    .stat-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .stat-icon {
+      font-size: 2.4rem;
+      margin-bottom: 12px;
+    }
+
+    .stat-label {
+      color: var(--card-text);
+      font-size: 0.9rem;
+      font-weight: 500;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--card-text);
+    }
+
+    .stat-subtext {
+      color: rgba(11,61,46,0.7);
+      font-size: 0.85rem;
+      margin-top: 8px;
+    }
+
+    /* ===== BOOKING CARDS ===== */
+    .booking-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      transition: all 0.3s ease;
+      color: var(--card-text);
+    }
+
+    .booking-card:hover {
+      border-color: var(--accent);
+      box-shadow: 0 20px 40px rgba(0, 180, 216, 0.1);
+    }
+
+    .booking-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 16px;
+    }
+
+    .booking-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    .status-badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .status-badge.pending {
+      background: rgba(255, 149, 0, 0.15);
+      color: var(--warning);
+    }
+
+    .status-badge.confirmed {
+      background: rgba(6, 214, 160, 0.15);
+      color: var(--success);
+    }
+
+    .status-badge.completed {
+      background: rgba(0, 180, 216, 0.15);
+      color: var(--accent);
+    }
+
+    .booking-details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 16px 0;
+      padding: 16px 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .detail-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .detail-label {
+      color: rgba(11,61,46,0.7);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .detail-value {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--card-text);
+    }
+
+    /* ===== ACTION BUTTONS ===== */
+    .action-button {
+      padding: 10px 16px;
+      background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+      color: white;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: inline-block;
+      margin-right: 8px;
+      margin-top: 12px;
+    }
+
+    .action-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(42, 157, 102, 0.3);
+    }
+
+    .action-button.secondary {
+      background: var(--bg-light);
+      border: 1px solid var(--border);
+      color: var(--accent);
+    }
+
+    /* ===== AI RECOMMENDATION PANEL ===== */
+    .ai-panel {
+      background: linear-gradient(135deg, rgba(0, 180, 216, 0.1), rgba(42, 157, 102, 0.1));
+      border: 1px solid rgba(0, 180, 216, 0.2);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 40px;
+    }
+
+    .ai-header {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .ai-header h3 {
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    .ai-badge {
+      background: var(--accent);
+      color: var(--bg-dark);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .recommendation-item {
+      background: var(--bg-card);
+      border-left: 3px solid var(--accent);
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+    }
+
+    .recommendation-item h4 {
+      margin-bottom: 6px;
+      color: var(--accent);
+    }
+
+    /* ===== ANALYTICS CHART ===== */
+    .chart-container {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 40px;
+    }
+
+    .chart-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .chart-bars {
+      display: flex;
+      gap: 8px;
+      align-items: flex-end;
+      height: 200px;
+      justify-content: space-around;
+    }
+
+    .chart-bar {
+      flex: 1;
+      background: linear-gradient(180deg, var(--accent), var(--primary));
+      border-radius: 8px 8px 0 0;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .chart-bar:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(0, 180, 216, 0.3);
+    }
+
+    .chart-bar-label {
+      position: absolute;
+      bottom: -24px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      white-space: nowrap;
+    }
+
+    /* ===== QUICK ACTIONS ===== */
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    .quick-action-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .quick-action-btn:hover {
+      border-color: var(--accent);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0, 180, 216, 0.1);
+    }
+
+    .quick-action-icon {
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+
+    .quick-action-text {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    /* ===== SERVICE HISTORY ===== */
+    .service-timeline {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+
+    .timeline-item {
+      position: relative;
+      padding-left: 40px;
+      margin-bottom: 24px;
+    }
+
+    .timeline-item:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      left: 15px;
+      top: 40px;
+      width: 2px;
+      height: calc(100% + 24px);
+      background: var(--border);
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: 0;
+      top: 4px;
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+    }
+
+    .timeline-date {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      margin-bottom: 4px;
+    }
+
+    .timeline-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .timeline-desc {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      header { padding: 0 16px; }
+      main { padding: 24px 16px; margin-top: 90px; }
+      .dashboard-grid.wide { grid-template-columns: 1fr; }
+      .booking-details { grid-template-columns: 1fr; }
+      .page-header h1 { font-size: 1.8rem; }
+      .header-actions { gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo">PlumbLink Pro</div>
+    <div class="header-actions">
+      <select id="themeSelect" title="Theme" style="padding:6px 8px;border-radius:8px;border:none;background:rgba(255,255,255,0.08);color:var(--text-primary);">
+        <option value="green">Green</option>
+        <option value="blue">Blue</option>
+      </select>
+      <div class="notification-bell" title="Notifications">
+        🔔
+        <div class="notification-badge" id="notifCount">2</div>
+      </div>
+      <div class="profile-menu">
+        <div class="profile-avatar" id="profileAvatar">U</div>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main>
+    <!-- Page Header -->
+    <div class="page-header" style="display:flex;align-items:center;gap:2rem;margin-bottom:40px;background:rgba(255,255,255,0.08);padding:2rem;border-radius:16px;backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.1);">
+      <div style="flex:1;">
+        <h1 id="welcomeHeading">Welcome back! 👋</h1>
+        <p id="greetingText">Overview — active jobs, recent bookings, and recommendations.</p>
+      </div>
+      <div style="flex:1;text-align:center;">
+        <img src="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=350&h=280&fit=crop" alt="Professional service" style="width:100%;max-width:350px;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.3);">
+      </div>
+    </div>
+
+    <!-- AI Recommendations Panel -->
+    <div class="ai-panel">
+      <div class="ai-header">
+        <span style="font-size: 1.4rem;">🤖</span>
+        <h3>AI Service Recommendations</h3>
+        <span class="ai-badge">Powered by ML</span>
+      </div>
+      <div id="aiRecommendations">
+        <div class="recommendation-item">
+          <h4>💧 Water Heater Maintenance Due</h4>
+          <p>Based on your booking history, your water heater may need servicing. Schedule a checkup to prevent breakdowns.</p>
+        </div>
+        <div class="recommendation-item">
+          <h4>🔧 Seasonal Plumbing Inspection</h4>
+          <p>Winter is approaching. We recommend a pipe insulation check to prevent frozen pipes in colder regions.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="dashboard-grid">
+      <div class="stat-card">
+        <div class="stat-icon">📅</div>
+        <div class="stat-label">Total Bookings</div>
+        <div class="stat-value" id="totalBookings">4</div>
+        <div class="stat-subtext">3 completed • 1 pending</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">💰</div>
+        <div class="stat-label">Total Spent</div>
+        <div class="stat-value" id="totalSpent">₹8,450</div>
+        <div class="stat-subtext">Last 3 months</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">⭐</div>
+        <div class="stat-label">Avg Service Rating</div>
+        <div class="stat-value" id="avgRating">4.8</div>
+        <div class="stat-subtext">Based on 4 reviews</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">🎯</div>
+        <div class="stat-label">Next Service</div>
+        <div class="stat-value" id="nextService">Dec 15</div>
+        <div class="stat-subtext">Drain cleaning scheduled</div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <h2 style="font-size: 1.4rem; margin-bottom: 20px; font-weight: 700;">Quick Actions</h2>
+    <div class="quick-actions">
+      <button class="quick-action-btn" onclick="location.href='booking.html'">
+        <div class="quick-action-icon">📅</div>
+        <div class="quick-action-text">Book Plumber</div>
+      </button>
+      <button class="quick-action-btn" onclick="location.href='e-commerce.html'">
+        <div class="quick-action-icon">🛒</div>
+        <div class="quick-action-text">Shop Materials</div>
+      </button>
+      <button class="quick-action-btn" onclick="viewHistory()">
+        <div class="quick-action-icon">📊</div>
+        <div class="quick-action-text">View History</div>
+      </button>
+      <button class="quick-action-btn" onclick="scheduleInspection()">
+        <div class="quick-action-icon">🔍</div>
+        <div class="quick-action-text">Schedule Inspection</div>
+      </button>
+    </div>
+
+    <!-- Analytics -->
+    <h2 style="font-size: 1.4rem; margin-bottom: 20px; font-weight: 700;">Booking Trends (Last 6 Months)</h2>
+    <div class="chart-container">
+      <div class="chart-bars">
+        <div class="chart-bar" style="height: 45%;"><span class="chart-bar-label">Jul</span></div>
+        <div class="chart-bar" style="height: 65%;"><span class="chart-bar-label">Aug</span></div>
+        <div class="chart-bar" style="height: 55%;"><span class="chart-bar-label">Sep</span></div>
+        <div class="chart-bar" style="height: 80%;"><span class="chart-bar-label">Oct</span></div>
+        <div class="chart-bar" style="height: 70%;"><span class="chart-bar-label">Nov</span></div>
+        <div class="chart-bar" style="height: 90%;"><span class="chart-bar-label">Dec</span></div>
+      </div>
+    </div>
+
+    <!-- Recent Bookings -->
+    <h2 style="font-size: 1.4rem; margin-bottom: 20px; font-weight: 700;">Recent Bookings</h2>
+    <div class="dashboard-grid wide" id="bookingsList">
+      <p style="color: var(--text-secondary); grid-column: 1 / -1;">Loading bookings...</p>
+    </div>
+
+    <!-- Service History Timeline -->
+    <h2 style="font-size: 1.4rem; margin-bottom: 20px; font-weight: 700; margin-top: 40px;">Service History</h2>
+    <div class="service-timeline">
+      <div class="timeline-item">
+        <div class="timeline-dot">✓</div>
+        <div class="timeline-date">Dec 5, 2025</div>
+        <div class="timeline-title">Kitchen Faucet Installation</div>
+        <div class="timeline-desc">Professional installation of premium chrome faucet. Cost: ₹2,500</div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot">✓</div>
+        <div class="timeline-date">Nov 18, 2025</div>
+        <div class="timeline-title">Emergency Leak Repair</div>
+        <div class="timeline-desc">Identified and fixed pipe leak in basement. Cost: ₹3,200</div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot">✓</div>
+        <div class="timeline-date">Nov 3, 2025</div>
+        <div class="timeline-title">Water Heater Maintenance</div>
+        <div class="timeline-desc">Annual service and filter replacement. Cost: ₹1,500</div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot">✓</div>
+        <div class="timeline-date">Oct 15, 2025</div>
+        <div class="timeline-title">Drain Cleaning Service</div>
+        <div class="timeline-desc">Deep drain cleaning and pipe inspection. Cost: ₹1,250</div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const API_BASE_URL = "http://localhost:5000";
+
+    // Initialize dashboard
+    window.addEventListener("load", async () => {
+      initializeUser();
+      await loadBookings();
+      generateAIInsights();
+    });
+
+    function initializeUser() {
+      try {
+        const user = JSON.parse(localStorage.getItem("user") || "null");
+        if (user) {
+          // Prefer a human name; avoid displaying raw email addresses.
+          let displayName = user.name || "";
+          if (!displayName) displayName = user.email || "";
+
+          // If the available name is an email, avoid showing the email directly.
+          if (displayName.includes("@")) {
+            if (user.role === "admin") {
+              displayName = "Admin";
+            } else {
+              // Use the part before @ as a cleaner fallback
+              displayName = displayName.split("@")[0] || "User";
+            }
+          }
+
+          // Final greeting — keep it concise
+          document.getElementById("welcomeHeading").textContent = `Welcome back, ${displayName}! 👋`;
+          const initials = (displayName || "User")
+            .split(" ")
+            .map((n) => n[0])
+            .join("")
+            .toUpperCase();
+          document.getElementById("profileAvatar").textContent = initials || "U";
+        } else {
+          window.location.href = "login.html";
+        }
+      } catch (e) {
+        console.error("User init error:", e);
+      }
+    }
+
+    async function loadBookings() {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      try {
+        const res = await fetch(API_BASE_URL + "/api/bookings", {
+          headers: { Authorization: "Bearer " + token },
+        });
+
+        if (!res.ok) throw new Error("Failed to load bookings");
+
+        const data = await res.json();
+        const bookings = data.bookings || [];
+
+        if (bookings.length === 0) {
+          document.getElementById("bookingsList").innerHTML =
+            '<p style="color: var(--text-secondary); grid-column: 1 / -1;">No bookings yet. <a href="booking.html" style="color: var(--accent); text-decoration: underline;">Create one now</a></p>';
+          return;
+        }
+
+        document.getElementById("bookingsList").innerHTML = bookings
+          .slice(0, 3)
+          .map(
+            (b) => `
+          <div class="booking-card">
+            <div class="booking-header">
+              <div class="booking-title">${b.issue}</div>
+              <div class="status-badge ${(b.status || "pending").toLowerCase()}">
+                ${(b.status || "pending").toUpperCase()}
+              </div>
+            </div>
+            <p style="color: var(--text-secondary); margin-bottom: 12px;">${b.description}</p>
+            <div class="booking-details">
+              <div class="detail-item">
+                <span class="detail-label">📅 Date</span>
+                <span class="detail-value">${new Date(b.preferred_time).toLocaleDateString()}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">⚡ Urgency</span>
+                <span class="detail-value">${b.urgency === 1 ? "Low" : b.urgency === 2 ? "Medium" : "High"}</span>
+              </div>
+            </div>
+            <button class="action-button" onclick="viewBooking('${b.id}')">View Details</button>
+          </div>
+        `
+          )
+          .join("");
+      } catch (err) {
+        console.error("Booking load error:", err);
+      }
+    }
+
+    function generateAIInsights() {
+      // Simulate AI-generated insights based on user behavior
+      const insights = [
+        "💧 Water Heater Maintenance Due - Service overdue based on your last visit on Nov 3.",
+        "🔧 Seasonal Inspection Recommended - Winter prep: pipe insulation check suggested.",
+        "📊 Cost Optimization - You could save 15% by bundling services. Schedule together!",
+      ];
+
+      const aiPanel = document.getElementById("aiRecommendations");
+      aiPanel.innerHTML = insights
+        .map(
+          (insight, i) => `
+        <div class="recommendation-item">
+          <h4>${insight.split(" - ")[0]}</h4>
+          <p>${insight.split(" - ")[1]}</p>
+        </div>
+      `
+        )
+        .join("");
+    }
+
+    function viewBooking(id) {
+      // Navigate to booking details page with booking id in query string
+      window.location.href = `booking-details.html?id=${id}`;
+    }
+
+    function viewHistory() {
+      alert("Full service history - Feature coming soon!");
+    }
+
+    function scheduleInspection() {
+      window.location.href = "booking.html";
+    }
+
+    function logout() {
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
+      window.location.href = "login.html";
+    }
+
+    // Theme selector: persist choice in localStorage
+    (function themeInit(){
+      const select = document.getElementById('themeSelect');
+      if (!select) return;
+      const apply = (name)=>{
+        document.body.classList.toggle('theme-blue', name === 'blue');
+      };
+      const saved = localStorage.getItem('plumb_theme') || 'green';
+      select.value = saved;
+      apply(saved);
+      select.addEventListener('change', ()=>{
+        const v = select.value || 'green';
+        localStorage.setItem('plumb_theme', v);
+        apply(v);
+      });
+    })();
+  </script>
+</body>
+</html>

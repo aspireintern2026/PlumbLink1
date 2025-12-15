@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#2a9d66"/><stop offset="1" stop-color="#1f7a4d"/></linearGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="#e8f7ee"/>
+  <g transform="translate(60,40)">
+    <circle cx="160" cy="120" r="80" fill="#fff" stroke="#d7f0e0" stroke-width="6"/>
+    <rect x="110" y="190" width="100" height="120" rx="18" fill="#fff" stroke="#d7f0e0" stroke-width="6"/>
+    <path d="M60 350 q100 -80 200 0" fill="none" stroke="#2a9d66" stroke-width="10" stroke-linecap="round"/>
+    <g transform="translate(300,40)">
+      <rect x="0" y="40" width="320" height="220" rx="20" fill="url(#g)"/>
+      <text x="40" y="120" fill="#fff" font-size="36" font-family="Poppins, Arial" font-weight="700">PlumbLink</text>
+      <text x="40" y="160" fill="#fff" font-size="18">Fast, local plumbing help</text>
+    </g>
+  </g>
+</svg>

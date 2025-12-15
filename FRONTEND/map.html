@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Plumber Live Map</title>
+
+  <!-- Leaflet CSS -->
+  <link 
+    rel="stylesheet" 
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+    #map {
+      height: 100%;
+      width: 100%;
+    }
+    .control-panel {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 1000;
+      background: rgba(0,0,0,0.65);
+      padding: 8px 10px;
+      border-radius: 8px;
+      color: #fff;
+      font-family: system-ui, sans-serif;
+      font-size: 12px;
+      max-width: 260px;
+    }
+    .control-panel button {
+      margin-top: 6px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    /* Hide Leaflet controls if you don't want to see them */
+    .leaflet-control-attribution {
+      display: none !important;
+    }
+    .leaflet-control-zoom {
+      display: none !important;
+    }
+  </style>
+</head>
+
+<body>
+
+<div id="map"></div>
+
+<div class="control-panel">
+  <div id="statusText">📌 Click on map or use GPS</div>
+  <button id="locBtn">Use My Current Location</button>
+</div>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+  // Default center (Mumbai)
+  const defaultLat = 19.0760;
+  const defaultLng = 72.8777;
+
+  const map = L.map('map').setView([defaultLat, defaultLng], 13);
+
+  // OpenStreetMap tiles
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19
+  }).addTo(map);
+
+  // One marker to move around
+  let marker = L.marker([defaultLat, defaultLng]).addTo(map);
+  marker.bindPopup("📍 Default Location").openPopup();
+
+  const statusText = document.getElementById('statusText');
+  const locBtn = document.getElementById('locBtn');
+
+  // Click on map to move marker
+  map.on("click", function(e) {
+    const lat = e.latlng.lat.toFixed(5);
+    const lng = e.latlng.lng.toFixed(5);
+
+    marker.setLatLng([lat, lng]);
+    marker.bindPopup(`📍 Selected Location<br>Lat: ${lat}<br>Lng: ${lng}`).openPopup();
+
+    statusText.textContent = `📍 Selected: ${lat}, ${lng}`;
+    console.log("Selected:", lat, lng);
+  });
+
+  // Use GPS when button clicked
+  locBtn.addEventListener('click', () => {
+    if (!navigator.geolocation) {
+      statusText.textContent = "❌ Geolocation not supported in this browser.";
+      alert("Geolocation is not supported by this browser.");
+      return;
+    }
+
+    statusText.textContent = "⏳ Getting current location…";
+
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const la = pos.coords.latitude;
+        const ln = pos.coords.longitude;
+
+        map.setView([la, ln], 15);
+        marker.setLatLng([la, ln]);
+        marker.bindPopup("📍 Your Current GPS Location").openPopup();
+
+        const msg = `✅ GPS: ${la.toFixed(5)}, ${ln.toFixed(5)}`;
+        statusText.textContent = msg;
+        console.log(msg);
+      },
+      (err) => {
+        console.warn("GPS error:", err);
+        if (err.code === 1) {
+          statusText.textContent = "❌ Permission denied for location.";
+          alert("Location access denied. Please allow location permission in the browser.");
+        } else {
+          statusText.textContent = "❌ Could not get location.";
+          alert("Could not get your location. Check GPS / browser settings.");
+        }
+      }
+    );
+  });
+
+  // Optional: try auto GPS once on load (non-blocking)
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const la = pos.coords.latitude;
+        const ln = pos.coords.longitude;
+        map.setView([la, ln], 14);
+        marker.setLatLng([la, ln]);
+        marker.bindPopup("📍 Your Current GPS Location").openPopup();
+        statusText.textContent = `✅ GPS: ${la.toFixed(5)}, ${ln.toFixed(5)}`;
+      },
+      () => {
+        statusText.textContent = "ℹ Click 'Use My Current Location' to retry GPS.";
+      }
+    );
+  }
+</script>
+
+</body>
+</html>

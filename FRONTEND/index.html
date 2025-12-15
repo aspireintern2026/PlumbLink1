@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PlumbLink – Plumbing & Repair Solutions</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* --------------------------
+       CLEAN STYLES (aligned & responsive)
+    -------------------------- */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Poppins', sans-serif; color: #222; background: #f6fbf6; overflow-x: hidden; }
+
+    /* Header */
+    header { position: fixed; top: 0; left: 0; width: 100%; background: #fff; box-shadow: 0 2px 15px rgba(0,0,0,0.05); z-index: 1000; }
+    .header-container { max-width: 1200px; margin: 0 auto; padding: 1rem 2rem; display:flex; align-items:center; justify-content:space-between; }
+    .logo { font-size: 1.8rem; font-weight: 700; color:#2a9d66; }
+    .nav-links { display:flex; gap:1.5rem; align-items:center; }
+    .nav-links a { color:#0b3d2e; font-weight:500; text-decoration:none; position:relative; }
+    .btn-header { background: linear-gradient(90deg,#2a9d66,#1f7a4d); color:#fff; padding:8px 20px; border-radius:8px; font-weight:600; }
+
+    /* Common section inner container */
+    .section-inner { max-width:1200px; margin:0 auto; padding:0 1rem; }
+
+    /* Hero */
+    .hero { background: linear-gradient(135deg,#2a9d66 0%,#1f7a4d 100%); color:#fff; padding:160px 20px 90px; display:flex; align-items:center; justify-content:center; }
+    .hero-content { width:100%; max-width:1200px; display:flex; gap:2.5rem; align-items:center; }
+    .hero-text { flex:1; }
+    .hero-text h1 { font-size:2.8rem; line-height:1.15; margin-bottom:0.6rem; }
+    .hero-text p { max-width:520px; color:rgba(255,255,255,0.95); line-height:1.6; }
+    .hero-image { flex:1; text-align:center; }
+    .hero-btns { margin-top:1.6rem; display:flex; gap:1rem; flex-wrap:wrap; }
+    .hero-btn-primary { background:#fff; color:#2a9d66; padding:12px 28px; border-radius:10px; font-weight:600; }
+    .hero-btn-outline { border:2px solid rgba(255,255,255,0.22); color:#fff; padding:12px 26px; border-radius:10px; }
+
+    /* About */
+    .about { background:#fff; padding:80px 20px; }
+    .about .section-inner { display:flex; flex-direction:column; gap:2rem; align-items:center; text-align:center; }
+    .about-text { max-width:800px; }
+    .about-text h2 { color:#2a9d66; font-size:2.2rem; margin-bottom:1rem; }
+    .about-text p { color:#555; line-height:1.8; font-size:1.05rem; }
+    .about-image { width:100%; max-width:600px; text-align:center; }
+    .about-image img { width:100%; height:auto; border-radius:12px; box-shadow:0 12px 40px rgba(42,157,102,0.15); }
+
+    /* Services */
+    .services { background:#f9fbff; padding:80px 20px; text-align:center; }
+    .services h2 { color:#2a9d66; font-size:2.2rem; margin-bottom:0.4rem; }
+    .services .subtitle { color:#666; margin-bottom:1.5rem; }
+    .filter-group { display:flex; gap:0.6rem; justify-content:center; margin-bottom:1rem; flex-wrap:wrap; }
+    .filter-btn { padding:8px 12px; border-radius:8px; border:1px solid #e6efe7; background:#fff; cursor:pointer; font-weight:600; color:#0b3d2e; }
+    .filter-btn.active { background: linear-gradient(90deg,#2a9d66,#1f7a4d); color:#fff; border-color:transparent; }
+    .services-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1.5rem; align-items:start; max-width:1100px; margin:0 auto; }
+    .service-card { background:#fff; padding:1.8rem; border-radius:12px; text-align:center; box-shadow:0 8px 24px rgba(42,157,102,0.06); transition:transform .28s ease, box-shadow .28s ease; }
+    .service-card img { width:64px; height:64px; object-fit:contain; margin-bottom:0.9rem; }
+    .service-card h3 { margin-bottom:0.6rem; color:#0b3d2e; }
+    .service-card p { color:#555; font-size:0.95rem; }
+    .service-card:hover { transform:translateY(-8px); box-shadow:0 18px 44px rgba(42,157,102,0.12); }
+
+    /* Why */
+    .why { background:linear-gradient(180deg,#ffffff,#e8f7ee); padding:80px 20px; }
+    .why h2 { text-align:center; color:#0b3d2e; font-size:2.1rem; margin-bottom:1rem; }
+    .why-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1.25rem; max-width:1100px; margin:0 auto; }
+    .why-card { background:#fff; padding:1.6rem; border-radius:12px; text-align:center; box-shadow:0 8px 22px rgba(42,157,102,0.06); }
+    .why-card img { width:56px; height:56px; margin-bottom:0.8rem; }
+    .why-card h4 { color:#2a9d66; margin-bottom:0.4rem; }
+
+    /* Testimonials */
+    .testimonials { background:#fff; padding:70px 20px; text-align:center; }
+    .testimonials h2 { color:#2a9d66; font-size:2rem; margin-bottom:1.25rem; }
+    .testimonial { max-width:760px; margin:0 auto; background:#f6fbf6; padding:1.6rem; border-radius:12px; font-style:italic; }
+
+    /* FAQ / Accordion */
+    .faq { background:#fff; padding:60px 20px; }
+    .faq h2 { text-align:center; color:#2a9d66; font-size:1.9rem; margin-bottom:0.4rem; }
+    .faq .subtitle { text-align:center; color:#666; margin-bottom:1rem; }
+    .accordion { max-width:920px; margin:0 auto; display:block; }
+    .accordion-item { border-bottom:1px solid #e8eefb; }
+    .accordion-button {
+      width:100%; text-align:left; padding:16px 18px; font-size:1rem; background:transparent; border:none;
+      cursor:pointer; display:flex; justify-content:space-between; align-items:center; font-weight:600; color:#0b3d2e;
+    }
+    /* Recommendations */
+    .recommendations { background:#fff; padding:60px 20px; }
+    .recommendations h2 { color:#2a9d66; text-align:center; margin-bottom:0.6rem; }
+    .recommendations .rec-controls { max-width:700px;margin:0 auto 1rem;display:flex;gap:0.6rem;justify-content:center; }
+    .recommendations .rec-list { max-width:900px;margin:0 auto; display:grid; gap:0.8rem; }
+    .rec-card { background:#f6fbf6; padding:12px 14px; border-radius:10px; display:flex;justify-content:space-between;align-items:center; }
+    .rec-meta { color:#444; font-size:0.95rem; }
+    /* Chat widget */
+    .chat-toggle { position:fixed; right:18px; bottom:84px; z-index:1200; }
+    .chat-button { background:linear-gradient(90deg,#2a9d66,#1f7a4d); color:#fff; border:none; padding:12px 14px; border-radius:50px; box-shadow:0 10px 30px rgba(42,157,102,0.15); cursor:pointer; }
+    .chat-panel { position:fixed; right:18px; bottom:140px; width:320px; max-height:420px; background:#fff; border-radius:12px; box-shadow:0 18px 40px rgba(0,0,0,0.12); overflow:hidden; display:none; flex-direction:column; z-index:1200; }
+    .chat-header { background:#2a9d66; color:#fff; padding:10px 12px; font-weight:700; }
+    .chat-body { padding:10px; flex:1; overflow:auto; background:#f6fbf6; }
+    .chat-input { display:flex; gap:8px; padding:10px; border-top:1px solid #eee; }
+    .chat-input input { flex:1; padding:8px 10px; border-radius:8px; border:1px solid #e6efe7; }
+    .chat-msg { margin:8px 0; display:flex; }
+    .chat-msg.user { justify-content:flex-end; }
+    .chat-bubble { max-width:78%; padding:8px 12px; border-radius:12px; background:#fff; box-shadow:0 6px 18px rgba(0,0,0,0.06); }
+    .chat-bubble.user { background:linear-gradient(90deg,#2a9d66,#1f7a4d); color:#fff; }
+    .accordion-button::after { content: '+'; font-size:1.2rem; color:#2a9d66; }
+    .accordion-button[aria-expanded="true"]::after { content: '-'; }
+    .accordion-panel { max-height:0; overflow:hidden; transition: max-height .28s ease, padding .28s ease; padding:0 18px; color:#444; }
+    .accordion-panel p { margin:12px 0 18px; line-height:1.6; }
+
+    /* Contact */
+    .contact { background:#f9fbff; padding:70px 20px; }
+    .contact h2 { text-align:center; color:#2a9d66; font-size:1.9rem; margin-bottom:0.6rem; }
+    .contact p { text-align:center; color:#555; margin-bottom:1rem; }
+    .contact-form { max-width:700px; margin:0 auto; display:flex; flex-direction:column; gap:0.9rem; }
+    .contact-form input, .contact-form textarea { width:100%; padding:12px 14px; border-radius:8px; border:1.5px solid #e0eaf8; font-size:1rem; }
+    .contact-form button { width:220px; margin:0.6rem auto 0; padding:12px 18px; border-radius:10px; background:linear-gradient(90deg,#2a9d66,#1f7a4d); color:#fff; border:none; font-weight:600; }
+    #formMessage { max-width:700px; margin:0.8rem auto 0; text-align:center; }
+
+    /* Footer */
+    footer { background:#2a9d66; color:#fff; text-align:center; padding:1.6rem; }
+
+    /* Responsive */
+    @media (max-width:900px) {
+      .hero-content { flex-direction:column; text-align:center; }
+      .about .section-inner { flex-direction:column; }
+      .about-image { max-width:100%; }
+    }
+    @media (max-width:480px) {
+      .hero-text h1 { font-size:1.8rem; }
+      .contact-form button { width:100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-container">
+      <div class="logo">PlumbLink</div>
+      <nav class="nav-links">
+        <a href="index.html" class="active">Home</a>
+        <a href="#services">Services</a>
+        <a href="e-commerce.html">Store</a>
+        <a href="booking.html">Book</a>
+      </nav>
+      <a href="login.html" class="btn-header">Login</a>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1>Reliable Plumbing & <span>Repair Solutions</span></h1>
+        <p>PlumbLink provides trusted, fast, and affordable plumbing services for homes and businesses across your city.</p>
+        <div class="hero-btns">
+          <a href="login.html" class="hero-btn-primary">Book a Plumber</a>
+          <a href="#contact" class="hero-btn-outline">Contact Us</a>
+        </div>
+      </div>
+      <div class="hero-image">
+        <img src="images/hero-plumber.svg" alt="Plumber illustration">
+      </div>
+    </div>
+  </section>
+
+  <!-- RECOMMENDATIONS -->
+  <section class="recommendations" id="recommendations">
+    <h2>Recommended Plumbers</h2>
+    <div class="rec-controls">
+      <input id="recIssue" type="search" placeholder="Describe your issue (e.g. leak, drain)" style="padding:10px 12px;border-radius:8px;border:1px solid #e6efe7;min-width:320px;">
+      <button id="recFetch" style="padding:10px 12px;border-radius:8px;background:linear-gradient(90deg,#2a9d66,#1f7a4d);color:#fff;border:none;font-weight:600;">Find</button>
+    </div>
+    <div class="rec-list" id="recList">
+      <!-- recommendation cards inserted here -->
+    </div>
+  </section>
+
+  <!-- CHAT WIDGET -->
+  <div class="chat-toggle">
+    <div class="chat-panel" id="chatPanel">
+      <div class="chat-header">PlumbLink Assistant</div>
+      <div class="chat-body" id="chatBody">
+        <div style="text-align:center;color:#666;padding:8px;">Hi — ask me about booking, pricing, or emergencies.</div>
+      </div>
+      <div class="chat-input">
+        <input id="chatInput" placeholder="Type a message..." aria-label="chat input">
+        <button id="chatSend" class="chat-button" style="padding:8px 10px;border-radius:8px;">Send</button>
+      </div>
+    </div>
+    <button id="chatToggleBtn" class="chat-button">Chat</button>
+  </div>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="section-inner">
+      <div class="about-text">
+        <h2>About PlumbLink</h2>
+        <p>At PlumbLink, we've been delivering reliable plumbing solutions for over a decade. Whether it's residential or commercial work, our certified plumbers ensure timely service, transparent pricing, and lasting results. We're available 24/7 because emergencies can't wait.</p>
+      </div>
+      <div class="about-image">
+        <img src="images/about-plumber.svg" alt="Professional plumber at work">
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="services" id="services">
+    <div style="max-width:1100px;margin:0 auto 1rem;padding:0 1rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;">
+      <h2 style="margin:0;color:#2a9d66;">Our Services</h2>
+      <div style="display:flex;gap:0.6rem;align-items:center;">
+        <input id="serviceSearch" type="search" placeholder="Search services..." style="padding:10px 12px;border-radius:8px;border:1px solid #e6efe7;min-width:220px;">
+        <button id="clearSearch" style="padding:10px 12px;border-radius:8px;background:#f0f6f0;border:1px solid #e0efe7;">Clear</button>
+      </div>
+    </div>
+    <h2>Our Services</h2>
+    <p class="subtitle">Professional plumbing care for every need.</p>
+    <div class="services-grid">
+      <div class="service-card" data-category="emergency"><img src="images/icon-emergency.svg" alt="Emergency"><h3>Emergency Repairs</h3><p>Fast response for leaks, bursts, and failures.</p></div>
+      <div class="service-card" data-category="bathroom"><img src="images/icon-bathroom.svg" alt="Bathroom"><h3>Bathroom Fittings</h3><p>Installation and upgrades for taps, showers, toilets.</p></div>
+      <div class="service-card" data-category="drain"><img src="images/icon-drain.svg" alt="Drain"><h3>Drain Cleaning</h3><p>Unclogging, cleaning, and flow optimization.</p></div>
+      <div class="service-card" data-category="heater"><img src="images/icon-heater.svg" alt="Heater"><h3>Water Heaters</h3><p>Repairs and installations of geysers and boilers.</p></div>
+    </div>
+  </section>
+
+  <!-- WHY CHOOSE US -->
+  <section class="why" id="why">
+    <h2>Why Choose PlumbLink?</h2>
+    <div class="why-grid">
+      <div class="why-card"><img src="images/icon-24.svg" alt="24/7"><h4>24/7 Availability</h4><p>Day or night, we’re here when you need us most.</p></div>
+      <div class="why-card"><img src="images/icon-certified.svg" alt="Certified"><h4>Certified Plumbers</h4><p>Licensed experts who guarantee top quality service.</p></div>
+      <div class="why-card"><img src="images/icon-drain.svg" alt="Pricing"><h4>Transparent Pricing</h4><p>No hidden costs — upfront estimates for every job.</p></div>
+      <div class="why-card"><img src="images/icon-bathroom.svg" alt="Tools"><h4>Modern Tools</h4><p>Equipped with advanced tools for quick, safe fixes.</p></div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS (carousel) -->
+  <section class="testimonials" id="reviews">
+    <h2>What Our Customers Say</h2>
+    <div class="carousel" id="testimonialsCarousel" style="max-width:900px;margin:0 auto;position:relative;">
+      <div class="carousel-track" style="display:flex;transition:transform 0.45s ease;">
+        <div class="testimonial-card" style="min-width:100%;padding:1.6rem;border-radius:12px;background:#f6fbf6;margin-right:12px;">
+          <p>“PlumbLink saved my weekend! They arrived within 30 minutes and fixed our burst pipe quickly. Great service and fair pricing.”</p>
+          <h4>— Priya R., Chennai</h4>
+        </div>
+        <div class="testimonial-card" style="min-width:100%;padding:1.6rem;border-radius:12px;background:#f6fbf6;margin-right:12px;">
+          <p>“Excellent technician and very professional. Fixed our heater issue the same day.”</p>
+          <h4>— Rohit K., Mumbai</h4>
+        </div>
+        <div class="testimonial-card" style="min-width:100%;padding:1.6rem;border-radius:12px;background:#f6fbf6;margin-right:12px;">
+          <p>“Transparent pricing and great communication. Will use PlumbLink again.”</p>
+          <h4>— Anita S., Bangalore</h4>
+        </div>
+      </div>
+      <button id="carouselPrev" aria-label="Previous" style="position:absolute;left:8px;top:50%;transform:translateY(-50%);background:#fff;border:1px solid #e6efe7;padding:8px;border-radius:8px;">◀</button>
+      <button id="carouselNext" aria-label="Next" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);background:#fff;border:1px solid #e6efe7;padding:8px;border-radius:8px;">▶</button>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq" id="faq">
+    <div class="section-inner">
+      <h2>Frequently Asked Questions</h2>
+      <p class="subtitle">Common questions about our services and how we work.</p>
+
+      <div class="accordion" id="faqAccordion">
+        <div class="accordion-item">
+          <button class="accordion-button" aria-expanded="false">How quickly can I get a plumber?</button>
+          <div class="accordion-panel"><p>We offer same-day service in most areas. For emergencies, we prioritize and aim to arrive within 30–60 minutes when possible.</p></div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-button" aria-expanded="false">Do you provide pricing estimates?</button>
+          <div class="accordion-panel"><p>Yes — we provide upfront estimates before starting any work. For complex jobs we may give a provisional quote and finalize after inspection.</p></div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-button" aria-expanded="false">Are your plumbers certified?</button>
+          <div class="accordion-panel"><p>All our technicians are certified and insured. They follow safety standards and guarantee workmanship.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <h2>Get in Touch</h2>
+    <p>Need plumbing help? Send us a message and we'll respond right away.</p>
+    <form class="contact-form" id="contactForm">
+      <input type="text" id="fullName" placeholder="Full Name" required>
+      <input type="email" id="email" placeholder="Email" required>
+      <textarea rows="4" id="message" placeholder="Your Message" required></textarea>
+      <button type="submit">Send Message</button>
+      <div id="formMessage" style="margin-top: 1rem; display: none; padding: 12px; border-radius: 8px; font-weight: 500;"></div>
+    </form>
+    <!-- Newsletter subscription (simple) -->
+    <div style="max-width:700px;margin:1.5rem auto 0;text-align:center;">
+      <h3 style="margin-bottom:0.4rem;color:#0b3d2e;">Join our Newsletter</h3>
+      <p style="color:#555;margin-bottom:0.6rem;">Get tips, offers and maintenance reminders.</p>
+      <div style="display:flex;gap:0.5rem;justify-content:center;align-items:center;">
+        <input id="newsletterEmail" type="email" placeholder="Your email" style="padding:10px 12px;border:1.5px solid #e0efe7;border-radius:8px;width:320px;max-width:70%;">
+        <button id="subscribeBtn" style="padding:10px 14px;border-radius:8px;background:linear-gradient(90deg,#2a9d66,#1f7a4d);color:#fff;border:none;font-weight:600;cursor:pointer;">Subscribe</button>
+      </div>
+      <div id="newsletterMsg" style="margin-top:10px;display:none;padding:10px;border-radius:8px;font-weight:500;"></div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    © 2025 AspirecodeAI. All rights reserved.
+  </footer>
+
+  <!-- Back to top -->
+  <button id="backToTop" title="Back to top" style="position:fixed;right:18px;bottom:24px;padding:12px 14px;border-radius:10px;border:none;background:linear-gradient(90deg,#2a9d66,#1f7a4d);color:#fff;display:none;box-shadow:0 10px 30px rgba(42,157,102,0.15);">↑ Top</button>
+
+  <script>
+    // Handle contact form submission
+    const contactForm = document.getElementById('contactForm');
+    const formMessage = document.getElementById('formMessage');
+
+    if (contactForm) {
+      contactForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const fullName = document.getElementById('fullName').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const message = document.getElementById('message').value.trim();
+
+        // Validate inputs
+        if (!fullName || !email || !message) {
+          showMessage('Please fill in all fields.', 'error');
+          return;
+        }
+
+        // Show loading state
+        const submitBtn = contactForm.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'Sending...';
+        submitBtn.disabled = true;
+
+        try {
+          // Send to backend
+          const response = await fetch('http://localhost:5000/api/contact/send', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              name: fullName,
+              email: email,
+              message: message
+            })
+          });
+
+          const data = await response.json();
+
+          if (response.ok && data.success) {
+            showMessage(data.message, 'success');
+            contactForm.reset();
+          } else {
+            showMessage(data.error || 'Failed to send message. Please try again.', 'error');
+          }
+        } catch (error) {
+          showMessage('Error: ' + error.message + '. Make sure the backend server is running on http://localhost:5000', 'error');
+        } finally {
+          submitBtn.textContent = originalText;
+          submitBtn.disabled = false;
+        }
+      });
+    }
+
+    function showMessage(text, type) {
+      formMessage.textContent = text;
+      formMessage.style.display = 'block';
+      formMessage.style.backgroundColor = type === 'success' ? '#d4edda' : '#f8d7da';
+      formMessage.style.color = type === 'success' ? '#155724' : '#721c24';
+      formMessage.style.borderLeft = `4px solid ${type === 'success' ? '#28a745' : '#dc3545'}`;
+
+      // Auto-hide success messages after 5 seconds
+      if (type === 'success') {
+        setTimeout(() => {
+          formMessage.style.display = 'none';
+        }, 5000);
+      }
+    }
+
+    // FAQ Accordion behavior
+    (function setupAccordion(){
+      const acc = document.querySelectorAll('.accordion-button');
+      acc.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const expanded = btn.getAttribute('aria-expanded') === 'true';
+          // collapse all
+          document.querySelectorAll('.accordion-button').forEach(b => b.setAttribute('aria-expanded','false'));
+          document.querySelectorAll('.accordion-panel').forEach(p => { p.style.maxHeight = null; p.style.paddingTop = '0'; p.style.paddingBottom = '0'; });
+
+          if (!expanded) {
+            btn.setAttribute('aria-expanded','true');
+            const panel = btn.nextElementSibling;
+            panel.style.paddingTop = '12px';
+            panel.style.paddingBottom = '18px';
+            panel.style.maxHeight = panel.scrollHeight + 'px';
+          }
+        });
+      });
+    })();
+
+    // Newsletter subscription handler
+    (function setupNewsletter(){
+      const btn = document.getElementById('subscribeBtn');
+      const emailInput = document.getElementById('newsletterEmail');
+      const msg = document.getElementById('newsletterMsg');
+
+      if (!btn || !emailInput) return;
+
+      btn.addEventListener('click', async () => {
+        const email = emailInput.value.trim();
+        if (!email || !email.includes('@')) {
+          showNewsletter('Enter a valid email address.', 'error');
+          return;
+        }
+
+        btn.disabled = true; const prev = btn.textContent; btn.textContent = 'Subscribing...';
+        try {
+          const res = await fetch('http://localhost:5000/api/newsletter/subscribe', {
+            method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({email})
+          });
+          const data = await res.json();
+          if (res.ok && data.success) {
+            showNewsletter(data.message || 'Subscribed!', 'success');
+            emailInput.value = '';
+          } else {
+            showNewsletter(data.error || data.message || 'Subscription failed.', 'error');
+          }
+        } catch (err) {
+          showNewsletter('Error: ' + err.message + '. Is backend running?', 'error');
+        } finally {
+          btn.disabled = false; btn.textContent = prev;
+        }
+      });
+
+      function showNewsletter(text, type) {
+        msg.style.display = 'block'; msg.textContent = text;
+        msg.style.backgroundColor = type === 'success' ? '#e6f4ea' : '#fdecea';
+        msg.style.color = type === 'success' ? '#14532d' : '#7a1f1f';
+        msg.style.borderLeft = '4px solid ' + (type === 'success' ? '#16a34a' : '#dc3545');
+        if (type === 'success') setTimeout(()=> msg.style.display='none', 5000);
+      }
+    })();
+
+    // Testimonials carousel
+    (function carouselSetup(){
+      const track = document.querySelector('#testimonialsCarousel .carousel-track');
+      const prev = document.getElementById('carouselPrev');
+      const next = document.getElementById('carouselNext');
+      if (!track) return;
+      const slides = Array.from(track.children);
+      let index = 0;
+
+      function update() {
+        track.style.transform = `translateX(-${index * 100}%)`;
+      }
+
+      prev.addEventListener('click', () => { index = (index - 1 + slides.length) % slides.length; update(); resetAuto(); });
+      next.addEventListener('click', () => { index = (index + 1) % slides.length; update(); resetAuto(); });
+
+      // Auto-rotate
+      let timer = setInterval(()=> { index = (index + 1) % slides.length; update(); }, 5000);
+      function resetAuto(){ clearInterval(timer); timer = setInterval(()=> { index = (index + 1) % slides.length; update(); }, 5000); }
+    })();
+
+    // Services client-side search + category filter
+    (function servicesSearch(){
+      const input = document.getElementById('serviceSearch');
+      const clear = document.getElementById('clearSearch');
+      const cards = Array.from(document.querySelectorAll('.services-grid .service-card'));
+      if (!input) return;
+
+      // create filter buttons dynamically from existing categories
+      const categories = Array.from(new Set(cards.map(c => c.dataset.category).filter(Boolean)));
+      const filterGroup = document.createElement('div');
+      filterGroup.className = 'filter-group';
+      const allBtn = document.createElement('button');
+      allBtn.className = 'filter-btn active'; allBtn.textContent = 'All'; allBtn.dataset.cat = '';
+      filterGroup.appendChild(allBtn);
+      categories.forEach(cat => {
+        const btn = document.createElement('button');
+        btn.className = 'filter-btn'; btn.textContent = cat[0].toUpperCase() + cat.slice(1);
+        btn.dataset.cat = cat; filterGroup.appendChild(btn);
+      });
+      // insert filter group above the services grid (after the search row)
+      const servicesSection = document.getElementById('services');
+      servicesSection.insertBefore(filterGroup, servicesSection.querySelector('.services-grid'));
+
+      let selectedCategory = '';
+
+      function applyFilter(){
+        const q = input.value.trim().toLowerCase();
+        cards.forEach(card => {
+          const text = (card.textContent || '').toLowerCase();
+          const cat = (card.dataset.category || '');
+          const matchesText = q === '' || text.includes(q);
+          const matchesCat = !selectedCategory || cat === selectedCategory;
+          card.style.display = (matchesText && matchesCat) ? '' : 'none';
+        });
+      }
+
+      // handle category button clicks
+      filterGroup.addEventListener('click', (e) => {
+        const btn = e.target.closest('button'); if (!btn) return;
+        filterGroup.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedCategory = btn.dataset.cat || '';
+        applyFilter();
+      });
+
+      input.addEventListener('input', applyFilter);
+      clear.addEventListener('click', ()=> { input.value=''; selectedCategory = ''; filterGroup.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active')); allBtn.classList.add('active'); applyFilter(); });
+    })();
+
+    // Back to top + smooth scroll
+    (function backToTop(){
+      const btn = document.getElementById('backToTop');
+      if (!btn) return;
+      window.addEventListener('scroll', () => {
+        btn.style.display = window.scrollY > 300 ? 'block' : 'none';
+      });
+      btn.addEventListener('click', () => window.scrollTo({top:0,behavior:'smooth'}));
+    })();
+
+    // Recommendations: fetch and render from backend
+    (function setupRecommendations(){
+      const btn = document.getElementById('recFetch');
+      const input = document.getElementById('recIssue');
+      const list = document.getElementById('recList');
+      if (!btn || !input || !list) return;
+
+      async function load(issue){
+        list.innerHTML = '<div style="text-align:center;padding:12px;color:#666">Loading recommendations…</div>';
+        try {
+          const q = new URLSearchParams({ issue: issue || '', limit: 6 });
+          const res = await fetch('http://localhost:5000/api/recommendations/?' + q.toString());
+          const data = await res.json();
+          if (!res.ok || !data.success){
+            list.innerHTML = '<div style="text-align:center;padding:12px;color:#a33">Failed to load recommendations</div>';
+            return;
+          }
+
+          const recs = data.recommendations || [];
+          if (!recs.length){
+            list.innerHTML = '<div style="text-align:center;padding:12px;color:#666">No recommendations found.</div>';
+            return;
+          }
+
+          list.innerHTML = '';
+          recs.forEach(r => {
+            const card = document.createElement('div');
+            card.className = 'rec-card';
+            card.innerHTML = `
+              <div>
+                <strong>${escapeHtml(r.name || 'Unknown')}</strong>
+                <div class="rec-meta">Score: ${r.score} — ${r.meta && r.meta.skills ? (r.meta.skills.join(', ')) : ''}</div>
+              </div>
+              <div style="text-align:right"><button class="hero-btn-outline" style="padding:8px 12px;border-radius:8px;background:#fff;">View</button></div>
+            `;
+            list.appendChild(card);
+          });
+        } catch (err){
+          list.innerHTML = '<div style="text-align:center;padding:12px;color:#a33">Error loading recommendations</div>';
+          console.error(err);
+        }
+      }
+
+      btn.addEventListener('click', () => load(input.value.trim()));
+      // load default recommendations on page load
+      load('');
+
+      function escapeHtml(s){
+        if (!s) return '';
+        return String(s).replace(/[&<>\"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;', '"':'&quot;'}[c]; });
+      }
+    })();
+
+    // Chat widget behavior: toggle, send messages to backend chatbot
+    (function setupChat(){
+      const panel = document.getElementById('chatPanel');
+      const toggle = document.getElementById('chatToggleBtn');
+      const sendBtn = document.getElementById('chatSend');
+      const input = document.getElementById('chatInput');
+      const body = document.getElementById('chatBody');
+      if (!panel || !toggle || !sendBtn || !input || !body) return;
+
+      function showPanel(show){ panel.style.display = show ? 'flex' : 'none'; }
+      toggle.addEventListener('click', ()=>{ showPanel(panel.style.display !== 'flex'); });
+
+      function appendMsg(text, who='bot'){
+        const row = document.createElement('div');
+        row.className = 'chat-msg ' + (who==='user' ? 'user' : '');
+        const bubble = document.createElement('div');
+        bubble.className = 'chat-bubble ' + (who==='user' ? 'user' : '');
+        bubble.textContent = text;
+        row.appendChild(bubble);
+        body.appendChild(row);
+        body.scrollTop = body.scrollHeight;
+      }
+
+      async function sendMessage(text){
+        if (!text) return;
+        appendMsg(text, 'user');
+        input.value = '';
+        appendMsg('Typing...', 'bot');
+        try{
+          const res = await fetch('http://localhost:5000/api/chatbot/message', {
+            method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({message: text})
+          });
+          const data = await res.json();
+          // remove the last 'Typing...' placeholder
+          const last = body.querySelectorAll('.chat-msg');
+          if (last.length) last[last.length-1].remove();
+          if (data && data.reply){
+            appendMsg(data.reply, 'bot');
+          } else {
+            appendMsg('Sorry, no reply from server.', 'bot');
+          }
+        }catch(err){
+          // remove 'Typing...'
+          const last = body.querySelectorAll('.chat-msg');
+          if (last.length) last[last.length-1].remove();
+          appendMsg('Error contacting chat service. Is backend running?', 'bot');
+          console.error(err);
+        }
+      }
+
+      sendBtn.addEventListener('click', ()=> sendMessage(input.value.trim()));
+      input.addEventListener('keydown', (e)=>{ if (e.key === 'Enter') { e.preventDefault(); sendMessage(input.value.trim()); } });
+    })();
+
+    // Debug token fetch (for testing auth)
+    fetch('http://localhost:5000/api/bookings/debug/token', {
+      headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+    }).then(r=>r.json()).then(console.log).catch(console.error)
+  </script>
+</body>
+</html>
