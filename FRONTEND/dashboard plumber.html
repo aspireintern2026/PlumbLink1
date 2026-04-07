@@ -1,1251 +1,454 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>PlumbLink — Plumber Dashboard</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root{
-      --bg-page:#f6fbf6;
-      --bg-sidebar:#2a9d66;
-      --bg-sidebar-soft:#1f7a4d;
-      --bg-card:#ffffff;
-      --bg-card-alt:#f6fbf6;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/images/aspirecodelogo.jpeg" type="image/jpeg">
+    <title>PlumbPro Partner Portal - Join as a Plumber</title>
+    <meta name="description" content="Join PlumbPro as a partner plumber. Get more jobs, steady work, higher earnings, and use our powerful app for free.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        :root {
+            --navy: #001F3F;
+            --teal: #008080;
+            --primary: #008080;
+            --primary-dark: #006666;
+            --secondary: #001F3F;
+            --success: #28a745;
+            --soft-green: #98FB98;
+            --white: #FFFFFF;
+            --light-grey: #F5F5F5;
+            --gray-100: #F8F9FA;
+            --gray-200: #E9ECEF;
+            --gray-700: #495057;
+            --gray-900: #212529;
+            --text-dark: #333333;
+            --text-light: #666666;
+            --shadow-subtle: 0 2px 10px rgba(0, 31, 63, 0.1);
+            --shadow-card: 0 4px 20px rgba(0, 128, 128, 0.08);
+            --border-radius: 12px;
+            --transition: all 0.3s ease;
+        }
 
-      --primary:#2a9d66;
-      --primary-soft:#e8f7ee;
-      --primary-dark:#1f7a4d;
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: var(--white);
+        }
+        a { text-decoration: none; }
+        img { max-width: 100%; display: block; }
 
-      --success:#16a34a;
-      --danger:#ef4444;
-      --warning:#ff6b35;
+        .container {
+            width: min(100%, 1280px);
+            margin: 0 auto;
+            padding: 0 20px;
+        }
 
-      --border-soft:#e5e7eb;
-      --border-strong:#d1d5db;
+        /* Header */
+        header {
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-200);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+        }
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        .logo span { color: var(--secondary); }
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+        }
+        .nav-links a {
+            color: var(--gray-700);
+            font-weight: 500;
+        }
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        .btn {
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        .btn-primary:hover { background: var(--primary-dark); }
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+        .btn-success:hover { background: #218838; }
 
-      --text-main:#0b3d2e;
-      --text-muted:#555;
-      --text-inverse:#f9fafb;
+        /* Hero */
+        .hero {
+            padding: 120px 0;
+            background: linear-gradient(135deg, #f0f7ff 0%, #f8fffd 100%);
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 24px;
+        }
+        .hero h1 span { color: var(--primary); }
+        .hero p {
+            font-size: 20px;
+            color: var(--gray-700);
+            max-width: 800px;
+            margin: 0 auto 40px;
+        }
+        .hero .btn {
+            font-size: 18px;
+            padding: 16px 40px;
+        }
 
-      --shadow-card:0 8px 24px rgba(42,157,102,0.06);
+        /* Benefits */
+        .benefits {
+            padding: 120px 0;
+            background: white;
+        }
+        .section-title {
+            text-align: center;
+            font-size: 40px;
+            margin-bottom: 24px;
+        }
+        .section-subtitle {
+            text-align: center;
+            font-size: 20px;
+            color: var(--gray-700);
+            max-width: 800px;
+            margin: 0 auto 80px;
+        }
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 40px;
+        }
+        .benefit-card {
+            background: var(--gray-100);
+            padding: 40px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            box-shadow: var(--shadow-card);
+            transition: var(--transition);
+        }
+        .benefit-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-subtle);
+        }
+        .benefit-icon {
+            font-size: 48px;
+            color: var(--primary);
+            margin-bottom: 24px;
+        }
+        .benefit-card h3 {
+            font-size: 24px;
+            margin-bottom: 16px;
+        }
 
-      /* kept for JS / color consistency */
-      --accent-a:#2a9d66;
-      --accent-b:#2a9d66;
-      --accent-c:#16a34a;
-      --white-t:#2a9d66;
-      --muted: rgba(85,85,85,1);
+        /* How It Works */
+        .how-it-works {
+            padding: 120px 0;
+            background: var(--gray-100);
+        }
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+        }
+        .step {
+            text-align: center;
+        }
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: 700;
+            margin: 0 auto 24px;
+        }
+        .step h3 {
+            font-size: 22px;
+            margin-bottom: 16px;
+        }
 
-      --radius-lg:18px;
-      --radius-md:12px;
-      --gap-lg:24px;
-      --pad-card:18px;
-    }
+        /* Requirements */
+        .requirements {
+            padding: 120px 0;
+            background: white;
+        }
+        .req-list {
+            max-width: 800px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .req-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 18px;
+        }
+        .req-item i {
+            color: var(--success);
+            font-size: 24px;
+        }
 
-    *{box-sizing:border-box;margin:0;padding:0}
-    html,body{
-      height:100%;
-      font-family:"Poppins",sans-serif;
-      background:var(--bg-page);
-      color:var(--text-main);
-      -webkit-font-smoothing:antialiased;
-    }
-    button{
-      font-family:inherit;
-      cursor:pointer;
-      border:none;
-      background:none;
-    }
-    a{text-decoration:none;color:inherit}
+        /* CTA */
+        .cta {
+            padding: 120px 0;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            text-align: center;
+        }
+        .cta h2 {
+            font-size: 40px;
+            margin-bottom: 24px;
+        }
+        .cta p {
+            font-size: 20px;
+            max-width: 700px;
+            margin: 0 auto 40px;
+            opacity: 0.9;
+        }
+        .cta .btn {
+            background: white;
+            color: var(--primary);
+            font-size: 18px;
+            padding: 16px 40px;
+        }
 
-    .muted{color:var(--text-muted);font-size:13px}
-    .muted-2{color:#9ca3af;font-size:12px}
-    .center{text-align:center}
-    .spacer{height:12px}
+        /* Footer */
+        footer {
+            background: var(--gray-900);
+            color: white;
+            padding: 80px 0 40px;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+        .footer-logo {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        .footer-logo span { color: var(--primary); }
+        .footer-links h4 {
+            margin-bottom: 16px;
+            font-size: 16px;
+        }
+        .footer-links a {
+            display: block;
+            color: #ccc;
+            margin-bottom: 12px;
+            transition: color 0.3s;
+        }
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+        .copyright {
+            text-align: center;
+            padding-top: 40px;
+            border-top: 1px solid #444;
+            color: #aaa;
+            font-size: 14px;
+        }
+        .copyright a {
+            color: #aaa;
+            margin-left: 12px;
+            text-decoration: none;
+        }
+        .copyright a:hover {
+            color: var(--primary);
+        }
 
-    /* BUTTONS */
-    .btn{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      padding:8px 16px;
-      border-radius:999px;
-      font-size:13px;
-      font-weight:600;
-      border:1px solid transparent;
-      white-space:nowrap;
-      transition:all .15s;
-    }
-    .btn-primary{
-      background:var(--primary);
-      color:#fff;
-      border-color:var(--primary);
-      box-shadow:0 8px 18px rgba(37,99,235,0.25);
-    }
-    .btn-primary:hover{
-      background:var(--primary-dark);
-      border-color:var(--primary-dark);
-    }
-    .btn-ghost{
-      background:var(--bg-card-alt);
-      color:var(--text-main);
-      border-color:var(--border-soft);
-    }
-    .btn-ghost:hover{
-      background:#e5edff;
-      border-color:#c7d2fe;
-    }
-
-    /* LAYOUT */
-    .app{
-      width:100%;
-      height:100%;
-      display:flex;
-    }
-
-    /* SIDEBAR */
-    .sidebar{
-      width:250px;
-      background:var(--bg-sidebar);
-      color:var(--text-inverse);
-      display:flex;
-      flex-direction:column;
-      padding:18px 16px;
-    }
-    .sidebar-header{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      padding:4px 8px 18px 4px;
-      border-bottom:1px solid rgba(148,163,184,0.2);
-      margin-bottom:14px;
-    }
-    .sidebar-logo{
-      width:40px;
-      height:40px;
-      border-radius:12px;
-      background:#1d4ed8;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-weight:700;
-      font-size:16px;
-    }
-    .sidebar-title-main{
-      font-size:15px;
-      font-weight:600;
-    }
-    .sidebar-title-sub{
-      font-size:11px;
-      opacity:0.8;
-    }
-
-    .nav-section-label{
-      font-size:11px;
-      text-transform:uppercase;
-      letter-spacing:0.08em;
-      color:#9ca3af;
-      margin:6px 4px 6px;
-    }
-    .sidebar-nav{
-      display:flex;
-      flex-direction:column;
-      gap:4px;
-      margin-bottom:18px;
-    }
-    .nav-item{
-      display:flex;
-      align-items:center;
-      gap:8px;
-      padding:8px 10px;
-      border-radius:10px;
-      font-size:13px;
-      color:#e5e7eb;
-      cursor:pointer;
-      transition:background .15s;
-    }
-    .nav-item span.icon{
-      width:18px;
-      text-align:center;
-      font-size:14px;
-      opacity:0.9;
-    }
-    .nav-item:hover{
-      background:var(--bg-sidebar-soft);
-    }
-    .nav-item.active{
-      background:#1d4ed8;
-      color:#f9fafb;
-    }
-
-    .sidebar-footer{
-      margin-top:auto;
-      font-size:12px;
-      color:#9ca3af;
-      padding-top:10px;
-      border-top:1px solid rgba(148,163,184,0.2);
-    }
-
-    /* MAIN */
-    .main{
-      flex:1;
-      display:flex;
-      flex-direction:column;
-      padding:18px 20px;
-      gap:var(--gap-lg);
-      overflow:auto;
-    }
-
-    /* HEADER */
-    header.top{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:16px;
-    }
-    .brand{
-      display:flex;
-      flex-direction:column;
-      gap:2px;
-    }
-    .brand .main-title{
-      font-size:18px;
-      font-weight:600;
-    }
-    .brand .sub-title{
-      font-size:12px;
-      color:var(--text-muted);
-    }
-
-    .header-actions{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      font-size:13px;
-    }
-
-    .status-pill{
-      padding:6px 12px;
-      border-radius:999px;
-      font-weight:600;
-      font-size:12px;
-      background:#f3f4f6;
-      border:1px solid #d1d5db;
-      color:#374151;
-    }
-
-    /* PAGES */
-    .page{
-      margin-top:var(--gap-lg);
-    }
-
-    /* METRIC CARDS */
-    .big-cards{
-      display:flex;
-      gap:18px;
-      flex-wrap:wrap;
-    }
-    .card-large{
-      flex:1;
-      min-width:260px;
-      border-radius:var(--radius-lg);
-      background:var(--bg-card);
-      border:1px solid var(--border-soft);
-      padding:var(--pad-card);
-      box-shadow:var(--shadow-card);
-      display:flex;
-      justify-content:space-between;
-      gap:16px;
-    }
-    .card-large h3{
-      font-size:15px;
-      font-weight:600;
-    }
-    .card-large p{
-      margin-top:4px;
-      font-size:12px;
-      color:var(--text-muted);
-    }
-    .metric{
-      margin-top:10px;
-      font-size:24px;
-      font-weight:700;
-    }
-
-    /* DASHBOARD GRID (map + active job) */
-    .dashboard-grid{
-      display:grid;
-      grid-template-columns:minmax(0,1.4fr) minmax(0,1.2fr);
-      gap:18px;
-      align-items:start;
-      margin-top:18px;
-    }
-
-    .sidebar-small{
-      border-radius:var(--radius-lg);
-      background:var(--bg-card);
-      padding:var(--pad-card);
-      border:1px solid var(--border-soft);
-      box-shadow:var(--shadow-card);
-    }
-    .sidebar-small h3{
-      font-size:15px;
-      font-weight:600;
-    }
-    #activeBox{
-      margin-top:8px;
-      padding:10px 12px;
-      border-radius:var(--radius-md);
-      background:var(--bg-card-alt);
-      border:1px solid var(--border-soft);
-      font-size:13px;
-    }
-
-    .map-big{
-      border-radius:var(--radius-lg);
-      background:var(--bg-card);
-      border:1px solid var(--border-soft);
-      box-shadow:var(--shadow-card);
-      min-height:260px;
-      display:flex;
-      flex-direction:column;
-      overflow:hidden;
-    }
-    .map-top{
-      padding:10px 14px;
-      border-bottom:1px solid var(--border-soft);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      font-size:14px;
-      font-weight:500;
-    }
-    .map-top .muted{
-      font-size:12px;
-    }
-    .map-canvas{
-      flex:1;
-      background:#e5e7eb;
-      position:relative;
-    }
-    .map-canvas iframe{
-      width:100%;
-      height:100%;
-      border:none;
-    }
-
-    /* DASHBOARD EXTRA WIDGETS */
-    .dashboard-extra{
-      display:flex;
-      flex-wrap:wrap;
-      gap:18px;
-      margin-top:18px;
-    }
-    .extra-card{
-      flex:1;
-      min-width:260px;
-      border-radius:var(--radius-lg);
-      background:var(--bg-card);
-      border:1px solid var(--border-soft);
-      box-shadow:var(--shadow-card);
-      padding:var(--pad-card);
-      font-size:13px;
-    }
-    .extra-title{
-      font-size:14px;
-      font-weight:600;
-      margin-bottom:6px;
-    }
-    .extra-row{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      margin-top:6px;
-    }
-    .extra-label{
-      color:var(--text-muted);
-      font-size:12px;
-    }
-    .extra-value{
-      font-weight:600;
-      font-size:14px;
-    }
-
-    /* JOBS PAGE */
-    .jobs-row{
-      border-radius:var(--radius-lg);
-      padding:var(--pad-card);
-      border:1px solid var(--border-soft);
-      background:var(--bg-card);
-      box-shadow:var(--shadow-card);
-    }
-    .jobs-header{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:12px;
-      margin-bottom:12px;
-    }
-    .jobs-header h2{
-      font-size:16px;
-      font-weight:600;
-    }
-    .jobs-list{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
-    .job-item{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:14px;
-      padding:10px 12px;
-      border-radius:var(--radius-md);
-      background:var(--bg-card-alt);
-      border:1px solid var(--border-soft);
-    }
-    .job-left{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      min-width:0;
-    }
-    .job-badge{
-      width:56px;
-      height:56px;
-      border-radius:12px;
-      background:var(--primary-soft);
-      color:var(--primary-dark);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size:12px;
-      font-weight:600;
-    }
-    .job-meta{
-      min-width:0;
-    }
-    .job-meta h4{
-      font-size:14px;
-      font-weight:600;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-    .job-meta p{
-      margin-top:4px;
-      font-size:12px;
-      color:var(--text-muted);
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-    .job-cta{
-      display:flex;
-      gap:8px;
-      align-items:center;
-      flex-wrap:wrap;
-      justify-content:flex-end;
-    }
-    .pill{
-      padding:5px 10px;
-      border-radius:999px;
-      font-size:11px;
-      font-weight:600;
-    }
-    .pill.high{
-      background:#fee2e2;
-      border:1px solid #fecaca;
-      color:#b91c1c;
-    }
-    .pill.norm{
-      background:#dcfce7;
-      border:1px solid #bbf7d0;
-      color:#15803d;
-    }
-
-    /* HISTORY PAGE */
-    .history-row h3{
-      font-size:15px;
-      font-weight:600;
-      margin-bottom:8px;
-    }
-    .history-list{
-      display:grid;
-      grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
-      gap:10px;
-    }
-    .history-item{
-      padding:10px 12px;
-      border-radius:var(--radius-md);
-      background:var(--bg-card);
-      border:1px solid var(--border-soft);
-      box-shadow:0 4px 10px rgba(15,23,42,0.03);
-      font-size:13px;
-    }
-
-    /* EARNINGS PAGE */
-    .earn-row{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
-    .earn-card{
-      border-radius:var(--radius-lg);
-      background:var(--bg-card);
-      padding:var(--pad-card);
-      border:1px solid var(--border-soft);
-      box-shadow:var(--shadow-card);
-      font-size:13px;
-    }
-    .earn-card h3{
-      font-size:15px;
-      font-weight:600;
-    }
-    .earn-big{
-      margin-top:8px;
-      font-size:24px;
-      font-weight:700;
-      color:var(--primary-dark);
-    }
-    #statTotal{color:var(--success)}
-
-    /* SUPPORT MODAL */
-    #supportModal,
-    #profileModal{
-      display:none;
-      position:fixed;
-      right:20px;
-      bottom:20px;
-      width:340px;
-      background:var(--bg-card);
-      padding:16px;
-      border-radius:var(--radius-md);
-      border:1px solid var(--border-soft);
-      box-shadow:0 20px 60px rgba(15,23,42,0.35);
-      z-index:40;
-    }
-    #supportModal textarea,
-    #profileModal input,
-    #profileModal select{
-      width:100%;
-      border-radius:10px;
-      padding:8px;
-      background:var(--bg-card-alt);
-      border:1px solid var(--border-soft);
-      color:var(--text-main);
-      font-size:13px;
-      margin-top:6px;
-    }
-    #supportModal textarea{
-      height:80px;
-      resize:vertical;
-    }
-    .modal-title{
-      font-weight:600;
-      font-size:14px;
-      margin-bottom:6px;
-    }
-
-    /* RESPONSIVE */
-    @media (max-width:1100px){
-      .sidebar{
-        display:none;
-      }
-      .app{
-        flex-direction:column;
-      }
-      .main{
-        padding:14px;
-      }
-      .dashboard-grid{
-        grid-template-columns:1fr;
-      }
-    }
-
-    @media (max-width:640px){
-      header.top{
-        flex-direction:column;
-        align-items:flex-start;
-        gap:8px;
-      }
-      .big-cards{
-        flex-direction:column;
-      }
-      .jobs-header{
-        flex-direction:column;
-        align-items:flex-start;
-      }
-      .job-item{
-        flex-direction:column;
-        align-items:flex-start;
-      }
-      .job-cta{
-        justify-content:flex-start;
-      }
-      #supportModal,#profileModal{
-        right:10px;
-        left:10px;
-        width:auto;
-      }
-    }
-  </style>
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 38px; }
+            .section-title { font-size: 32px; }
+            .nav-links { gap: 20px; }
+        }
+    </style>
 </head>
-<body>
-<div class="app">
+<body id="top">
 
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
-    <div class="sidebar-header">
-      <div class="sidebar-logo">PL</div>
-      <div>
-        <div class="sidebar-title-main">PlumbLink</div>
-        <div class="sidebar-title-sub">Worker Dashboard</div>
-      </div>
-    </div>
-
-    <div class="nav-section-label">Main</div>
-    <nav class="sidebar-nav">
-      <div class="nav-item active" id="nav-dashboard">
-        <span class="icon">🏠</span><span>Dashboard</span>
-      </div>
-      <div class="nav-item" id="nav-jobs">
-        <span class="icon">🧰</span><span>Jobs</span>
-      </div>
-      <div class="nav-item" id="nav-earnings">
-        <span class="icon">💰</span><span>Earnings</span>
-      </div>
-      <div class="nav-item" id="nav-history">
-        <span class="icon">🧾</span><span>History</span>
-      </div>
-      <div class="nav-item" id="nav-support">
-        <span class="icon">🆘</span><span>Support</span>
-      </div>
-    </nav>
-
-    <div class="sidebar-footer">
-      Logged in as<br>
-      <strong>PLB-102</strong>
-    </div>
-  </aside>
-
-  <!-- MAIN CONTENT -->
-  <main class="main">
-    <!-- TOP HEADER -->
-    <header class="top">
-      <div class="brand">
-        <div class="main-title">Today’s Overview</div>
-        <div class="sub-title">Track jobs, map, and earnings in one place.</div>
-      </div>
-      <div class="header-actions">
-        <div class="muted">ID: <strong style="margin-left:4px">PLB-102</strong></div>
-        <div class="status-pill" id="onlineStatus">Offline</div>
-        <button class="btn btn-ghost" id="btnProfile">Profile</button>
-        <button class="btn btn-primary" id="btnToggle">Go Online</button>
-      </div>
+    <!-- Header -->
+    <header>
+        <div class="container nav">
+            <div class="logo">Plumb<span>Pro</span></div>
+            <div class="nav-links">
+                <a href="#">For Customers</a>
+                <a href="#">Login</a>
+                <a href="apply.html" class="btn btn-primary">Apply Now</a>
+            </div>
+        </div>
     </header>
 
-    <!-- DASHBOARD PAGE -->
-    <div id="dashboard" class="page">
-      <section class="big-cards">
-        <div class="card-large">
-          <div>
-            <h3>Incoming Requests</h3>
-            <p>Jobs waiting for you. Accept what you can reach quickly.</p>
-            <div class="metric" id="metricIncoming">0</div>
-          </div>
-          <div style="text-align:right;font-size:12px">
-            <div class="muted">Average ETA</div>
-            <div style="margin-top:6px;font-size:18px;font-weight:600" id="metricETA">—</div>
-          </div>
+    <!-- Hero -->
+    <section class="hero">
+        <div class="container">
+            <h1>Become a <span>PlumbPro Partner Plumber</span></h1>
+            <p>Join our network of trusted professional plumbers and get access to steady, high-paying jobs in your area — all while using our powerful field service app for free.</p>
+            <a href="#apply" class="btn btn-success">Apply to Become a Partner</a>
         </div>
+    </section>
 
-        <div class="card-large">
-          <div>
-            <h3>Active Job</h3>
-            <p>Current job you’re working on.</p>
-            <div class="metric" id="metricActive">None</div>
-          </div>
-          <div style="text-align:right;font-size:12px">
-            <div class="muted">Status</div>
-            <div style="margin-top:6px;font-size:16px;font-weight:600" id="metricActiveStatus">—</div>
-          </div>
+    <!-- Benefits -->
+    <section class="benefits">
+        <div class="container">
+            <h2 class="section-title">Why Partner with PlumbPro?</h2>
+            <p class="section-subtitle">We connect you with customers who need your services — fast, reliable, and profitable.</p>
+
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <div class="benefit-icon"><i class="fas fa-dollar-sign"></i></div>
+                    <h3>Higher Earnings</h3>
+                    <p>Get paid competitive rates with no commission fees taken from your payout. Keep 100% of what you earn.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon"><i class="fas fa-calendar-alt"></i></div>
+                    <h3>Steady Work</h3>
+                    <p>Receive daily job requests matched to your skills, location, and availability.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon"><i class="fas fa-tools"></i></div>
+                    <h3>Free Professional Tools</h3>
+                    <p>Use our full-featured mobile app at no cost: scheduling, routing, invoicing, payments, and more.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon"><i class="fas fa-headset"></i></div>
+                    <h3>Support When You Need It</h3>
+                    <p>24/7 partner support team to help with job questions, disputes, or app issues.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon"><i class="fas fa-star"></i></div>
+                    <h3>Grow Your Reputation</h3>
+                    <p>Earn 5-star reviews from verified customers and build your profile in the PlumbPro network.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon"><i class="fas fa-shield-alt"></i></div>
+                    <h3>Insurance & Protection</h3>
+                    <p>Every job is covered by our partnership liability protection for added peace of mind.</p>
+                </div>
+            </div>
         </div>
+    </section>
 
-        <div class="card-large">
-          <div>
-            <h3>Ratings & Incentives</h3>
-            <p>Maintain rating &gt; 4.6 to earn bonuses.</p>
-            <div class="metric" id="metricRating">4.8 ★</div>
-          </div>
-          <div style="text-align:right;font-size:12px">
-            <div class="muted">Current Incentive</div>
-            <div style="margin-top:6px;font-size:16px;font-weight:600" id="metricBonus">₹450</div>
-          </div>
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <div class="container">
+            <h2 class="section-title">How It Works</h2>
+            <p class="section-subtitle">Simple steps to start earning more as a PlumbPro partner</p>
+
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Apply Online</h3>
+                    <p>Submit your details, license, and insurance info in under 5 minutes.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Get Approved</h3>
+                    <p>We review your application and background check within 24-48 hours.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Download the App</h3>
+                    <p>Get instant access to the PlumbPro Partner app and complete onboarding.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Start Accepting Jobs</h3>
+                    <p>Go online, receive job requests, and start earning right away.</p>
+                </div>
+            </div>
         </div>
-      </section>
+    </section>
 
-      <section class="dashboard-grid">
-        <!-- ACTIVE JOB + QUICK STATS -->
-        <aside class="sidebar-small">
-          <h3>Active Job Controls</h3>
-          <div class="spacer"></div>
-          <div id="activeBox">
-            <div class="muted">No active job</div>
-          </div>
+    <!-- Requirements -->
+    <section class="requirements">
+        <div class="container">
+            <h2 class="section-title">Partner Requirements</h2>
+            <p class="section-subtitle">To maintain quality service, we ask that partners meet these standards</p>
 
-          <div class="spacer"></div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <button class="btn btn-primary" id="navBtn" onclick="onNavigate()" disabled>Navigate</button>
-            <button class="btn btn-ghost" id="arriveBtn" onclick="onArrive()" disabled>Arrive</button>
-            <button class="btn btn-ghost" id="startBtn" onclick="onStart()" disabled>Start</button>
-          </div>
-
-          <div style="height:10px"></div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <button class="btn btn-ghost" id="saveLocBtn" onclick="onSaveLocation()">Save Location</button>
-          </div>
-
-          <div style="height:14px"></div>
-          <div>
-            <h4 style="margin:0;font-size:14px;font-weight:600">Quick Stats</h4>
-            <div style="margin-top:6px" class="muted">Completed today</div>
-            <div style="font-weight:700;font-size:18px;margin-top:4px" id="statToday">0</div>
-            <div style="margin-top:10px" class="muted">Total earnings</div>
-            <div style="font-weight:700;font-size:18px;margin-top:4px" id="statTotal">₹0</div>
-          </div>
-        </aside>
-
-        <!-- MAP -->
-        <section class="map-big">
-          <div class="map-top">
-            <div>Live Map</div>
-            <div class="muted">Folium map generated from Python backend.</div>
-          </div>
-          <div class="map-canvas" id="mapCanvas">
-            <iframe src="map.html" allow="geolocation"></iframe>
-          </div>
-        </section>
-      </section>
-
-      <!-- EXTRA DASHBOARD WIDGETS -->
-      <section class="dashboard-extra">
-        <div class="extra-card">
-          <div class="extra-title">Today’s Jobs Summary</div>
-          <div class="extra-row">
-            <span class="extra-label">Total jobs today</span>
-            <span class="extra-value" id="dashTotalCount">0</span>
-          </div>
-          <div class="extra-row">
-            <span class="extra-label">Incoming</span>
-            <span class="extra-value" id="dashIncomingCount">0</span>
-          </div>
-          <div class="extra-row">
-            <span class="extra-label">Active</span>
-            <span class="extra-value" id="dashActiveCount">0</span>
-          </div>
-          <div class="extra-row">
-            <span class="extra-label">Completed today</span>
-            <span class="extra-value" id="dashCompletedCount">0</span>
-          </div>
+            <div class="req-list">
+                <div class="req-item"><i class="fas fa-check-circle"></i> Valid plumbing license</div>
+                <div class="req-item"><i class="fas fa-check-circle"></i> General liability insurance ($1M minimum)</div>
+                <div class="req-item"><i class="fas fa-check-circle"></i> At least 2 years of professional experience</div>
+                <div class="req-item"><i class="fas fa-check-circle"></i> Clean background check</div>
+                <div class="req-item"><i class="fas fa-check-circle"></i> Reliable vehicle and tools</div>
+                <div class="req-item"><i class="fas fa-check-circle"></i> Professional attitude and communication</div>
+            </div>
         </div>
+    </section>
 
-        <div class="extra-card">
-          <div class="extra-title">Shift & Availability</div>
-          <div class="extra-row">
-            <span class="extra-label">Today's shift</span>
-            <span class="extra-value">9:00 AM – 7:00 PM</span>
-          </div>
-          <div class="extra-row">
-            <span class="extra-label">Break reminder</span>
-            <span class="extra-value">Every 3 hours</span>
-          </div>
-          <div class="extra-row">
-            <span class="extra-label">Status</span>
-            <span class="extra-value" id="dashOnlineText">Offline</span>
-          </div>
+    <!-- CTA -->
+    <section class="cta" id="apply">
+        <div class="container">
+            <h2>Ready to Join the PlumbPro Partner Network?</h2>
+            <p>Start receiving high-quality job leads today. No subscription fees. No hidden costs.</p>
+            <a href="apply.html" class="btn">Apply Now - It's Free</a>
+            <p style="margin-top:40px;font-size:16px;opacity:0.9;">Most partners are approved within 48 hours</p>
         </div>
+    </section>
 
-        <div class="extra-card">
-          <div class="extra-title">Notes & Safety Tips</div>
-          <ul style="margin-top:6px;padding-left:18px;font-size:12px;color:var(--text-muted);line-height:1.6">
-            <li>Always shut off the main valve before repair.</li>
-            <li>Wear gloves and safety glasses while cutting pipes.</li>
-            <li>Confirm customer name & address before starting job.</li>
-            <li>Use in-app support if customer asks for extra work.</li>
-          </ul>
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-grid">
+            <div>
+                <div class="footer-logo">Plumb<span>Pro</span></div>
+                <p style="color:#ccc;">Connecting customers with trusted local plumbers</p>
+            </div>
+            <div class="footer-links">
+                <h4>For Plumbers</h4>
+                <a href="#">Become a Partner</a>
+                <a href="#">Partner Login</a>
+                <a href="#">Partner Support</a>
+            </div>
+            <div class="footer-links">
+                <h4>Company</h4>
+                <a href="#">About Us</a>
+                <a href="#">Careers</a>
+                <a href="#">Contact</a>
+            </div>
+            <div class="footer-links">
+                <h4>Legal</h4>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+            </div>
         </div>
-      </section>
-    </div>
-
-    <!-- JOBS PAGE -->
-    <div id="jobs" class="page" style="display:none">
-      <section class="jobs-row">
-        <div class="jobs-header">
-          <div>
-            <h2>Jobs</h2>
-            <div class="muted">New requests appear here. Accept quickly to keep good ETA.</div>
-          </div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <button class="btn btn-ghost" onclick="refreshIncoming()">Refresh</button>
-            <button class="btn btn-primary" onclick="acceptNearest()">Auto Accept Nearest</button>
-          </div>
+        <div class="container copyright">
+            © 2025 AspirecodeAI. All rights reserved. <a href="#top">↑ Top</a>
         </div>
-        <div class="jobs-list" id="jobsList"></div>
-      </section>
-    </div>
+    </footer>
 
-    <!-- EARNINGS PAGE -->
-    <div id="earnings" class="page" style="display:none">
-      <section class="earn-row">
-        <div class="earn-card">
-          <h3>Earnings — Today</h3>
-          <div class="earn-big" id="earnToday">₹0</div>
-          <div class="muted" style="margin-top:6px">
-            Pending and processed payments are visible in the payouts panel.
-          </div>
-        </div>
-
-        <div class="earn-card">
-          <h3>Earnings — This Week</h3>
-          <div class="earn-big" id="earnWeek">₹0</div>
-          <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
-            <button class="btn btn-primary" onclick="requestPayout()">Request Payout</button>
-            <button class="btn btn-ghost" onclick="openPayouts()">View Payouts</button>
-          </div>
-        </div>
-
-        <div class="earn-card">
-          <h3>Performance</h3>
-          <div class="muted" style="margin-top:6px">Average rating</div>
-          <div style="font-size:24px;font-weight:700;margin-top:4px" id="avgRating">4.8 ★</div>
-          <div class="muted" style="margin-top:8px">Jobs completed</div>
-          <div style="font-weight:700;margin-top:4px" id="jobsCompleted">0</div>
-        </div>
-      </section>
-    </div>
-
-    <!-- HISTORY PAGE -->
-    <div id="history" class="page" style="display:none">
-      <section class="history-row">
-        <h3>Recent Jobs / History</h3>
-        <div class="history-list" id="historyList"></div>
-      </section>
-    </div>
-
-  </main>
-</div>
-
-<!-- SUPPORT MODAL -->
-<div id="supportModal">
-  <div class="modal-title">Message Support</div>
-  <textarea id="supportText" placeholder="Describe your issue..."></textarea>
-  <div style="display:flex;gap:8px;margin-top:8px;justify-content:flex-end">
-    <button class="btn btn-primary" onclick="sendSupport()">Send</button>
-    <button class="btn btn-ghost" onclick="closeSupport()">Close</button>
-  </div>
-</div>
-
-<!-- PROFILE MODAL -->
-<div id="profileModal">
-  <div class="modal-title">Worker Profile</div>
-  <label class="muted">Name</label>
-  <input id="profileName" type="text" value="Ramesh Kumar" />
-  <label class="muted" style="margin-top:6px;display:block;">Phone</label>
-  <input id="profilePhone" type="text" value="+91 98XXXXXX10" />
-  <label class="muted" style="margin-top:6px;display:block;">Home Area</label>
-  <input id="profileArea" type="text" value="Chennai Central" />
-  <label class="muted" style="margin-top:6px;display:block;">Experience</label>
-  <select id="profileExp">
-    <option>0–1 years</option>
-    <option selected>2–5 years</option>
-    <option>5–10 years</option>
-    <option>10+ years</option>
-  </select>
-  <div style="display:flex;gap:8px;margin-top:10px;justify-content:flex-end">
-    <button class="btn btn-primary" onclick="saveProfile()">Save</button>
-    <button class="btn btn-ghost" onclick="closeProfile()">Close</button>
-  </div>
-</div>
-
-<script>
-  /* -------------------------
-     Sample data + state
-     ------------------------- */
-  const sampleIncoming = [
-    { id: 7101, customer:'Ramesh K', issue:'Burst Pipe', addr:'12 MG Road', price:550, urgency:'High', distance: '2.4 km', eta:'16m' },
-    { id: 7102, customer:'Nisha P', issue:'Clogged Drain', addr:'45 Lake View', price:280, urgency:'Normal', distance:'1.1 km', eta:'10m' },
-    { id: 7103, customer:'Anil S', issue:'Water Heater Fault', addr:'11 Park Lane', price:920, urgency:'High', distance:'5.4 km', eta:'30m' }
-  ];
-
-  let incoming = JSON.parse(localStorage.getItem('plumb_incoming')) || sampleIncoming.slice();
-  let currentJob = JSON.parse(localStorage.getItem('plumb_current')) || null;
-  let earnings = JSON.parse(localStorage.getItem('plumb_earnings')) || { today:0, week:0, total:0 };
-  let history = JSON.parse(localStorage.getItem('plumb_history')) || [];
-  let online = (localStorage.getItem('plumb_online') === 'true');
-
-  /* -------------------------
-     DOM refs
-     ------------------------- */
-  const jobsListEl = document.getElementById('jobsList');
-  const metricIncomingEl = document.getElementById('metricIncoming');
-  const metricETAEl = document.getElementById('metricETA');
-  const metricActiveEl = document.getElementById('metricActive');
-  const metricActiveStatusEl = document.getElementById('metricActiveStatus');
-  const statTodayEl = document.getElementById('statToday');
-  const statTotalEl = document.getElementById('statTotal');
-  const earnTodayEl = document.getElementById('earnToday');
-  const earnWeekEl = document.getElementById('earnWeek');
-  const historyListEl = document.getElementById('historyList');
-  const onlineStatusEl = document.getElementById('onlineStatus');
-  const btnToggle = document.getElementById('btnToggle');
-
-  /* -------------------------
-     Page Switching
-     ------------------------- */
-  function showPage(page){
-    document.querySelectorAll(".page").forEach(p => p.style.display = "none");
-    const el = document.getElementById(page);
-    if(el) el.style.display = "block";
-
-    document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
-    const nav = document.getElementById("nav-" + page);
-    if(nav) nav.classList.add("active");
-  }
-
-  document.getElementById("nav-dashboard").onclick = () => showPage("dashboard");
-  document.getElementById("nav-jobs").onclick      = () => showPage("jobs");
-  document.getElementById("nav-earnings").onclick  = () => showPage("earnings");
-  document.getElementById("nav-history").onclick   = () => showPage("history");
-  document.getElementById("nav-support").onclick   = () => openSupport();
-
-  /* -------------------------
-     Render helpers
-     ------------------------- */
-  function updateDashboardSummary(){
-    const incomingCount = incoming.length || 0;
-    const activeCount = currentJob ? 1 : 0;
-    const completedToday = history.filter(
-      h => new Date(h.when).toDateString() === new Date().toDateString()
-    ).length || 0;
-    const totalToday = incomingCount + activeCount + completedToday;
-
-    const t = document.getElementById('dashTotalCount');
-    if(!t) return; // dashboard not rendered yet
-
-    t.textContent = totalToday;
-    document.getElementById('dashIncomingCount').textContent = incomingCount;
-    document.getElementById('dashActiveCount').textContent = activeCount;
-    document.getElementById('dashCompletedCount').textContent = completedToday;
-    document.getElementById('dashOnlineText').textContent = online ? 'Online' : 'Offline';
-  }
-
-  function renderIncoming(){
-    jobsListEl.innerHTML = '';
-    if(!incoming || incoming.length === 0){
-      jobsListEl.innerHTML = '<div class="muted center">No incoming requests</div>';
-      metricIncomingEl.textContent = '0';
-      metricETAEl.textContent = '—';
-      updateDashboardSummary();
-      return;
-    }
-    metricIncomingEl.textContent = incoming.length;
-    const avg = incoming.reduce((s,j)=>s + parseInt(j.eta),0) / incoming.length;
-    metricETAEl.textContent = (Math.round(avg) || incoming[0].eta) + 'm';
-
-    incoming.forEach(job=>{
-      const div = document.createElement('div');
-      div.className = 'job-item';
-      div.innerHTML = `
-        <div class="job-left">
-          <div class="job-badge">#${job.id}</div>
-          <div class="job-meta">
-            <h4>${job.issue}</h4>
-            <p>${job.customer} • ${job.addr}</p>
-            <div class="muted-2" style="margin-top:4px">${job.distance} • ETA ${job.eta} • ₹${job.price}</div>
-          </div>
-        </div>
-        <div class="job-cta">
-          <div class="pill ${job.urgency === 'High' ? 'high' : 'norm'}">${job.urgency}</div>
-          <div style="display:flex;gap:6px">
-            <button class="btn btn-ghost" onclick="previewJob(${job.id})">Preview</button>
-            <button class="btn btn-primary" onclick="acceptJob(${job.id})">Accept</button>
-          </div>
-        </div>
-      `;
-      jobsListEl.appendChild(div);
-    });
-
-    updateDashboardSummary();
-  }
-
-  function renderHistory(){
-    historyListEl.innerHTML = '';
-    if(!history.length){
-      historyListEl.innerHTML = '<div class="muted center">No history yet</div>';
-      updateDashboardSummary();
-      return;
-    }
-    history.slice(0,20).forEach(h=>{
-      const el = document.createElement('div');
-      el.className = 'history-item';
-      el.innerHTML = `
-        <div style="font-weight:600;font-size:13px">#${h.id} ${h.issue}</div>
-        <div class="muted" style="margin-top:4px;font-size:12px">${h.when}</div>
-        <div style="margin-top:8px;font-weight:700;color:var(--success)">₹${h.price}</div>
-      `;
-      historyListEl.appendChild(el);
-    });
-    updateDashboardSummary();
-  }
-
-  function renderEarnings(){
-    earnTodayEl.textContent = `₹${earnings.today}`;
-    earnWeekEl.textContent = `₹${earnings.week}`;
-    statTodayEl.textContent = (history.filter(
-      h=>new Date(h.when).toDateString() === new Date().toDateString()
-    ).length) || 0;
-    statTotalEl.textContent = `₹${earnings.total}`;
-    document.getElementById('jobsCompleted').textContent = history.length;
-    updateDashboardSummary();
-  }
-
-  /* -------------------------
-     Job actions
-     ------------------------- */
-  function previewJob(id){
-    const job = incoming.find(j=>j.id===id);
-    if(!job) return alert('Job not found');
-    alert(`Preview\n\n${job.issue}\n${job.customer}\n${job.addr}\nETA ${job.eta}\nPrice ₹${job.price}`);
-  }
-
-  function acceptJob(id){
-    if(!online) return alert('Go online first to accept jobs');
-    const idx = incoming.findIndex(j=>j.id===id);
-    if(idx === -1) return alert('Job not found');
-    const job = incoming.splice(idx,1)[0];
-    job.status = 'Assigned';
-    job.assignedAt = new Date().toISOString();
-    currentJob = job;
-    localStorage.setItem('plumb_current', JSON.stringify(currentJob));
-    localStorage.setItem('plumb_incoming', JSON.stringify(incoming));
-    updateActiveUI();
-    renderIncoming();
-    openJobControls(job);
-  }
-
-  function acceptNearest(){
-    if(!online) return alert('Go online first');
-    if(!incoming.length) return alert('No incoming jobs');
-    incoming.sort((a,b)=>parseInt(a.eta)-parseInt(b.eta));
-    acceptJob(incoming[0].id);
-  }
-
-  function openJobControls(job){
-    metricActiveEl.textContent = `#${job.id} ${job.issue}`;
-    metricActiveStatusEl.textContent = job.status;
-    document.getElementById('activeBox').innerHTML = `
-      <div style="font-weight:600;font-size:14px">#${job.id} — ${job.issue}</div>
-      <div class="muted" style="margin-top:4px">${job.customer} • ${job.addr}</div>
-      <div style="margin-top:8px;font-weight:700;color:var(--success)">₹${job.price}</div>
-    `;
-    document.getElementById('navBtn').disabled = false;
-    document.getElementById('arriveBtn').disabled = false;
-    document.getElementById('startBtn').disabled = false;
-    updateDashboardSummary();
-  }
-
-  function updateActiveUI(){
-    if(!currentJob){
-      metricActiveEl.textContent = 'None';
-      metricActiveStatusEl.textContent = '—';
-      document.getElementById('activeBox').innerHTML = '<div class="muted">No active job</div>';
-      document.getElementById('navBtn').disabled = true;
-      document.getElementById('arriveBtn').disabled = true;
-      document.getElementById('startBtn').disabled = true;
-    } else {
-      metricActiveEl.textContent = `#${currentJob.id} ${currentJob.issue}`;
-      metricActiveStatusEl.textContent = currentJob.status || 'Assigned';
-      document.getElementById('activeBox').innerHTML = `
-        <div style="font-weight:600;font-size:14px">#${currentJob.id} — ${currentJob.issue}</div>
-        <div class="muted" style="margin-top:4px">${currentJob.customer} • ${currentJob.addr}</div>
-        <div style="margin-top:8px;font-weight:700;color:var(--success)">₹${currentJob.price}</div>
-      `;
-      document.getElementById('navBtn').disabled = false;
-      document.getElementById('arriveBtn').disabled = false;
-      document.getElementById('startBtn').disabled = false;
-    }
-    updateDashboardSummary();
-  }
-
-  function onNavigate(){
-    if(!currentJob) return alert('No active job');
-    currentJob.status = 'Navigating';
-    metricActiveStatusEl.textContent = currentJob.status;
-    localStorage.setItem('plumb_current', JSON.stringify(currentJob));
-    alert('Navigation opened (mock).');
-    updateDashboardSummary();
-  }
-
-  function onArrive(){
-    if(!currentJob) return alert('No active job');
-    currentJob.status = 'Arrived';
-    metricActiveStatusEl.textContent = currentJob.status;
-    localStorage.setItem('plumb_current', JSON.stringify(currentJob));
-    alert('Marked as Arrived.');
-    updateDashboardSummary();
-  }
-
-  function onStart(){
-    if(!currentJob) return alert('No active job');
-    currentJob.status = 'Working';
-    metricActiveStatusEl.textContent = currentJob.status;
-    localStorage.setItem('plumb_current', JSON.stringify(currentJob));
-    if(confirm('Mark job as Completed now?')) {
-      completeCurrentJob();
-    } else {
-      updateDashboardSummary();
-    }
-  }
-
-  function completeCurrentJob(){
-    if(!currentJob) return;
-    currentJob.status = 'Completed';
-    currentJob.completedAt = new Date().toISOString();
-    history.unshift({ id: currentJob.id, issue: currentJob.issue, price: currentJob.price, when: currentJob.completedAt });
-    earnings.today += Number(currentJob.price);
-    earnings.week += Number(currentJob.price);
-    earnings.total += Number(currentJob.price);
-    localStorage.setItem('plumb_history', JSON.stringify(history));
-    localStorage.setItem('plumb_earnings', JSON.stringify(earnings));
-    currentJob = null;
-    localStorage.removeItem('plumb_current');
-    metricActiveEl.textContent = 'None';
-    metricActiveStatusEl.textContent = '—';
-    document.getElementById('activeBox').innerHTML = '<div class="muted">No active job</div>';
-    document.getElementById('navBtn').disabled = true;
-    document.getElementById('arriveBtn').disabled = true;
-    document.getElementById('startBtn').disabled = true;
-    renderHistory(); 
-    renderEarnings(); 
-    renderIncoming();
-    alert('Job completed — earnings recorded.');
-  }
-
-  /* -------------------------
-     Online toggle & support / profile
-     ------------------------- */
-  function setOnline(on){
-    online = on;
-    localStorage.setItem('plumb_online', on ? 'true' : 'false');
-    onlineStatusEl.textContent = on ? 'Online' : 'Offline';
-    btnToggle.textContent = on ? 'Go Offline' : 'Go Online';
-
-    if(on){
-      onlineStatusEl.style.background = '#dcfce7';
-      onlineStatusEl.style.borderColor = '#bbf7d0';
-      onlineStatusEl.style.color = '#166534';
-    } else {
-      onlineStatusEl.style.background = '#f3f4f6';
-      onlineStatusEl.style.borderColor = '#d1d5db';
-      onlineStatusEl.style.color = '#374151';
-    }
-    updateDashboardSummary();
-  }
-  btnToggle.addEventListener('click', () => {
-    setOnline(!online);
-  });
-
-  function openSupport(){ document.getElementById('supportModal').style.display='block'; }
-  function closeSupport(){ document.getElementById('supportModal').style.display='none'; }
-  function sendSupport(){ 
-    const txt=document.getElementById('supportText').value.trim(); 
-    if(!txt) return alert('Type a message'); 
-    alert('Support message sent.'); 
-    document.getElementById('supportText').value=''; 
-    closeSupport(); 
-  }
-
-  function openProfile(){ document.getElementById('profileModal').style.display='block'; }
-  function closeProfile(){ document.getElementById('profileModal').style.display='none'; }
-  function saveProfile(){
-    // here you can send to backend; for now just close & alert
-    alert('Profile saved (mock).');
-    closeProfile();
-  }
-
-  document.getElementById('btnProfile').addEventListener('click', openProfile);
-
-  function requestPayout(){ alert('Payout request sent — ops will review.'); }
-  function openPayouts(){ alert('Payouts panel (mock)'); }
-
-  /* -------------------------
-     Location sending
-     ------------------------- */
-  function sendLocation(lat, lng){
-    const token = localStorage.getItem('token');
-    if(!token) return;
-
-    fetch('http://localhost:5000/api/plumbers/me/location', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token
-      },
-      body: JSON.stringify({ lat, lng })
-    })
-    .then(r=>r.json())
-    .then(j=>{
-      if(j && j.status === 'ok'){
-        console.log('Location saved', j);
-      } else {
-        console.warn('Save location response', j);
-      }
-    })
-    .catch(err=>console.warn('Save location failed', err));
-  }
-
-  function onSaveLocation(){
-    if(!localStorage.getItem('token')){
-      alert('You must be logged in to save location');
-      return;
-    }
-    if(!navigator.geolocation){
-      alert('Geolocation is not supported by this browser');
-      return;
-    }
-    navigator.geolocation.getCurrentPosition(
-      (pos)=>{
-        const lat = pos.coords.latitude;
-        const lng = pos.coords.longitude;
-        sendLocation(lat, lng);
-        alert('Location saved (current GPS coordinates sent).');
-      },
-      (err)=>{
-        console.warn(err);
-        alert('Could not get your location. Please enable GPS / location access.');
-      }
-    );
-  }
-
-  /* -------------------------
-     Init
-     ------------------------- */
-  if(!localStorage.getItem('plumb_incoming')) localStorage.setItem('plumb_incoming', JSON.stringify(incoming));
-  incoming = JSON.parse(localStorage.getItem('plumb_incoming') || '[]');
-  history = JSON.parse(localStorage.getItem('plumb_history') || '[]');
-  earnings = JSON.parse(localStorage.getItem('plumb_earnings') || '{"today":0,"week":0,"total":0}');
-
-  renderIncoming();
-  renderHistory();
-  renderEarnings();
-  setOnline(localStorage.getItem('plumb_online') === 'true');
-  if(currentJob) updateActiveUI();
-
-  // default page
-  showPage("dashboard");
-</script>
 </body>
 </html>

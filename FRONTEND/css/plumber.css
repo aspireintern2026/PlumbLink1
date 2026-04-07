@@ -1,0 +1,106 @@
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:Poppins,sans-serif;
+  background: linear-gradient(180deg,#f3fbfb 0%, #ffffff 50%);
+  display:flex;
+  min-height:100vh;
+}
+.sidebar{
+  width:250px;
+  background:linear-gradient(135deg,#001f3f,#008080);
+  color:#fff;
+  padding:20px;
+}
+.sidebar a{
+  display:block;
+  padding:12px;
+  color:#fff;
+  text-decoration:none;
+  border-radius:8px;
+  margin-bottom:6px;
+}
+.sidebar a:hover,.sidebar a.active{background:rgba(255,255,255,.15)}
+.main{
+  flex:1;
+  padding:20px;
+  overflow:auto;
+}
+.header{
+  background: linear-gradient(90deg, #e6fffb 0%, #e6f0ff 100%);
+  padding:15px 20px;
+  border-radius:12px;
+  font-size:1.5rem;
+  font-weight:600;
+  margin-bottom:20px;
+  color:#003b3b;
+  box-shadow: 0 6px 18px rgba(2,48,50,0.04);
+}
+.page{display:none}
+.page.active{display:block}
+.stats{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:20px;
+}
+.stat-card{
+  background: linear-gradient(180deg,#ffffff 0%, #f7fffd 100%);
+  padding:18px;
+  border-radius:12px;
+  text-align:center;
+  border-left:4px solid rgba(0,128,128,0.12);
+}
+.stat-card i{font-size:2rem;color:#008080}
+.welcome-banner{
+  background: linear-gradient(90deg,#ffffff 0%, #f0fcff 100%);
+  padding:28px;
+  border-radius:16px;
+  display:flex;
+  gap:20px;
+  align-items:center;
+  margin-bottom:22px;
+  border: 1px solid rgba(0,128,128,0.06);
+}
+.job-card{
+  background: linear-gradient(90deg,#ffffff 0%, #fffaf6 100%);
+  padding:14px;
+  border-radius:12px;
+  margin-bottom:15px;
+  border-left:4px solid rgba(255,165,0,0.08);
+}
+.chat-box{
+  background: linear-gradient(180deg,#ffffff 0%, #fbffff 100%);
+  height:300px;
+  padding:10px;
+  overflow:auto;
+  border-radius:12px;
+  border:1px solid rgba(0,0,0,0.03);
+}
+.chat-input{
+  display:flex;
+  gap:10px;
+  margin-top:10px;
+}
+.chat-input input{flex:1;padding:8px}
+button{
+  padding:8px 14px;
+  border:none;
+  border-radius:8px;
+  background:#008080;
+  color:#fff;
+  cursor:pointer;
+}
+#loginModal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.5);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:10000;
+}
+.modal{
+  background:#fff;
+  padding:25px;
+  border-radius:12px;
+  width:320px;
+}

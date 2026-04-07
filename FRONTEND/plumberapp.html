@@ -1,0 +1,1360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PlumbLink  Plumber Portal</title>
+  <link rel="icon" href="images/aspirecodelogo.jpeg" type="image/jpeg">
+  
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+  <!-- in-head favicon already set above -->
+
+  <style>
+    :root {
+      --primary: #008080;
+      --primary-dark: #006666;
+      --sidebar-bg: #1a1a1a;
+      --bg-light: #f4f6f9;
+      --card-bg: #ffffff;
+      --text: #333333;
+      --text-light: #666666;
+      --success: #28a745;
+      --danger: #dc3545;
+      --warning: #ffc107;
+      --radius: 16px;
+      --shadow: 0 4px 20px rgba(0,0,0,0.08);
+      --transition: all 0.3s ease;
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg-light);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .top-header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 70px;
+      background: white;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      z-index: 1000;
+    }
+
+    .header-left { display: flex; align-items: center; gap: 16px; }
+    .topbar-title { font-size: 1.5rem; font-weight: 700; color: var(--primary); }
+
+    .header-right { display: flex; align-items: center; gap: 16px; }
+
+    .online-toggle-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 600;
+    }
+
+    .online-indicator-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.95rem;
+    }
+
+    .online-indicator-header i { animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100% { opacity:1 } 50% { opacity:0.5 } }
+
+    .help-btn, .emergency-btn {
+      padding: 10px 16px;
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      border: none;
+      cursor: pointer;
+    }
+
+    .help-btn {
+      background: var(--primary);
+      color: white;
+    }
+
+    .emergency-btn {
+      background: var(--danger);
+      color: white;
+      animation: pulse-red 2s infinite;
+    }
+
+    @keyframes pulse-red {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+
+    .toggle-label {
+      position: relative;
+      display: inline-block;
+      width: 70px;
+      height: 36px;
+      cursor: pointer;
+    }
+
+    .toggle-label input { opacity: 0; width: 0; height: 0; }
+
+    .toggle-track {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: #ccc;
+      border-radius: 36px;
+      transition: background 0.4s ease;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .toggle-knob {
+      position: absolute;
+      height: 30px;
+      width: 30px;
+      left: 3px;
+      bottom: 3px;
+      background: white;
+      border-radius: 50%;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    input:checked + .toggle-track { background: var(--success); }
+    input:checked + .toggle-track .toggle-knob { transform: translateX(34px); }
+
+    .toggle-label.is-loading .toggle-track {
+      background: linear-gradient(90deg, #ccc 0%, #e0e0e0 50%, #ccc 100%);
+      background-size: 200% 100%;
+      animation: loading 1.6s linear infinite;
+    }
+
+    @keyframes loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+    /* Modals */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .modal-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal {
+      background: white;
+      border-radius: var(--radius);
+      width: 90%;
+      max-width: 420px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      overflow: hidden;
+      animation: modal-pop 0.4s ease forwards;
+    }
+
+    @keyframes modal-pop {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .modal-header {
+      padding: 20px;
+      text-align: center;
+      font-size: 1.4rem;
+      font-weight: 600;
+    }
+
+    .modal-help-header {
+      background: var(--primary);
+      color: white;
+    }
+
+    .modal-sos-header {
+      background: var(--danger);
+      color: white;
+    }
+
+    .modal-body {
+      padding: 20px;
+      text-align: center;
+    }
+
+    .modal-body p {
+      margin-bottom: 20px;
+      color: var(--text-light);
+      line-height: 1.6;
+    }
+
+    .support-options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .support-btn {
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      border: none;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .support-chat { background: #e6f7f7; color: var(--primary); }
+    .support-call { background: var(--success); color: white; }
+    .support-faq { background: #f0f0f0; color: var(--text); }
+
+    .sos-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .btn-sos-emergency {
+      background: var(--danger);
+      color: white;
+      padding: 16px;
+      font-size: 1.3rem;
+      font-weight: 700;
+      border-radius: 30px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-sos-admin {
+      background: var(--warning);
+      color: black;
+      padding: 14px;
+      font-size: 1.1rem;
+      border-radius: 30px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-cancel {
+      background: transparent;
+      color: var(--text-light);
+      padding: 12px;
+      font-size: 1rem;
+      border: none;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 70px; left: 0;
+      width: 260px; height: calc(100% - 70px);
+      background: var(--sidebar-bg);
+      color: white;
+      padding: 30px 20px;
+      overflow-y: auto;
+      z-index: 999;
+    }
+
+    .sidebar h2 { font-size: 1.5rem; margin-bottom: 2rem; text-align: center; }
+    .sidebar h2 i { color: var(--primary); margin-right: 8px; }
+
+    .sidebar a {
+      display: block;
+      padding: 14px 18px;
+      color: #ddd;
+      text-decoration: none;
+      border-radius: var(--radius);
+      margin-bottom: 8px;
+      transition: var(--transition);
+    }
+
+    .sidebar a:hover, .sidebar a.active {
+      background: var(--primary);
+      color: white;
+      padding-left: 26px;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      height: 70px;
+      background: white;
+      box-shadow: 0 -2px 12px rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 999;
+    }
+
+    .bottom-nav a {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: var(--text-light);
+      text-decoration: none;
+      font-size: 0.75rem;
+      width: 20%;
+    }
+
+    .bottom-nav a i { font-size: 1.5rem; margin-bottom: 4px; }
+    .bottom-nav a.active { color: var(--primary); }
+
+    .main {
+      padding: 90px 20px 100px;
+    }
+
+    @media (min-width: 768px) {
+      .sidebar { display: block; }
+      .bottom-nav { display: none; }
+      .main { margin-left: 260px; padding: 90px 40px; }
+    }
+
+    @media (max-width: 767px) {
+      .sidebar { display: none; }
+      .bottom-nav { display: flex; }
+      .main { margin-left: 0; }
+    }
+
+    .header { font-size: 1.8rem; font-weight: 600; margin-bottom: 1.5rem; color: var(--primary); }
+
+    .page { display: none; }
+    .page.active { display: block; }
+
+    .card {
+      background: var(--card-bg);
+      padding: 1.5rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 1.5rem;
+    }
+
+    #map { height: 340px; border-radius: var(--radius); margin-top: 1rem; }
+
+    .earnings-highlight {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      padding: 2rem;
+      border-radius: var(--radius);
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .earnings-highlight h1 { font-size: 3.2rem; margin: 0.5rem 0; }
+
+    .quick-metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .metric-card {
+      background: var(--card-bg);
+      padding: 1.2rem;
+      border-radius: var(--radius);
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+
+    .metric-card i { font-size: 2.2rem; color: var(--primary); margin-bottom: 0.8rem; }
+
+    .job-item {
+      background: var(--card-bg);
+      padding: 1.4rem;
+      border-radius: var(--radius);
+      margin-bottom: 1rem;
+      border-left: 6px solid var(--primary);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .job-active {
+      border-left-color: var(--success);
+      background: #f8fff8;
+    }
+
+    .job-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.8rem; }
+    .job-payout { font-size: 1.6rem; font-weight: 700; color: var(--success); }
+
+    .job-details { font-size: 0.95rem; color: var(--text-light); margin-bottom: 1rem; line-height: 1.6; }
+
+    .job-actions { display: flex; gap: 1rem; margin-top: 1rem; }
+
+    .btn-accept, .btn-decline, .btn-full {
+      padding: 0.9rem;
+      border-radius: 30px;
+      font-weight: 600;
+      cursor: pointer;
+      flex: 1;
+      font-size: 1rem;
+      border: none;
+      text-align: center;
+    }
+
+    .btn-accept { background: var(--success); color: white; }
+    .btn-decline { background: transparent; color: var(--danger); border: 2px solid var(--danger); }
+    .btn-navigate { background: var(--primary); color: white; }
+    .btn-reached { background: var(--warning); color: white; }
+
+    .no-jobs { text-align: center; padding: 4rem 1rem; color: var(--text-light); }
+    .no-jobs i { font-size: 5rem; color: #ddd; margin-bottom: 1rem; }
+
+    .connection-status {
+      position: fixed;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.8);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+
+    .connection-status.show { opacity: 1; }
+
+    .swipe-container {
+      background: #fff9e6;
+      padding: 30px;
+      border-radius: var(--radius);
+      text-align: center;
+      margin: 20px 0;
+      box-shadow: var(--shadow);
+    }
+
+    .swipe-button {
+      background: var(--success);
+      color: white;
+      padding: 20px 40px;
+      border-radius: 50px;
+      font-size: 1.4rem;
+      font-weight: 700;
+      width: 80%;
+      max-width: 400px;
+      margin: 20px auto;
+      box-shadow: 0 8px 20px rgba(40,167,69,0.3);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .materials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .material-item {
+      background: white;
+      border-radius: var(--radius);
+      padding: 15px;
+      text-align: center;
+      box-shadow: var(--shadow);
+      border: 2px solid transparent;
+      cursor: pointer;
+    }
+
+    .material-item.selected {
+      border-color: var(--primary);
+      background: #e6f7f7;
+    }
+
+    .material-item img {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      margin-bottom: 10px;
+      border-radius: 8px;
+    }
+
+    .photo-upload {
+      border: 3px dashed #ccc;
+      border-radius: var(--radius);
+      padding: 40px;
+      text-align: center;
+      margin: 20px 0;
+      background: #f9f9f9;
+      cursor: pointer;
+    }
+
+    .photo-preview {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .photo-preview img {
+      width: 100%;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .work-timer {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-align: center;
+      margin: 20px 0;
+      font-family: monospace;
+    }
+
+    .completion-screen {
+      text-align: center;
+      padding: 60px 20px;
+      background: linear-gradient(135deg, #e6f7f7, #f8fff8);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      min-height: 70vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .completion-screen h2 {
+      font-size: 2.2rem;
+      color: var(--success);
+      margin-bottom: 40px;
+    }
+
+    .completion-screen p {
+      font-size: 1.2rem;
+      margin: 15px 0;
+      color: var(--text);
+    }
+
+    .completion-screen .thank-you {
+      font-size: 2rem;
+      font-weight: 600;
+      margin: 50px 0 40px;
+      color: var(--primary);
+    }
+
+    .completion-buttons {
+      display: flex;
+      gap: 20px;
+      margin-top: 40px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary-large {
+      background: var(--primary);
+      color: white;
+      padding: 16px 40px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      border-radius: 30px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(0,128,128,0.3);
+      min-width: 200px;
+    }
+
+    .btn-secondary-large {
+      background: #007bff;
+      color: white;
+      padding: 16px 40px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      border-radius: 30px;
+      border: none;
+      cursor: pointer;
+      min-width: 150px;
+    }
+
+    .profile-header { display: flex; align-items: center; gap: 20px; margin-bottom: 2rem; }
+    .profile-avatar { width: 100px; height: 100px; border-radius: 50%; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: bold; }
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0; }
+    .info-item { background: #f0f0f0; padding: 1rem; border-radius: var(--radius); }
+    .info-item strong { display: block; color: var(--text-light); font-size: 0.9rem; }
+    .info-item span { font-size: 1.1rem; font-weight: 600; }
+    .shift-calendar { background: white; border-radius: var(--radius); padding: 1rem; box-shadow: var(--shadow); margin-bottom: 1.5rem; text-align: center; }
+    .shift-calendar h3 { margin-bottom: 1rem; color: var(--primary); }
+    .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; font-size: 0.9rem; }
+    .day-header { font-weight: 600; color: var(--text-light); padding: 0.5rem 0; }
+    .day-cell { padding: 0.8rem 0; border-radius: 8px; }
+    .day-cell.today { background: var(--primary); color: white; font-weight: bold; }
+    .day-cell.working { background: #e6f7f7; }
+    .settings-item { display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 0; border-bottom: 1px solid #eee; }
+    .settings-item:last-child { border-bottom: none; }
+  </style>
+</head>
+<body>
+
+<div class="top-header">
+  <div class="header-left">
+    <div class="topbar-title">PlumbLink</div>
+  </div>
+  <div class="header-right">
+    <div class="online-toggle-header">
+      <label class="toggle-label">
+        <input type="checkbox" id="headerAvailabilityToggle">
+        <span class="toggle-track"><span class="toggle-knob"></span></span>
+      </label>
+      <div class="online-indicator-header" id="headerStatus">
+        <i class="fas fa-circle"></i> Offline
+      </div>
+    </div>
+    <button class="help-btn" onclick="openHelpModal()">Help</button>
+    <button class="emergency-btn" onclick="openSOSModal()">SOS</button>
+  </div>
+</div>
+
+<div id="connectionStatus" class="connection-status">Connecting...</div>
+
+<!-- HELP MODAL -->
+<div id="helpModal" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header modal-help-header">
+      <i class="fas fa-headset fa-2x"></i><br>
+      Help & Support
+    </div>
+    <div class="modal-body">
+      <p>How can we assist you today?</p>
+      <div class="support-options">
+        <button class="support-btn support-chat" onclick="alert('Live chat connecting...')">
+          <i class="fas fa-comment-dots"></i> Chat with Support
+        </button>
+        <button class="support-btn support-call" onclick="window.location.href='tel:+918800880088'">
+          <i class="fas fa-phone"></i> Call Support (+91 8800880088)
+        </button>
+        <button class="support-btn support-faq" onclick="alert('Opening FAQ...')">
+          <i class="fas fa-question-circle"></i> View FAQ
+        </button>
+      </div>
+      <button class="btn-cancel" onclick="closeHelpModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- SOS MODAL -->
+<div id="sosModal" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header modal-sos-header">
+      <i class="fas fa-exclamation-triangle fa-3x"></i><br>
+      EMERGENCY SOS
+    </div>
+    <div class="modal-body">
+      <p><strong>Are you in danger or need immediate help?</strong></p>
+      <p>Your location will be shared with emergency services.</p>
+      <div class="sos-actions">
+        <button class="btn-sos-emergency" onclick="window.location.href='tel:112'">
+          <i class="fas fa-phone-alt"></i> Call Emergency (112)
+        </button>
+        <button class="btn-sos-admin" onclick="sendSOStoAdmin()">
+          Send Alert to PlumbLink Admin
+        </button>
+      </div>
+      <button class="btn-cancel" onclick="closeSOSModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="sidebar">
+  <h2><i class="fas fa-wrench"></i> Plumber</h2>
+  <a class="active" data-page="home"><i class="fas fa-home"></i> Home</a>
+  <a data-page="earnings"><i class="fas fa-rupee-sign"></i> Earnings</a>
+  <a data-page="shift"><i class="fas fa-clock"></i> Shift</a>
+  <a data-page="profile"><i class="fas fa-user"></i> Profile</a>
+  <a data-page="settings"><i class="fas fa-cog"></i> Settings</a>
+  <a onclick="logout()" style="margin-top:auto"><i class="fas fa-sign-out-alt"></i> Logout</a>
+</div>
+
+<div class="bottom-nav">
+  <a class="active" data-page="home"><i class="fas fa-home"></i><span>Home</span></a>
+  <a data-page="earnings"><i class="fas fa-rupee-sign"></i><span>Earnings</span></a>
+  <a data-page="shift"><i class="fas fa-clock"></i><span>Shift</span></a>
+  <a data-page="profile"><i class="fas fa-user"></i><span>Profile</span></a>
+  <a data-page="settings"><i class="fas fa-cog"></i><span>Settings</span></a>
+</div>
+
+<div class="main">
+
+  <!-- HOME -->
+  <div id="home" class="page active">
+    <div class="header">Dashboard</div>
+
+    <div class="earnings-highlight">
+      <p>Today's Earnings (January 02, 2026)</p>
+      <h1 id="todayEarnings">₹0</h1>
+      <p id="demandMessage">You are currently offline</p>
+    </div>
+
+    <div class="card">
+      <h3>Jobs Near You</h3>
+      <div id="map"></div>
+    </div>
+
+    <div class="quick-metrics">
+      <div class="metric-card"><i class="fas fa-tasks"></i><h3 id="metric-jobs-done">0</h3><small>Jobs Done</small></div>
+      <div class="metric-card"><i class="fas fa-medal"></i><h3 id="metric-incentives">₹0</h3><small>Incentives</small></div>
+      <div class="metric-card"><i class="fas fa-clock"></i><h3 id="metric-online-duration">0h 0m</h3><small>Online Today</small></div>
+      <div class="metric-card"><i class="fas fa-star"></i><h3 id="metric-rating">0.0</h3><small>Rating</small></div>
+    </div>
+
+    <div class="card">
+      <h3>Available Jobs</h3>
+      <div id="jobsContainer"></div>
+      <div id="noJobsMessage" class="no-jobs">
+        <i class="fas fa-inbox"></i>
+        <h3>No jobs right now</h3>
+        <p>Go online to receive job requests</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACTIVE JOB PAGE -->
+  <div id="activejob" class="page">
+    <div class="header">Active Job</div>
+
+    <div class="card">
+      <div id="activeJobWorkflow">
+        <!-- Workflow steps injected here -->
+      </div>
+    </div>
+
+    <div class="card" style="text-align:center;">
+      <button class="btn-decline btn-full" onclick="cancelActiveJob()">
+        Cancel Job
+      </button>
+    </div>
+  </div>
+
+  <!-- EARNINGS -->
+    <div id="earnings" class="page">
+    <div class="header">Earnings</div>
+    <div class="earnings-highlight">
+      <p>This Month (January 2026)</p>
+      <h1 id="earnings-monthly">₹0</h1>
+      <p id="earnings-trend">—</p>
+    </div>
+    <div class="card">
+      <h3>Earnings Trend</h3>
+      <canvas id="earningsChart" height="140"></canvas>
+    </div>
+  </div>
+
+  <!-- SHIFT -->
+  <div id="shift" class="page">
+    <div class="header">My Shift</div>
+
+    <div class="card shift-calendar">
+      <h3>January 2026</h3>
+      <div class="calendar-grid">
+        <div class="day-header">Sun</div><div class="day-header">Mon</div><div class="day-header">Tue</div><div class="day-header">Wed</div>
+        <div class="day-header">Thu</div><div class="day-header">Fri</div><div class="day-header">Sat</div>
+
+        <div></div><div></div><div></div><div></div><div></div><div class="day-cell">1</div><div class="day-cell today">2</div>
+        <div class="day-cell working">3</div><div class="day-cell working">4</div><div class="day-cell working">5</div>
+        <div class="day-cell working">6</div><div class="day-cell working">7</div><div class="day-cell working">8</div><div class="day-cell working">9</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Today's Shift</h3>
+      <p><strong>Status:</strong> Online</p>
+      <p><strong>Start Time:</strong> 8:00 AM</p>
+      <p><strong>Online Duration:</strong> 6h 45m</p>
+      <p><strong>Target:</strong> 8 hours</p>
+    </div>
+
+    <div class="card">
+      <h3>Weekly Summary</h3>
+      <p><strong>This Week:</strong> 42 hours</p>
+      <p><strong>Incentives Earned:</strong> ₹3,400</p>
+      <p><strong>Jobs Completed:</strong> 28</p>
+    </div>
+  </div>
+
+  <!-- PROFILE -->
+  <div id="profile" class="page">
+    <div class="header">My Profile</div>
+
+    <div class="card profile-header">
+      <div class="profile-avatar">RS</div>
+      <div>
+        <h2>Rahul Sharma</h2>
+        <p>Professional Plumber • Mumbai</p>
+        <p><i class="fas fa-star" style="color:gold"></i> 4.9 (342 reviews)</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Personal Information</h3>
+      <div class="info-grid">
+        <div class="info-item"><strong>Phone</strong><span>+91 98765 43210</span></div>
+        <div class="info-item"><strong>Email</strong><span>rahul.sharma@email.com</span></div>
+        <div class="info-item"><strong>ID</strong><span>PLB042</span></div>
+        <div class="info-item"><strong>Joined</strong><span>June 2023</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Performance Stats</h3>
+      <div class="info-grid">
+          <div class="info-item"><strong>Total Jobs</strong><span id="perf-total-jobs">0</span></div>
+          <div class="info-item"><strong>Completion Rate</strong><span id="perf-completion-rate">0%</span></div>
+          <div class="info-item"><strong>Total Earnings</strong><span id="perf-total-earnings"></span></div>
+          <div class="info-item"><strong>Response Time</strong><span id="perf-response-time">—</span></div>
+        </div>
+    </div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div id="settings" class="page">
+    <div class="header">Settings</div>
+
+    <div class="card">
+      <h3>Preferences</h3>
+      <div class="settings-item">
+        <span>Accept jobs automatically within 5km</span>
+        <label class="toggle-label"><input type="checkbox" checked><span class="toggle-track"><span class="toggle-knob"></span></span></label>
+      </div>
+      <div class="settings-item">
+        <span>Sound notifications for new jobs</span>
+        <label class="toggle-label"><input type="checkbox" checked><span class="toggle-track"><span class="toggle-knob"></span></span></label>
+      </div>
+      <div class="settings-item">
+        <span>Vibration alerts</span>
+        <label class="toggle-label"><input type="checkbox"><span class="toggle-track"><span class="toggle-knob"></span></span></label>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Account</h3>
+      <div class="settings-item">
+        <span>Change Password</span>
+        <i class="fas fa-chevron-right"></i>
+      </div>
+      <div class="settings-item">
+        <span>Bank Account Details</span>
+        <i class="fas fa-chevron-right"></i>
+      </div>
+      <div class="settings-item">
+        <span>Documents & Verification</span>
+        <i class="fas fa-chevron-right"></i>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Support</h3>
+      <div class="settings-item">
+        <span>Contact Support</span>
+        <i class="fas fa-chevron-right"></i>
+      </div>
+      <div class="settings-item">
+        <span>Rate App</span>
+        <i class="fas fa-chevron-right"></i>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const SERVER_URL = "http://127.0.0.1:5000";
+const PLUMBER_ID = "42";
+
+let socket = null;
+let map = null;
+let locationWatchId = null;
+let currentJob = null;
+let workStartTime = null;
+let workTimerInterval = null;
+let hasReached = false;
+
+// Modal Functions
+function openHelpModal() {
+  document.getElementById("helpModal").classList.add("show");
+}
+
+function closeHelpModal() {
+  document.getElementById("helpModal").classList.remove("show");
+}
+
+function openSOSModal() {
+  document.getElementById("sosModal").classList.add("show");
+}
+
+function closeSOSModal() {
+  document.getElementById("sosModal").classList.remove("show");
+}
+
+function sendSOStoAdmin() {
+  if (socket?.connected) {
+    socket.emit("sos_alert", { plumber_id: PLUMBER_ID, message: "Emergency SOS triggered" });
+  }
+  alert("SOS Alert Sent!\n\nYour location and alert have been sent to PlumbLink support team.\nHelp is on the way.");
+  closeSOSModal();
+}
+
+// Close modals when clicking outside
+document.querySelectorAll(".modal-overlay").forEach(overlay => {
+  overlay.addEventListener("click", e => {
+    if (e.target === overlay) {
+      overlay.classList.remove("show");
+    }
+  });
+});
+
+function initMap() {
+  if (map) map.remove();
+  map = L.map("map").setView([19.076, 72.8777], 13);
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
+}
+
+function clearMap() {
+  if (map) { map.remove(); map = null; }
+}
+
+function createJobElement(job) {
+  const div = document.createElement("div");
+  div.className = "job-item";
+  div.id = `job-${job.job_id}`;
+  const jobJson = JSON.stringify(job).replace(/'/g, "&apos;");
+  div.innerHTML = `
+    <div class="job-header">
+      <div>
+        <strong>${job.service || "Plumbing Service"}</strong><br>
+        <small>${job.address || "Near Mumbai"}</small>
+      </div>
+      <div class="job-payout">${job.amount ? '₹' + job.amount : ''}</div>
+    </div>
+    <div class="job-details">
+      <div><i class="fas fa-clock"></i> ${job.time || "ASAP"}</div>
+      <div><i class="fas fa-map-marker-alt"></i> ~${Math.round(job.distance || 4)} km</div>
+    </div>
+    <div class="job-actions">
+      <button class="btn-decline" onclick="declineJob('${job.job_id}')">Decline</button>
+      <button class="btn-accept" data-job='${jobJson}' onclick="acceptJob('${job.job_id}', this.dataset.job)">Accept</button>
+    </div>
+  `;
+  return div;
+}
+
+function renderJob(job) {
+  const container = document.getElementById("jobsContainer");
+  container.prepend(createJobElement(job));
+  document.getElementById("noJobsMessage").style.display = "none";
+  if ("vibrate" in navigator) navigator.vibrate(200);
+}
+
+function acceptJob(jobId, jobString) {
+  const job = JSON.parse(jobString.replace(/&apos;/g, "'"));
+  currentJob = { 
+    ...job, 
+    job_id: jobId,
+    booking_id: job.booking_id || "BK" + Math.floor(100000 + Math.random() * 900000),
+    name: job.name || "Customer Name",
+    phone: job.phone || "+91 98765 43210",
+    address: job.address || "Full Address, Mumbai",
+    customer_lat: job.customer_lat || 19.1185,
+    customer_lng: job.customer_lng || 72.8468,
+    amount: job.amount || 0
+  };
+  hasReached = false;
+
+  document.getElementById(`job-${jobId}`)?.remove();
+
+  if (socket?.connected) {
+    socket.emit('accept_job', { job_id: jobId, plumber_id: PLUMBER_ID, plumber_name: "Rahul Sharma" });
+  }
+
+  showPage("activejob");
+  startActiveJobWorkflow();
+}
+
+function startActiveJobWorkflow() {
+  const container = document.getElementById("activeJobWorkflow");
+  container.innerHTML = `
+    <div class="job-item job-active">
+      <div class="job-header">
+          <strong>${currentJob.service || "Plumbing Service"}</strong>
+          <div class="job-payout">${currentJob.amount ? '₹' + currentJob.amount : ''}</div>
+        </div>
+      <div class="job-details">
+        <p><strong>Booking ID:</strong> ${currentJob.booking_id}</p>
+        <p><strong>Customer:</strong> ${currentJob.name}</p>
+        <p><strong>Address:</strong> ${currentJob.address}</p>
+        <p><strong>Contact:</strong> <a href="tel:${currentJob.phone}">${currentJob.phone}</a></p>
+      </div>
+      <div class="job-actions">
+        <button class="btn-navigate btn-full" onclick="navigateToCustomer()">
+          <i class="fas fa-location-arrow"></i> Navigate to Location
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function navigateToCustomer() {
+  window.open(`https://www.google.com/maps/dir/?api=1&destination=${currentJob.customer_lat},${currentJob.customer_lng}`, '_blank');
+
+  document.getElementById("activeJobWorkflow").innerHTML = `
+    <div class="job-item job-active">
+      <h3><i class="fas fa-route"></i> Navigating to Customer</h3>
+      <div class="job-details" style="text-align:center; margin:30px 0;">
+        <p><strong>${currentJob.name}</strong></p>
+        <p>${currentJob.address}</p>
+      </div>
+      <button class="btn-reached btn-full" onclick="markAsReached()">
+        <i class="fas fa-flag-checkered"></i> I Have Reached the Location
+      </button>
+    </div>
+  `;
+}
+
+function markAsReached() {
+  hasReached = true;
+  document.getElementById("activeJobWorkflow").innerHTML = `
+    <div class="swipe-container">
+      <h3>Reached Customer Location!</h3>
+      <p>Swipe right to start the work</p>
+      <div class="swipe-button" onclick="startWork()">
+        → Swipe to Start Work →
+      </div>
+    </div>
+  `;
+}
+
+function startWork() {
+  workStartTime = Date.now();
+
+  document.getElementById("activeJobWorkflow").innerHTML = `
+    <div class="work-timer" id="workTimer">00:00</div>
+    <h3>Work In Progress</h3>
+    <p>Select materials used:</p>
+
+    <div class="materials-grid">
+      <div class="material-item" onclick="this.classList.toggle('selected')">
+        <img src="https://via.placeholder.com/80?text=Pipe" alt="PVC Pipe">
+        <p>PVC Pipe 1"</p>
+        <strong>₹280</strong>
+      </div>
+      <div class="material-item" onclick="this.classList.toggle('selected')">
+        <img src="https://via.placeholder.com/80?text=Tape" alt="Teflon Tape">
+        <p>Teflon Tape</p>
+        <strong>₹60</strong>
+      </div>
+      <div class="material-item" onclick="this.classList.toggle('selected')">
+        <img src="https://via.placeholder.com/80?text=Sealant" alt="Sealant">
+        <p>Silicone Sealant</p>
+        <strong>₹350</strong>
+      </div>
+      <div class="material-item" onclick="this.classList.toggle('selected')">
+        <img src="https://via.placeholder.com/80?text=Elbow" alt="Elbow Joint">
+        <p>Elbow Joint</p>
+        <strong>₹120</strong>
+      </div>
+    </div>
+
+    <button class="btn-full" style="background:var(--primary);color:white;" onclick="goToPhotos()">
+      Continue to Upload Photos →
+    </button>
+  `;
+
+  workTimerInterval = setInterval(() => {
+    if (workStartTime) {
+      const secs = Math.floor((Date.now() - workStartTime) / 1000);
+      const m = String(Math.floor(secs / 60)).padStart(2, '0');
+      const s = String(secs % 60).padStart(2, '0');
+      document.getElementById("workTimer").textContent = `${m}:${s}`;
+    }
+  }, 1000);
+}
+
+function goToPhotos() {
+  document.getElementById("activeJobWorkflow").innerHTML = `
+    <h3>Upload Proof of Work</h3>
+    <p>Take BEFORE and AFTER photos</p>
+
+    <div class="photo-upload" onclick="document.getElementById('beforeInput').click()">
+      <i class="fas fa-camera" style="font-size:3rem;color:#aaa;"></i>
+      <p>Tap for BEFORE photo</p>
+      <input type="file" id="beforeInput" accept="image/*" capture="camera" style="display:none" onchange="previewImage(this, 'before')">
+    </div>
+    <div class="photo-preview" id="beforePreview"></div>
+
+    <div class="photo-upload" onclick="document.getElementById('afterInput').click()" style="margin-top:30px;">
+      <i class="fas fa-camera" style="font-size:3rem;color:#aaa;"></i>
+      <p>Tap for AFTER photo</p>
+      <input type="file" id="afterInput" accept="image/*" capture="camera" style="display:none" onchange="previewImage(this, 'after')">
+    </div>
+    <div class="photo-preview" id="afterPreview"></div>
+
+    <button class="btn-full" style="background:var(--success);color:white;margin-top:30px;" onclick="completeJob()">
+      Complete Job & Get Paid
+    </button>
+  `;
+}
+
+function previewImage(input, type) {
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      document.getElementById(type + 'Preview').innerHTML = 
+        `<img src="${e.target.result}" alt="${type} photo">`;
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+function completeJob() {
+  clearInterval(workTimerInterval);
+
+  const earningsEl = document.getElementById("todayEarnings");
+  const current = parseInt(earningsEl.textContent.replace(/[₹,]/g, '')) || 0;
+  const newTotal = current + currentJob.amount;
+  earningsEl.textContent = `₹${newTotal.toLocaleString()}`;
+
+  document.getElementById("activeJobWorkflow").innerHTML = `
+    <div class="completion-screen">
+      <h2>Job Completed Successfully!</h2>
+      
+      <p><strong>Booking ID:</strong> ${currentJob.booking_id}</p>
+      <p><strong>Customer:</strong> ${currentJob.name}</p>
+      <p><strong>Earnings:</strong> ₹${currentJob.amount}</p>
+      
+      <div class="thank-you">Thank you!</div>
+      
+      <div class="completion-buttons">
+        <button class="btn-primary-large" onclick="goToHomeAfterCompletion()">
+          Go to Home
+        </button>
+        <button class="btn-secondary-large" onclick="goToHomeAfterCompletion()">
+          OK
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function goToHomeAfterCompletion() {
+  currentJob = null;
+  hasReached = false;
+  workStartTime = null;
+  workTimerInterval = null;
+
+  showPage("home");
+  document.getElementById("activeJobWorkflow").innerHTML = "";
+}
+
+function cancelActiveJob() {
+  if (confirm("Cancel this job?")) {
+    currentJob = null;
+    hasReached = false;
+    clearInterval(workTimerInterval);
+    showPage("home");
+  }
+}
+
+function declineJob(jobId) {
+  document.getElementById(`job-${jobId}`)?.remove();
+}
+
+function connectSocket() {
+  if (socket?.connected) return;
+  socket = io(`${SERVER_URL}/plumber`, {
+    transports: ["websocket", "polling"],
+    query: { plumber_id: PLUMBER_ID }
+  });
+  socket.on("connect", () => showToast("Connected – Ready for jobs"));
+  socket.on("disconnect", () => showToast("Disconnected"));
+  socket.on("new_job", renderJob);
+  socket.on("job_taken", data => document.getElementById(`job-${data.job_id}`)?.remove());
+}
+
+function disconnectSocket() {
+  if (socket) { socket.disconnect(); socket = null; }
+}
+
+function startLocationTracking() {
+  if (!navigator.geolocation) return;
+  locationWatchId = navigator.geolocation.watchPosition(
+    pos => {
+      const { latitude: lat, longitude: lng } = pos.coords;
+      if (socket?.connected) socket.emit("update_location", { plumber_id: PLUMBER_ID, lat, lng });
+      if (map) map.setView([lat, lng], 13);
+    },
+    err => console.warn("Location error:", err),
+    { enableHighAccuracy: true, timeout: 10000, maximumAge: 30000 }
+  );
+}
+
+function stopLocationTracking() {
+  if (locationWatchId) navigator.geolocation.clearWatch(locationWatchId);
+  if (socket?.connected) socket.emit("go_offline", { plumber_id: PLUMBER_ID });
+}
+
+const toggle = document.getElementById("headerAvailabilityToggle");
+const statusEl = document.getElementById("headerStatus");
+const demandMessage = document.getElementById("demandMessage");
+
+toggle.addEventListener("change", function() {
+  const label = this.closest(".toggle-label");
+  label.classList.add("is-loading");
+  this.disabled = true;
+
+  if (this.checked) {
+    statusEl.innerHTML = `<i class="fas fa-circle" style="color:var(--success)"></i> Online`;
+    demandMessage.textContent = "High demand in your area!";
+    document.getElementById("noJobsMessage").style.display = "none";
+    initMap();
+    connectSocket();
+    startLocationTracking();
+  } else {
+    statusEl.innerHTML = `<i class="fas fa-circle" style="color:var(--danger)"></i> Offline`;
+    demandMessage.textContent = "You are currently offline";
+    clearMap();
+    stopLocationTracking();
+    disconnectSocket();
+  }
+
+  setTimeout(() => {
+    label.classList.remove("is-loading");
+    this.disabled = false;
+  }, 800);
+});
+
+function showToast(msg) {
+  const toast = document.getElementById("connectionStatus");
+  toast.textContent = msg;
+  toast.classList.add("show");
+  setTimeout(() => toast.classList.remove("show"), 3000);
+}
+
+function showPage(id) {
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  document.getElementById(id)?.classList.add("active");
+  document.querySelectorAll("[data-page]").forEach(a => a.classList.remove("active"));
+  document.querySelectorAll(`[data-page="${id}"]`).forEach(a => a.classList.add("active"));
+
+  if (id === "home" && toggle.checked) initMap();
+  if (id === "earnings") loadEarningsChart();
+}
+
+document.querySelectorAll("[data-page]").forEach(link => {
+  link.addEventListener("click", e => {
+    e.preventDefault();
+    showPage(link.dataset.page);
+  });
+});
+
+function loadEarningsChart() {
+  const ctx = document.getElementById("earningsChart");
+  if (!ctx || ctx.chart) return;
+  ctx.chart = new Chart(ctx.getContext("2d"), {
+    type: "line",
+    data: {
+      labels: ["Dec 25", "Dec 28", "Dec 31", "Jan 1", "Jan 2"],
+      datasets: [{
+        label: "Earnings",
+        data: [6200, 7100, 4900, 7200, 5800],
+        borderColor: "#008080",
+        backgroundColor: "rgba(0,128,128,0.15)",
+        tension: 0.4,
+        fill: true
+      }]
+    },
+    options: { responsive: true, plugins: { legend: { display: false } } }
+  });
+}
+
+function logout() {
+  if (confirm("Log out of PlumbLink?")) {
+    localStorage.clear();
+    alert("Logged out successfully.");
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  showPage("home");
+  // try to populate plumber stats from API if token present
+  fetchPlumberStats();
+});
+
+function getAuthToken(){
+  return localStorage.getItem('access_token') || localStorage.getItem('token') || localStorage.getItem('auth_token') || localStorage.getItem('jwt') || null;
+}
+
+async function fetchPlumberStats(){
+  const token = getAuthToken();
+  if(!token) return;
+  try{
+    const res = await fetch(SERVER_URL + '/api/bookings/plumber', { headers: { 'Authorization': 'Bearer ' + token }});
+    if(!res.ok) return;
+    const data = await res.json();
+    const bookings = data.bookings || [];
+
+    // compute basic stats
+    const now = new Date();
+    let todaysEarnings = 0;
+    let monthlyEarnings = 0;
+    let jobsDone = 0;
+    let completed = 0;
+
+    bookings.forEach(b => {
+      const amt = Number(b.amount || b.payout || b.price || 0) || 0;
+      const created = new Date(b.created_at || b.time || b.assigned_at || null);
+      if(!isNaN(created)){
+        if(created.toDateString() === now.toDateString()) todaysEarnings += amt;
+        if(created.getMonth() === now.getMonth() && created.getFullYear() === now.getFullYear()) monthlyEarnings += amt;
+      }
+      jobsDone += 1;
+      if((b.status||'').toLowerCase() === 'completed') completed += 1;
+    });
+
+    // update UI
+    const todayEl = document.getElementById('todayEarnings');
+    const monthlyEl = document.getElementById('earnings-monthly');
+    const jobsEl = document.getElementById('metric-jobs-done');
+    const incentivesEl = document.getElementById('metric-incentives');
+    const perfJobsEl = document.getElementById('perf-total-jobs');
+    const perfEarningsEl = document.getElementById('perf-total-earnings');
+    const perfCompletionEl = document.getElementById('perf-completion-rate');
+
+    if(todayEl) todayEl.textContent = todaysEarnings ? ('₹' + todaysEarnings.toLocaleString('en-IN')) : '₹0';
+    if(monthlyEl) monthlyEl.textContent = monthlyEarnings ? ('₹' + monthlyEarnings.toLocaleString('en-IN')) : '₹0';
+    if(jobsEl) jobsEl.textContent = jobsDone || 0;
+    if(incentivesEl) incentivesEl.textContent = '₹0';
+    if(perfJobsEl) perfJobsEl.textContent = jobsDone || 0;
+    if(perfEarningsEl) perfEarningsEl.textContent = monthlyEarnings ? ('₹' + monthlyEarnings.toLocaleString('en-IN')) : '';
+    if(perfCompletionEl) perfCompletionEl.textContent = jobsDone ? Math.round((completed / jobsDone) * 100) + '%' : '0%';
+
+  }catch(err){
+    console.warn('Failed to fetch plumber stats', err);
+  }
+}
+</script>
+
+</body>
+</html>

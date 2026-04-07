@@ -9,11 +9,28 @@
     rel="stylesheet" 
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
   />
+  <link rel="icon" href="/images/aspirecodelogo.jpeg" type="image/jpeg">
 
   <style>
+    :root{
+      --navy: #001F3F;
+      --teal: #008080;
+      --soft-green: #98FB98;
+      --white: #FFFFFF;
+      --light-grey: #F5F5F5;
+      --text-dark: #333333;
+      --text-light: #666666;
+      --shadow-subtle: 0 2px 10px rgba(0, 31, 63, 0.1);
+      --shadow-card: 0 4px 20px rgba(0, 128, 128, 0.08);
+      --gradient-primary: linear-gradient(135deg, var(--navy) 0%, var(--teal) 100%);
+      --border-radius: 12px;
+      --transition: all 0.3s ease;
+    }
     html, body {
       height: 100%;
       margin: 0;
+      background: var(--texture);
+      color: var(--text-primary);
     }
     #map {
       height: 100%;
@@ -24,14 +41,18 @@
       top: 10px;
       left: 10px;
       z-index: 1000;
-      background: rgba(0,0,0,0.65);
+      background: rgba(255,255,255,0.95);
       padding: 8px 10px;
       border-radius: 8px;
-      color: #fff;
+      color: var(--text-primary);
       font-family: system-ui, sans-serif;
       font-size: 12px;
       max-width: 260px;
+      box-shadow: 0 6px 20px rgba(16,42,67,0.06);
     }
+
+    /* Ensure all small/secondary text is black */
+    small, p, .subtitle, .meta, .rec-meta, .detail-label, .stat-subtext, .timeline-date, .timeline-desc, .text-secondary { color: var(--text-primary); }
     .control-panel button {
       margin-top: 6px;
       padding: 4px 8px;
@@ -51,7 +72,7 @@
   </style>
 </head>
 
-<body>
+<body id="top">
 
 <div id="map"></div>
 
@@ -147,6 +168,12 @@
     );
   }
 </script>
+
+<footer style="text-align:center; padding:24px 0; background:transparent; color:inherit;">
+  <div style="max-width:1200px; margin:0 auto;">
+    <p>© 2025 AspirecodeAI. All rights reserved. <a href="#top" style="margin-left:12px; text-decoration:none;">↑ Top</a></p>
+  </div>
+</footer>
 
 </body>
 </html>

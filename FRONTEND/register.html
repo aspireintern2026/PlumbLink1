@@ -4,32 +4,50 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PlumbLink Register</title>
+<link rel="icon" href="/images/aspirecodelogo.jpeg" type="image/jpeg">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:"Poppins",sans-serif;}
+:root{
+      --navy: #001F3F;
+      --teal: #008080;
+      --soft-green: #98FB98;
+      --white: #FFFFFF;
+      --light-grey: #F5F5F5;
+      --text-dark: #333333;
+      --text-light: #666666;
+      --shadow-subtle: 0 2px 10px rgba(0, 31, 63, 0.1);
+      --shadow-card: 0 4px 20px rgba(0, 128, 128, 0.08);
+      --gradient-primary: linear-gradient(135deg, var(--navy) 0%, var(--teal) 100%);
+      --border-radius: 12px;
+      --transition: all 0.3s ease;
+    }
 body{
-  background:linear-gradient(135deg,#2a9d66 0%,#1f7a4d 100%);
+  background:var(--texture);
+  color:var(--text-primary);
   min-height:100vh;display:flex;align-items:center;justify-content:center;
   padding:20px;
 }
 
 .register-box{
   width:100%;max-width:450px;
-  background:rgba(255,255,255,0.14);
-  backdrop-filter:blur(18px);
-  border-radius:20px;
-  padding:45px 35px;
-  color:#fff;text-align:center;
-  box-shadow:0 18px 55px rgba(0,0,0,0.35);
+  background:#ffffff;
+  border-radius:12px;
+  padding:34px 28px;
+  color:var(--text-primary);text-align:center;
+  box-shadow:0 12px 36px rgba(16,42,67,0.06);
   animation:fadeIn .6s ease;
-  border:1px solid rgba(255,255,255,0.2);
+  border:1px solid rgba(0,0,0,0.06);
 }
 
 @keyframes fadeIn{
   from{opacity:0;transform:translateY(25px);}
   to{opacity:1;transform:translateY(0);}
 }
+
+/* Ensure all small/secondary text is black */
+small, p, .subtitle, .meta, .rec-meta, .detail-label, .stat-subtext, .timeline-date, .timeline-desc, .text-secondary { color: var(--text-primary); }
 
 .logo{font-size:2rem;font-weight:700;margin-bottom:8px;letter-spacing:1px;}
 .subtitle{font-size:0.9rem;opacity:0.85;margin-bottom:25px;}
@@ -155,6 +173,12 @@ async function register(){
   }
 }
 </script>
+
+  <footer style="text-align:center; padding:24px 0; background:transparent; color:inherit;">
+    <div style="max-width:1200px; margin:0 auto;">
+      <p>© 2025 AspirecodeAI. All rights reserved. <a href="#top" style="margin-left:12px; text-decoration:none;">↑ Top</a></p>
+    </div>
+  </footer>
 
 </body>
 </html>

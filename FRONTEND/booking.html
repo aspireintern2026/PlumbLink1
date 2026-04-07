@@ -1,321 +1,973 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Book a Plumber – PlumbLink</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="icon" href="/images/aspirecodelogo.jpeg" type="image/jpeg">
+  <title>Book a Plumber – PlumbLink</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --navy: #001F3F;
+      --teal: #008080;
+      --soft-green: #98FB98;
+      --white: #FFFFFF;
+      --light-grey: #F8F9FA;
+      --text-dark: #1A1A1A;
+      --text-light: #6C757D;
+      --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+      --shadow-card: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+      --shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+      --gradient-primary: linear-gradient(135deg, #001F3F 0%, #008080 100%);
+      --gradient-teal: linear-gradient(135deg, #008080 0%, #006666 100%);
+      --gradient-soft: linear-gradient(135deg, #98FB98 0%, #90EE90 100%);
+      --border-radius: 12px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --glass-bg: rgba(255, 255, 255, 0.8);
+      --glass-border: rgba(0, 128, 128, 0.1);
+    }
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    [data-theme="dark"] {
+      --white: #121212;
+      --light-grey: #1E1E1E;
+      --text-dark: #E0E0E0;
+      --text-light: #B0B0B0;
+      --glass-bg: rgba(18, 18, 18, 0.9);
+      --glass-border: rgba(240, 240, 240, 0.1);
+      --gradient-primary: linear-gradient(135deg, #003366 0%, #004d4d 100%);
+      --gradient-teal: linear-gradient(135deg, #004d4d 0%, #003333 100%);
+      --gradient-soft: linear-gradient(135deg, #4d7c00 0%, #2e4d00 100%);
+      --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.4);
+      --shadow-card: 0 4px 6px rgba(0, 0, 0, 0.2), 0 2px 4px rgba(0, 0, 0, 0.15);
+      --shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.2), 0 4px 6px rgba(0, 0, 0, 0.15);
+    }
 
-<style>
-  :root {
-    --primary: #2a9d66;
-    --secondary: #1f7a4d;
-    --accent: #ff6b35;
-    --background: #f6fbf6;
-    --card: #ffffff;
-    --text-dark: #0b3d2e;
-    --text-muted: #555;
-    --radius: 12px;
-    --shadow: 0 8px 20px rgba(42,157,102,0.12);
-  }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { 
+      font-family: 'Inter', sans-serif; 
+      color: var(--text-dark); 
+      background: var(--white); 
+      line-height: 1.6; 
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    img { max-width: 100%; height: auto; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
-  body { background: var(--background); color: var(--text-dark); overflow-x: hidden; }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes slideInLeft { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+    .fade-in { animation: fadeInUp 0.6s ease-out forwards; }
+    .slide-in { animation: slideInLeft 0.5s ease-out forwards; }
 
-  header {
-    position: fixed; top: 0; width: 100%;
-    background: #fff;
-    border-bottom: 2px solid #e8ecf3;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-    z-index: 1000;
-  }
-  .header-inner {
-    max-width: 1200px; margin: auto;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 1rem 2rem;
-  }
-  .logo { font-size: 1.8rem; font-weight: 700; color: var(--secondary); }
+    header {
+      position: fixed; top: 0; width: 100%; background: var(--glass-bg); 
+      backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border); 
+      box-shadow: var(--shadow-subtle); z-index: 1000; transition: var(--transition);
+    }
+    .header-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.75rem 1rem;
+    }
+    .logo { 
+      font-size: 1.5rem; font-weight: 700; 
+      background: var(--gradient-primary); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; 
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .nav-links { display: flex; gap: 1.5rem; align-items: center; }
+    .nav-links a { 
+      color: var(--text-dark); font-weight: 500; text-decoration: none; 
+      padding: 0.5rem 1rem; border-radius: 8px; transition: var(--transition); 
+      display: flex; align-items: center; gap: 0.5rem; font-size: 0.95rem;
+    }
+    .nav-links a:hover { color: var(--teal); background: rgba(0, 128, 128, 0.05); }
+    .nav-links a.active { background: rgba(0, 128, 128, 0.1); color: var(--teal); }
+    .dark-toggle { 
+      background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 0.5rem; 
+      border-radius: 50%; cursor: pointer; color: var(--text-dark); transition: var(--transition);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .dark-toggle:hover { background: var(--gradient-teal); color: var(--white); }
 
-  .nav-links { display: flex; gap: 2rem; }
-  .nav-links a { color: var(--text-dark); font-weight: 500; position: relative; transition: 0.3s; }
-  .nav-links a:hover { color: var(--primary); }
-  
-  .hero {
-    background: linear-gradient(100deg, var(--primary), var(--secondary));
-    color: #fff; padding: 160px 20px 100px; margin-top: 80px; text-align: center;
-    box-shadow: 0 8px 32px rgba(42,157,102,0.15);
-  }
-  .hero h1 { font-size: 2.8rem; font-weight: 700; margin-bottom: 1rem; text-shadow: 0 2px 6px rgba(0,0,0,0.1); }
-  .hero p { font-size: 1.15rem; opacity: 0.95; max-width: 600px; margin: auto; line-height: 1.6; }
+    .hero {
+      background: var(--gradient-primary); color: white; 
+      padding: 140px 0 80px; text-align: left; position: relative; overflow: hidden;
+      min-height: 60vh; display: flex; align-items: center;
+    }
+    .hero::before {
+      content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.05"><circle cx="50" cy="50" r="2" fill="white"/></svg>') repeat;
+    }
+    .hero-content {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; position: relative; z-index: 1;
+    }
+    .hero-text h1 { 
+      font-size: 3rem; font-weight: 700; margin-bottom: 1rem; line-height: 1.1;
+    }
+    .hero-text p { font-size: 1.1rem; opacity: 0.9; max-width: 450px; }
+    .hero-badge { 
+      background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); color: var(--white); padding: 0.75rem 1.5rem; border-radius: 50px; 
+      font-weight: 600; box-shadow: var(--shadow-card); display: inline-flex; align-items: center; gap: 0.5rem;
+      margin-top: 1rem; border: 1px solid rgba(255,255,255,0.1);
+    }
+    .hero-image img { 
+      border-radius: var(--border-radius); box-shadow: var(--shadow-hover); 
+      transition: var(--transition); 
+    }
+    .hero-image:hover img { transform: scale(1.02); }
 
-  .booking-form-card {
-    background: var(--card);
-    max-width: 850px;
-    margin: -60px auto 3rem;
-    padding: 2.5rem 2rem;
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    border: 1px solid #e8ecf3;
-  }
+    .trust-section {
+      padding: 4rem 0; background: var(--light-grey); text-align: center;
+    }
+    .trust-section h3 {
+      font-size: 1.8rem; color: var(--navy); margin-bottom: 2rem;
+    }
+    .trust-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem;
+    }
+    .trust-item {
+      padding: 1.5rem;
+    }
+    .trust-item i {
+      font-size: 3rem; color: var(--teal); margin-bottom: 1rem;
+    }
+    .trust-item p {
+      font-weight: 600; margin-bottom: 0.5rem;
+    }
 
-  label { display: block; font-weight: 600; color: var(--secondary); margin: 1.2rem 0 0.5rem; font-size: 0.95rem; }
-  input, select, textarea {
-    width: 100%; padding: 13px 14px; border: 2px solid #d9e3f3;
-    border-radius: var(--radius); background: #f9fbff; transition: all 0.3s ease; font-family: 'Poppins', sans-serif; font-size: 0.95rem;
-  }
-  input:focus, select:focus, textarea:focus {
-    border-color: var(--primary); box-shadow: 0 0 0 4px rgba(42,157,102,0.1); background: #fff; outline: none;
-  }
+    .booking-section {
+      display: grid; grid-template-columns: 1fr 300px; gap: 2rem; padding: 4rem 0; 
+      background: var(--light-grey);
+    }
+    .booking-form { 
+      background: var(--white); padding: 2.5rem; border-radius: var(--border-radius); 
+      box-shadow: var(--shadow-card); 
+    }
+    .summary-panel { 
+      background: var(--white); padding: 2rem; border-radius: var(--border-radius); 
+      box-shadow: var(--shadow-card); position: sticky; top: 2rem; height: fit-content;
+    }
+    .summary-panel h3 { font-size: 1.25rem; font-weight: 600; color: var(--navy); margin-bottom: 1.5rem; }
+    .summary-item { display: flex; justify-content: space-between; margin-bottom: 1rem; padding: 0.75rem; background: var(--light-grey); border-radius: 8px; }
+    .summary-total { font-size: 1.5rem; font-weight: 700; color: var(--teal); border-top: 2px solid var(--glass-border); padding-top: 1rem; margin-top: 1rem; }
 
-  textarea { resize: vertical; min-height: 110px; }
-  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .section-title { 
+      font-size: 1.3rem; font-weight: 600; color: var(--navy); 
+      margin: 2rem 0 1.5rem; display: flex; align-items: center; gap: 0.75rem;
+      position: relative; padding-bottom: 0.5rem;
+    }
+    .section-title::after { 
+      content: ''; position: absolute; bottom: 0; left: 0; width: 40px; height: 2px; 
+      background: var(--gradient-teal);
+    }
 
-  .file-upload {
-    margin-top: 1rem; border: 2px dashed var(--primary); padding: 1.2rem;
-    border-radius: var(--radius); text-align: center; color: var(--primary);
-    background: #f0f6ff; cursor: pointer; transition: 0.3s;
-  }
+    .service-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;
+    }
+    .service-card {
+      border: 1px solid var(--glass-border); border-radius: var(--border-radius); overflow: hidden;
+      cursor: pointer; transition: var(--transition); box-shadow: var(--shadow-subtle);
+      position: relative;
+    }
+    .service-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); border-color: var(--teal); }
+    .service-card.selected { 
+      border-color: var(--teal); box-shadow: 0 0 0 3px rgba(0,128,128,0.2), var(--shadow-hover);
+    }
+    .service-img { 
+      height: 180px; overflow: hidden; position: relative; background: var(--light-grey);
+    }
+    .service-img img { width: 100%; height: 100%; object-fit: cover; transition: var(--transition); }
+    .service-card:hover .service-img img { transform: scale(1.05); }
+    .service-info { 
+      padding: 1.25rem; text-align: left;
+    }
+    .service-info h4 { font-weight: 600; color: var(--navy); margin-bottom: 0.5rem; }
+    .service-meta { font-size: 0.9rem; color: var(--text-light); display: flex; justify-content: space-between; align-items: center; }
 
-  .urgency-options { display: flex; gap: 1.2rem; margin-top: 1rem; flex-wrap: wrap; }
-  .urgency-option {
-    flex: 1; border: 2px solid #e0e7f1;
-    border-radius: var(--radius); padding: 1.3rem; text-align: center;
-    background: #f6fbf6; cursor: pointer; transition: all 0.3s ease; font-weight: 500;
-  }
-  .urgency-option.selected { border-color: var(--accent); background: linear-gradient(135deg, #fff5f0, #fffbf7); box-shadow: 0 6px 16px rgba(255, 107, 53, 0.1); }
-  .urgency-option:hover { border-color: var(--accent); background: #f0f6ff; }
+    .address-group { 
+      position: relative; display: flex; gap: 0.5rem; align-items: stretch; 
+    }
+    .address-group input { flex: 1; }
+    .location-btn {
+      background: var(--gradient-teal); color: var(--white); border: none; 
+      padding: 0.875rem 1rem; border-radius: var(--border-radius); cursor: pointer; 
+      font-weight: 500; display: flex; align-items: center; gap: 0.5rem;
+      box-shadow: var(--shadow-subtle);
+    }
+    .location-btn:hover { transform: translateY(-1px); box-shadow: var(--shadow-card); }
+    .location-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
-  .booking-submit {
-    background: linear-gradient(90deg, var(--primary), var(--secondary));
-    color: #fff; border: none; border-radius: 10px; padding: 14px;
-    width: 100%; margin-top: 2rem; font-size: 1.05rem; cursor: pointer; font-weight: 600;
-    transition: all 0.3s ease; box-shadow: 0 8px 20px rgba(42,157,102,0.2);
-  }
-  .booking-submit:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(42,157,102,0.3); }
-  .booking-submit:active { 
-    transform: translateY(0); 
-  }
+    .datetime-group { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+    .datetime-group input { flex: 1; min-width: 200px; }
 
-  .success-msg {
-    display: none; background: #e8f5e9;
-    border-left: 5px solid #43a047; padding: 1rem;
-    margin-top: 1.5rem; text-align: center;
-  }
-  .success-msg.show { display: block; }
+    .addons-group { margin: 1.5rem 0; }
+    .addon-item { display: flex; align-items: center; gap: 1rem; padding: 0.75rem; border-radius: 8px; cursor: pointer; transition: var(--transition); }
+    .addon-item:hover { background: var(--light-grey); }
+    .addon-item input[type="checkbox"] { accent-color: var(--teal); transform: scale(1.2); }
+    .addon-price { font-weight: 600; color: var(--teal); }
 
-  footer { background: #fff; text-align: center; padding: 2rem 0; }
-</style>
+    label { display: block; font-weight: 500; color: var(--text-dark); margin: 1.5rem 0 0.75rem; font-size: 0.95rem; }
+    input, select, textarea {
+      width: 100%; padding: 0.875rem 1rem; border: 1px solid var(--glass-border); 
+      border-radius: var(--border-radius); background: var(--white); 
+      transition: var(--transition); font-size: 1rem; 
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none; border-color: var(--teal); box-shadow: 0 0 0 3px rgba(0,128,128,0.05); 
+    }
+    textarea { resize: vertical; min-height: 120px; }
+    .validation-error { border-color: #DC3545; box-shadow: 0 0 0 3px rgba(220,53,69,0.1); }
+    .error-msg { color: #DC3545; font-size: 0.875rem; margin-top: 0.25rem; display: none; }
+
+    .booking-submit {
+      background: var(--gradient-primary); color: var(--white); border: none; border-radius: var(--border-radius);
+      padding: 1rem 2rem; width: 100%; margin-top: 2rem; font-size: 1.1rem; font-weight: 600; 
+      cursor: pointer; transition: var(--transition); box-shadow: var(--shadow-card);
+      display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+    }
+    .booking-submit:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
+    .booking-submit.loading { pointer-events: none; opacity: 0.8; }
+
+    .map-preview {
+      margin-top: 1.5rem;
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+      height: 300px;
+      background: var(--light-grey);
+    }
+    .map-preview iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+    .map-link {
+      margin-top: 0.75rem;
+      font-size: 0.95rem;
+      color: var(--teal);
+      word-break: break-all;
+    }
+    .map-link a {
+      color: var(--teal);
+      text-decoration: underline;
+    }
+
+    .success-modal { 
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+      background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center;
+    }
+    .modal-content { 
+      background: var(--white); padding: 3rem; border-radius: var(--border-radius); 
+      box-shadow: var(--shadow-hover); max-width: 500px; text-align: center; 
+    }
+    .modal-icon { font-size: 4rem; color: var(--soft-green); margin-bottom: 1rem; }
+    .modal-btn { background: var(--gradient-teal); color: var(--white); border: none; padding: 0.75rem 2rem; border-radius: 8px; cursor: pointer; margin-top: 1rem; }
+
+    .progress-steps { display: flex; justify-content: space-between; margin-bottom: 2rem; position: relative; }
+    .progress-step { flex: 1; height: 2px; background: var(--light-grey); position: relative; }
+    .progress-step.active { background: var(--teal); }
+    .step-indicator { position: absolute; top: -8px; width: 16px; height: 16px; background: var(--teal); border-radius: 50%; transform: translateX(-50%); left: 0; }
+    .step-indicator.completed { background: var(--soft-green); }
+
+    /* === NEW: Booking History Styles === */
+    .history-section {
+      padding: 4rem 0;
+      background: var(--light-grey);
+    }
+    .history-title {
+      font-size: 1.8rem;
+      color: var(--navy);
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .history-list {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .history-item {
+      background: var(--white);
+      padding: 1.5rem;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-card);
+      margin-bottom: 1.5rem;
+      transition: var(--transition);
+    }
+    .history-item:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+    }
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    .history-ref {
+      font-weight: 700;
+      color: var(--teal);
+      font-size: 1.1rem;
+    }
+    .history-status {
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    .status-pending { background: rgba(255,193,7,0.2); color: #856404; }
+    .status-confirmed { background: rgba(40,167,69,0.2); color: #155724; }
+    .status-completed { background: rgba(0,123,255,0.2); color: #004085; }
+    .status-cancelled { background: rgba(220,53,69,0.2); color: #721c24; }
+    .history-details {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      font-size: 0.95rem;
+      color: var(--text-light);
+    }
+    .history-details strong {
+      color: var(--text-dark);
+    }
+    .no-history {
+      text-align: center;
+      color: var(--text-light);
+      font-size: 1.1rem;
+      padding: 3rem;
+    }
+
+    footer { 
+      background: var(--gradient-primary); color: var(--white); text-align: center; 
+      padding: 2rem 0; margin-top: 4rem;
+    }
+    footer a { color: var(--soft-green); text-decoration: none; }
+
+    @media (max-width: 1024px) {
+      .booking-section { grid-template-columns: 1fr; }
+      .summary-panel { position: static; order: -1; }
+    }
+    @media (max-width: 768px) {
+      .hero-content { grid-template-columns: 1fr; text-align: center; gap: 2rem; }
+      .hero-text h1 { font-size: 2.5rem; }
+      .booking-form { padding: 1.5rem; }
+      .service-grid { grid-template-columns: 1fr; }
+      .datetime-group { flex-direction: column; align-items: stretch; }
+      .address-group { flex-direction: column; }
+      .location-btn { justify-content: center; }
+      .trust-grid { grid-template-columns: 1fr; }
+      .map-preview { height: 250px; }
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
 </head>
-
-<body>
+<body data-theme="light">
 
 <header>
-  <div class="header-inner">
-    <div class="logo">PlumbLink</div>
-    <nav class="nav-links" id="navLinks">
-      <a href="index.html">Home</a>
-      <a href="services.html">Services</a>
-      <a href="store.html">Store</a>
-      <a href="book.html">Book</a>
-      <a href="#" onclick="logout()">Logout</a>
+  <div class="header-inner container">
+    <div class="logo"><i class="fas fa-droplet"></i> PlumbLink</div>
+    <nav class="nav-links">
+      <a href="index.html"><i class="fas fa-home"></i> Home</a>
+      <a href="index.html"><i class="fas fa-cogs"></i> Services</a>
+      <a href="e-commerce.html"><i class="fas fa-shopping-cart"></i> Store</a>
+      <a href="booking.html" class="active"><i class="fas fa-calendar-check"></i> Book</a>
+      <a href="#history"><i class="fas fa-history"></i> History</a>
+      <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      <button class="dark-toggle" onclick="toggleDarkMode()" title="Toggle Dark Mode">
+        <i class="fas fa-moon" id="darkIcon"></i>
+      </button>
     </nav>
   </div>
 </header>
 
-<section class="hero">
-  <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:2rem;padding:0 20px;flex-wrap:wrap;">
-    <div style="flex:1;min-width:300px;">
-      <h1>Book Your Plumbing Expert</h1>
-      <p>Fast, reliable, and professional service for homes & offices.</p>
-    </div>
-    <div style="flex:1;min-width:300px;text-align:center;">
-      <img src="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=400&h=300&fit=crop" alt="Professional plumber" style="width:100%;max-width:380px;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.2);">
+<section class="hero fade-in">
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-text fade-in">
+        <h1>Fast, Reliable Plumbing Help – Book in Minutes!</h1>
+        <p>Get a trusted local plumber to your door quickly. Upfront pricing, no surprises, and friendly service every time.</p>
+        <div class="hero-badge"><i class="fas fa-star"></i> 4.9/5 from 2,000+ Happy Customers</div>
+        <div class="hero-badge"><i class="fas fa-shield-alt"></i> 100% Satisfaction Guaranteed</div>
+      </div>
+      <div class="hero-image slide-in">
+        <img src="https://www.ajperri.com//media/mhul1iod/tech-w-customer.jpg?width=550" alt="Happy customer thanking friendly plumber">
+      </div>
     </div>
   </div>
 </section>
 
-<div class="booking-form-card">
-
-<form id="bookingForm">
-
-  <div class="form-grid">
-    <div>
-      <label>Issue Type</label>
-      <select id="issue" required>
-        <option value="">Select issue...</option>
-        <option>Leak Repair</option>
-        <option>Pipe Installation</option>
-        <option>Drain Unclogging</option>
-        <option>Water Heater</option>
-        <option>Toilet Repair</option>
-        <option>Other</option>
-      </select>
-    </div>
-    <div>
-      <label>Preferred Time</label>
-      <input type="datetime-local" id="preferredTime" required>
-    </div>
-  </div>
-
-  <label>Description</label>
-  <textarea id="desc" required placeholder="Describe your plumbing issue..."></textarea>
-
-  <label>Urgency Level</label>
-  <div class="urgency-options">
-    <div class="urgency-option selected">
-      <input type="radio" name="urgency" value="low" checked>
-      <div>Low</div>
-    </div>
-    <div class="urgency-option">
-      <input type="radio" name="urgency" value="medium">
-      <div>Medium</div>
-    </div>
-    <div class="urgency-option">
-      <input type="radio" name="urgency" value="high">
-      <div>High</div>
+<section class="trust-section">
+  <div class="container">
+    <h3>Why Customers Love PlumbLink</h3>
+    <div class="trust-grid">
+      <div class="trust-item">
+        <i class="fas fa-clock"></i>
+        <p>Fast Response</p>
+        <span>Average arrival in under 2 hours</span>
+      </div>
+      <div class="trust-item">
+        <i class="fas fa-dollar-sign"></i>
+        <p>No Hidden Fees</p>
+        <span>Upfront pricing always</span>
+      </div>
+      <div class="trust-item">
+        <i class="fas fa-thumbs-up"></i>
+        <p>Licensed & Insured</p>
+        <span>Professional plumbers only</span>
+      </div>
+      <div class="trust-item">
+        <i class="fas fa-smile"></i>
+        <p>Happy Customers</p>
+        <span>98% would recommend us</span>
+      </div>
     </div>
   </div>
+</section>
 
-  <button type="submit" class="booking-submit" id="bookingBtn">Book My Plumber</button>
-  <div id="bookingMsg" class="success-msg"></div>
+<section class="booking-section container">
+  <div class="booking-form fade-in">
+    <form id="bookingForm" novalidate>
+      <div class="progress-steps">
+        <div class="progress-step active"><div class="step-indicator completed"></div></div>
+        <div class="progress-step"><div class="step-indicator"></div></div>
+        <div class="progress-step"><div class="step-indicator"></div></div>
+        <div class="progress-step"><div class="step-indicator"></div></div>
+      </div>
 
-</form>
+      <div class="section-title"><i class="fas fa-search"></i> Select Service</div>
+      <div class="service-grid" id="serviceGrid"></div>
+      <input type="hidden" id="service" required>
+      <div class="error-msg" id="serviceError">Please select a service</div>
 
+      <div class="section-title"><i class="fas fa-map-marker-alt"></i> Service Address</div>
+      <div class="address-group">
+        <input type="text" id="address" placeholder="Enter your full address or use current location" required>
+        <button type="button" id="getLocation" class="location-btn"><i class="fas fa-location-arrow"></i> Current Location</button>
+      </div>
+      <div class="error-msg" id="addressError">Please enter a valid address</div>
+
+      <div id="mapContainer" style="display:none;">
+        <div class="section-title"><i class="fas fa-map"></i> Location Preview</div>
+        <div class="map-preview">
+          <iframe loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+        <div class="map-link">
+          Open in Google Maps: <a id="mapsLink" target="_blank" rel="noopener" href="">Tap to view directions</a>
+        </div>
+      </div>
+
+      <div class="section-title"><i class="fas fa-calendar-alt"></i> Preferred Date & Time</div>
+      <div class="datetime-group">
+        <input type="date" id="preferredDate" required>
+        <select id="timeSlot" required>
+          <option value="">Select time slot</option>
+          <option value="09:00-11:00">9:00 AM - 11:00 AM</option>
+          <option value="11:00-13:00">11:00 AM - 1:00 PM</option>
+          <option value="13:00-15:00">1:00 PM - 3:00 PM</option>
+          <option value="15:00-17:00">3:00 PM - 5:00 PM</option>
+          <option value="17:00-19:00">5:00 PM - 7:00 PM</option>
+        </select>
+      </div>
+
+      <div class="section-title"><i class="fas fa-edit"></i> Additional Details</div>
+      <textarea id="details" placeholder="Describe the issue in detail (e.g., 'Kitchen sink leaking under pipes, water on floor since yesterday')" required></textarea>
+      <div class="error-msg" id="detailsError">Please provide details about the issue</div>
+
+      <div class="section-title"><i class="fas fa-plus-circle"></i> Add-ons (Optional)</div>
+      <div class="addons-group">
+        <div class="addon-item">
+          <input type="checkbox" id="videoConsult" value="50">
+          <label for="videoConsult"><i class="fas fa-video"></i> Video Consultation (+$50)</label>
+          <span class="addon-price">+$50</span>
+        </div>
+        <div class="addon-item">
+          <input type="checkbox" id="emergency" value="100">
+          <label for="emergency"><i class="fas fa-bolt"></i> Emergency Priority (+$100)</label>
+          <span class="addon-price">+$100</span>
+        </div>
+        <div class="addon-item">
+          <input type="checkbox" id="parts" value="75">
+          <label for="parts"><i class="fas fa-tools"></i> Bring Spare Parts (+$75)</label>
+          <span class="addon-price">+$75</span>
+        </div>
+      </div>
+
+      <button type="submit" class="booking-submit" id="bookingBtn"><i class="fas fa-wrench"></i> Book My Plumber Now</button>
+    </form>
+  </div>
+
+  <aside class="summary-panel slide-in">
+    <h3>Booking Summary</h3>
+    <div id="summaryContent">
+      <p style="color: var(--text-light); text-align: center; padding: 2rem;">Select a service to see details</p>
+    </div>
+    <div class="summary-total" id="totalPrice">$0</div>
+  </aside>
+</section>
+
+<!-- NEW: Booking History Section -->
+<section class="history-section container" id="history">
+  <h3 class="history-title">Your Booking History</h3>
+  <div class="history-list" id="historyList">
+    <p class="no-history">Loading your bookings...</p>
+  </div>
+</section>
+
+<div class="success-modal" id="successModal">
+  <div class="modal-content">
+    <div class="modal-icon"><i class="fas fa-check-circle"></i></div>
+    <h2>Booking Confirmed!</h2>
+    <p>Your plumber will be in touch soon. Reference ID: <strong id="bookingRef"></strong></p>
+    <button class="modal-btn" onclick="window.location.href='dashboard.html'">View Dashboard</button>
+  </div>
 </div>
 
-<footer>© 2025 AspirecodeAI. All Rights Reserved.</footer>
+<footer class="container">
+  <p>© 2025 PlumbLink. All Rights Reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+</footer>
 
 <script>
-// Base URL of your Flask backend
-const API_BASE_URL = "http://localhost:5000";
+  // === CONFIGURATION ===
+  const API_BASE_URL = "http://localhost:5000";
+  const BOOKINGS_PATH = "/api/bookings";   // Update if your backend uses a different route
 
-// Path for the bookings endpoint – this MUST match your Flask blueprint
-// Example in Flask: Blueprint("bookings_bp", __name__, url_prefix="/api/bookings")
-const BOOKINGS_PATH = "/api/bookings";
+  const services = [
+    { value: "leak-repair", title: "Leak Repair", img: "https://static.homeguide.com/assets/images/content/homeguide-plumber-sink-repair-cost-plumber-fixing-kitchen-sink-pipe.jpg", price: 99, duration: "45-60 mins" },
+    { value: "drain-unclog", title: "Drain Unclogging", img: "https://res.cloudinary.com/liaison-inc/image/upload/f_auto/q_auto,w_1200/v1657736592/content/homeguide/homeguide-plumber-unclogging-tub-drain-with-electric-drain-snake_imkdcs.jpg", price: 79, duration: "30-45 mins" },
+    { value: "water-heater", title: "Water Heater Service", img: "https://www.perfecthomeservices.com/wp-content/uploads/2023/01/PERFECT-HOME-2021-BASEMENT-98-1500x1000-1.jpg", price: 149, duration: "60-90 mins" },
+    { value: "toilet-repair", title: "Toilet Repair", img: "https://www.ezflowplumbingaz.com/images/blog/iStock-1199720285.jpg", price: 89, duration: "40-60 mins" },
+    { value: "pipe-install", title: "Pipe Installation/Replacement", img: "https://anthonyphc.com/wp-content/uploads/2025/08/Horizontal_3583.webp", price: 129, duration: "90+ mins" },
+    { value: "emergency", title: "Emergency Callout", img: "https://superiorplumbinganddrains.com/wp-content/uploads/2025/01/superior-plumbing-and-drains-emergency-plumbing-tools.jpg", price: 199, duration: "As fast as 1 hour" }
+  ];
 
-function logout() {
-  localStorage.clear();
-  window.location.href = "login.html";
-}
-
-// Pre-fill preferred time to current time + 1 hour (optional)
-(function setDefaultPreferredTime() {
-  const input = document.getElementById("preferredTime");
-  const now = new Date();
-  now.setHours(now.getHours() + 1);
-  const iso = now.toISOString().slice(0, 16); // "YYYY-MM-DDTHH:MM"
-  input.value = iso;
-})();
-
-// Select urgency option
-document.querySelectorAll(".urgency-option").forEach(opt => {
-  opt.addEventListener("click", () => {
-    document.querySelectorAll(".urgency-option").forEach(o => o.classList.remove("selected"));
-    opt.classList.add("selected");
-    opt.querySelector("input").checked = true;
-  });
-});
-
-async function parseJsonSafe(res) {
-  try {
-    return await res.json();
-  } catch (e) {
-    console.warn("Response is not valid JSON, status:", res.status);
-    const text = await res.text();
-    console.warn("Raw response text:", text);
-    return { raw: text };
-  }
-}
-
-// -------- BACKEND SUBMIT ----------
-document.getElementById("bookingForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  const token = localStorage.getItem("token");
-  if (!token) {
-    alert("Please login first");
+  function logout() {
+    localStorage.clear();
     window.location.href = "login.html";
-    return;
   }
 
-  const issue = document.getElementById("issue").value.trim();
-  const desc = document.getElementById("desc").value.trim();
-  const urgency = document.querySelector("input[name='urgency']:checked").value;
-  const preferredTime = document.getElementById("preferredTime").value;
+  function toggleDarkMode() {
+    const body = document.body;
+    const currentTheme = body.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    body.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    const icon = document.getElementById('darkIcon');
+    if (icon) icon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+  }
+  if (localStorage.getItem('theme') === 'dark') toggleDarkMode();
 
-  if (!issue || !desc || !urgency || !preferredTime) {
-    alert("Please fill in all fields");
-    return;
+  (function setDefaultDate() {
+    const dateInput = document.getElementById("preferredDate");
+    if (!dateInput) return;
+    const now = new Date();
+    now.setDate(now.getDate() + 1);
+    const tomorrow = now.toISOString().split('T')[0];
+    dateInput.min = tomorrow;
+    dateInput.value = tomorrow;
+  })();
+
+  const serviceGrid = document.getElementById('serviceGrid');
+  services.forEach(service => {
+    const card = document.createElement('div');
+    card.className = 'service-card';
+    card.dataset.value = service.value;
+    card.innerHTML = `
+      <div class="service-img">
+        <img src="${service.img}" alt="${service.title}" loading="lazy">
+      </div>
+      <div class="service-info">
+        <h4>${service.title}</h4>
+        <div class="service-meta">
+          <span>From $${service.price}</span>
+          <span>${service.duration}</span>
+        </div>
+      </div>
+    `;
+    serviceGrid.appendChild(card);
+  });
+
+  serviceGrid.addEventListener('click', (e) => {
+    const card = e.target.closest('.service-card');
+    if (card) {
+      document.querySelectorAll('.service-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      document.getElementById('service').value = card.dataset.value;
+      updateSummary(card);
+      validateField('service');
+      updateProgress();
+    }
+  });
+
+  function updateSummary(card) {
+    const service = services.find(s => s.value === card.dataset.value);
+    if (!service) return;
+    const addonsTotal = Array.from(document.querySelectorAll('input[type="checkbox"]:checked'))
+      .reduce((sum, cb) => sum + parseInt(cb.value || 0), 0);
+    const total = service.price + addonsTotal;
+    document.getElementById('summaryContent').innerHTML = `
+      <div class="summary-item"><span>${service.title}</span><span>$${service.price}</span></div>
+      ${addonsTotal > 0 ? `<div class="summary-item"><span>Add-ons</span><span>+$${addonsTotal}</span></div>` : ''}
+    `;
+    document.getElementById('totalPrice').textContent = `$${total}`;
   }
 
-  const msg = document.getElementById("bookingMsg");
-  const btn = document.getElementById("bookingBtn");
-
-  msg.classList.add("show");
-  msg.textContent = "Submitting booking...";
-  btn.disabled = true;
-
-  try {
-    console.log("Token:", token);
-    console.log("Request body:", {
-      issue: issue,
-      description: desc,
-      urgency: urgency,
-      preferred_time: preferredTime
+  document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+    cb.addEventListener('change', () => {
+      const selected = document.querySelector('.service-card.selected');
+      if (selected) updateSummary(selected);
     });
+  });
 
-    // Important: no trailing slash here; matches most Flask blueprints better
-    const endpoint = API_BASE_URL + BOOKINGS_PATH;
+  function updateMapPreview() {
+    const address = document.getElementById('address').value.trim();
+    if (!address) {
+      document.getElementById('mapContainer').style.display = 'none';
+      return;
+    }
 
-    console.log("Calling endpoint:", endpoint);
+    const encodedAddress = encodeURIComponent(address);
+    // Use a free embeddable maps URL (no API key required)
+    const embedUrl = `https://www.google.com/maps?q=${encodedAddress}&output=embed`;
+    const directUrl = `https://www.google.com/maps/search/?api=1&query=${encodedAddress}`;
 
-    const res = await fetch(endpoint, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + token
+    const iframe = document.querySelector('#mapContainer iframe');
+    iframe.src = embedUrl;
+
+    const link = document.getElementById('mapsLink');
+    link.href = directUrl;
+    link.textContent = "Open full Google Maps for directions →";
+
+    document.getElementById('mapContainer').style.display = 'block';
+  }
+
+  document.getElementById('address').addEventListener('blur', updateMapPreview);
+  document.getElementById('address').addEventListener('input', () => {
+    const addr = document.getElementById('address').value.trim();
+    if (addr.length > 10) updateMapPreview();
+  });
+
+  document.getElementById('getLocation')?.addEventListener('click', async () => {
+    const btn = document.getElementById('getLocation');
+    const addressInput = document.getElementById('address');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Detecting...';
+
+    const resetBtn = () => {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-location-arrow"></i> Current Location';
+    };
+
+    if (!navigator.geolocation) {
+      alert('Geolocation not supported by your browser.');
+      resetBtn();
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      async pos => {
+        const { latitude, longitude } = pos.coords;
+        try {
+          const res = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`);
+          const data = await res.json();
+
+          let fullAddress = "";
+          if (data.locality) fullAddress += data.locality + ", ";
+          if (data.city) fullAddress += data.city + ", ";
+          if (data.principalSubdivision) fullAddress += data.principalSubdivision + ", ";
+          if (data.countryName) fullAddress += data.countryName;
+          if (data.postcode) fullAddress += " - " + data.postcode;
+
+          addressInput.value = fullAddress.trim() || `${latitude.toFixed(6)}, ${longitude.toFixed(6)} (Detected)`;
+        } catch {
+          addressInput.value = `${latitude.toFixed(6)}, ${longitude.toFixed(6)} (Detected)`;
+        }
+        validateField('address');
+        updateProgress();
+        updateMapPreview();
+        resetBtn();
       },
-      body: JSON.stringify({
-        issue: issue,
-        description: desc,
-        urgency: urgency,
-        preferred_time: preferredTime
-      })
-    });
+      () => { 
+        alert('Location access denied or unavailable. You can enter address manually.'); 
+        resetBtn(); 
+      },
+      { enableHighAccuracy: true, timeout: 10000 }
+    );
+  });
 
-    const data = await parseJsonSafe(res);
-    console.log("Response status:", res.status);
-    console.log("Response data:", data);
-
-    if (res.ok) {
-      msg.textContent = "✔ Booking created successfully!";
-      setTimeout(() => window.location.href = "dashboard.html", 1500);
+  function validateField(id) {
+    const field = document.getElementById(id);
+    const error = document.getElementById(id + 'Error');
+    const value = field?.value?.trim();
+    if (!value) {
+      field?.classList.add('validation-error');
+      error?.style.removeProperty('display');
+      return false;
     } else {
-      let errorText = data.error || data.message || ("HTTP " + res.status);
+      field?.classList.remove('validation-error');
+      error?.style.setProperty('display', 'none');
+      return true;
+    }
+  }
 
-      // If it is a 404, be explicit – likely wrong backend route
-      if (res.status === 404) {
-        errorText = "Backend route not found (404). Check that Flask has a POST route at '" + BOOKINGS_PATH + "'.";
+  function updateProgress() {
+    const steps = document.querySelectorAll('.progress-step');
+    const checks = [
+      validateField('service'),
+      !!document.getElementById('address')?.value?.trim(),
+      !!document.getElementById('preferredDate')?.value,
+      !!document.getElementById('details')?.value?.trim()
+    ];
+    const completed = checks.filter(Boolean).length;
+    steps.forEach((step, i) => {
+      const ind = step.querySelector('.step-indicator');
+      if (i < completed) {
+        step.classList.add('active');
+        ind?.classList.add('completed');
+      } else {
+        step.classList.remove('active');
+        ind?.classList.remove('completed');
+      }
+    });
+  }
+
+  ['service', 'address', 'preferredDate', 'details'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('blur', () => { validateField(id); updateProgress(); });
+  });
+
+  setInterval(() => {
+    const draft = {
+      service: document.getElementById('service')?.value || '',
+      address: document.getElementById('address')?.value || '',
+      preferredDate: document.getElementById('preferredDate')?.value || '',
+      timeSlot: document.getElementById('timeSlot')?.value || '',
+      details: document.getElementById('details')?.value || ''
+    };
+    if (Object.values(draft).some(v => v.trim())) {
+      localStorage.setItem('bookingDraft', JSON.stringify(draft));
+    }
+  }, 2000);
+
+  window.addEventListener('load', () => {
+    const draft = localStorage.getItem('bookingDraft');
+    if (draft) {
+      try {
+        const data = JSON.parse(draft);
+        Object.entries(data).forEach(([k, v]) => {
+          const el = document.getElementById(k);
+          if (el && v) el.value = v;
+        });
+        if (data.service) {
+          const card = document.querySelector(`[data-value="${data.service}"]`);
+          if (card) {
+            card.classList.add('selected');
+            updateSummary(card);
+          }
+        }
+        if (data.address) updateMapPreview();
+        updateProgress();
+      } catch (e) { console.warn('Draft load failed'); }
+    }
+
+    // Auto-scroll to history if URL has #history
+    if (window.location.hash === '#history') {
+      document.getElementById('history').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    loadBookingHistory(); // Load history on page load
+  });
+
+  // === Booking History Feature ===
+  async function loadBookingHistory() {
+    const token = localStorage.getItem("access_token");
+    const historyList = document.getElementById('historyList');
+
+    if (!token) {
+      historyList.innerHTML = '<p class="no-history">Please log in to view your booking history.</p>';
+      return;
+    }
+
+    historyList.innerHTML = '<p class="no-history"><i class="fas fa-spinner fa-spin"></i> Loading history...</p>';
+
+    try {
+      const res = await fetch(API_BASE_URL + "/api/bookings", {
+        headers: { "Authorization": "Bearer " + token }
+      });
+
+      if (!res.ok) {
+        const errText = await res.text();
+        console.error('Bookings fetch failed', res.status, errText);
+        if (res.status === 401) {
+          localStorage.removeItem('access_token');
+          historyList.innerHTML = '<p class="no-history">Session expired. Please <a href="login.html">log in</a> again.</p>';
+          return;
+        }
+        throw new Error(`Failed to fetch bookings (${res.status})`);
       }
 
-      msg.textContent = "❌ Error: " + errorText;
+      let bookings = await res.json();
 
-      if (res.status === 401 || res.status === 403) {
-        setTimeout(() => {
-          alert("Session expired or unauthorized. Please login again.");
-          logout();
-        }, 1000);
+      // Accept either an array or an object like { bookings: [...] }
+      if (bookings && bookings.bookings && Array.isArray(bookings.bookings)) {
+        bookings = bookings.bookings;
+      }
+
+      if (!Array.isArray(bookings) || bookings.length === 0) {
+        historyList.innerHTML = '<p class="no-history">No bookings yet. Start by booking a service above!</p>';
+        return;
+      }
+
+      let html = '';
+      bookings.slice().reverse().forEach(booking => {
+        const date = new Date(booking.preferred_time || booking.created_at || Date.now())
+          .toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        const time = booking.preferred_time 
+          ? new Date(booking.preferred_time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) 
+          : 'N/A';
+
+        const statusClass = {
+          pending: 'status-pending',
+          confirmed: 'status-confirmed',
+          completed: 'status-completed',
+          cancelled: 'status-cancelled'
+        }[booking.status?.toLowerCase() || 'pending'] || 'status-pending';
+
+        const statusText = booking.status 
+          ? booking.status.charAt(0).toUpperCase() + booking.status.slice(1) 
+          : 'Pending';
+
+        const serviceTitle = services.find(s => s.value === booking.issue)?.title || booking.issue || 'Unknown Service';
+
+        html += `
+          <div class="history-item">
+            <div class="history-header">
+              <span class="history-ref">#${booking.id || booking.booking_id || 'N/A'}</span>
+              <span class="history-status ${statusClass}">${statusText}</span>
+            </div>
+            <div class="history-details">
+              <div><strong>Service:</strong> ${serviceTitle}</div>
+              <div><strong>Date:</strong> ${date}</div>
+              <div><strong>Time:</strong> ${time}</div>
+              <div><strong>Address:</strong> ${booking.address || 'N/A'}</div>
+              <div><strong>Urgency:</strong> ${booking.urgency ? booking.urgency.charAt(0).toUpperCase() + booking.urgency.slice(1) : 'Medium'}</div>
+            </div>
+            <p style="margin-top: 1rem; color: var(--text-light);">${booking.description || 'No additional details.'}</p>
+          </div>
+        `;
+      });
+
+      historyList.innerHTML = html;
+
+    } catch (err) {
+      console.error("History load error:", err);
+      historyList.innerHTML = '<p class="no-history">Unable to load history. Please try again later.</p>';
+    }
+  }
+
+    // === Form Submit === (UPDATED TO WORK WITH YOUR BACKEND)
+  document.getElementById("bookingForm").addEventListener("submit", async e => {
+    e.preventDefault();
+
+    // Optional: Check login token if you have auth
+    // const token = localStorage.getItem("access_token");
+    // if (!token) { alert("Please login first"); window.location.href = "login.html"; return; }
+
+    const valid = ['service', 'address', 'preferredDate', 'details'].every(id => {
+      const field = document.getElementById(id);
+      return field && field.value.trim() !== '';
+    });
+
+    if (!valid) {
+      alert("Please fill all required fields.");
+      return;
+    }
+
+    const selectedCard = document.querySelector('.service-card.selected');
+    if (!selectedCard) {
+      alert("Please select a service");
+      return;
+    }
+
+    const address = document.getElementById('address').value.toLowerCase();
+
+    // Simple coordinate mapping based on area
+    const coordMap = {
+      "andheri": { lat: 19.1185, lng: 72.8468 },
+      "bandra": { lat: 19.0607, lng: 72.8360 },
+      "powai": { lat: 19.1186, lng: 72.9075 },
+      "juhu": { lat: 19.1072, lng: 72.8266 },
+      "borivali": { lat: 19.2296, lng: 72.8577 },
+      "goregaon": { lat: 19.1646, lng: 72.8493 },
+      "malad": { lat: 19.1860, lng: 72.8486 },
+      "dadar": { lat: 19.0190, lng: 72.8428 },
+      "thane": { lat: 19.2183, lng: 72.9781 },
+      "navi mumbai": { lat: 19.0330, lng: 73.0297 },
+      "mumbai": { lat: 19.0760, lng: 72.8777 }
+    };
+
+    let customer_lat = 19.0760;
+    let customer_lng = 72.8777;
+
+    for (const [key, coords] of Object.entries(coordMap)) {
+      if (address.includes(key)) {
+        customer_lat = coords.lat;
+        customer_lng = coords.lng;
+        break;
       }
     }
 
-  } catch (err) {
-    console.error("Fetch error:", err);
-    msg.textContent = "❌ Backend not reachable (network error)";
-  } finally {
-    btn.disabled = false;
-  }
-});
+    const serviceTitle = selectedCard.querySelector('h4').textContent.trim();
+
+    const payload = {
+      name: "Customer", // You can add name field later
+      phone: "9876543210", // Add phone field if needed
+      address: document.getElementById('address').value,
+      service: serviceTitle,
+      urgency: document.getElementById('emergency')?.checked ? "ASAP" : "Today",
+      details: document.getElementById('details').value,
+      amount: "950",
+      time: document.getElementById('timeSlot')?.value || "Anytime",
+      type: document.getElementById('emergency')?.checked ? "Emergency" : "Standard",
+      customer_lat: customer_lat,
+      customer_lng: customer_lng
+    };
+
+    const btn = document.getElementById("bookingBtn");
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Finding plumber...';
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/bookings`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+          // Remove Authorization header if no login yet
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log("Booking successful!", result);
+
+        document.getElementById('bookingRef').textContent = result.job_id || 'PLB' + Date.now();
+        document.getElementById('successModal').style.display = 'flex';
+
+        // Clear draft
+        localStorage.removeItem('bookingDraft');
+
+        // Refresh history
+        setTimeout(loadBookingHistory, 1000);
+      } else {
+        const error = await response.text();
+        alert("Booking failed: " + error);
+        console.error("Server error:", error);
+      }
+    } catch (err) {
+      console.error("Network error:", err);
+      alert("Cannot connect to server. Is your Flask app running at http://127.0.0.1:5000?");
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-wrench"></i> Book My Plumber Now';
+    }
+  });
+  
 </script>
 
 </body>

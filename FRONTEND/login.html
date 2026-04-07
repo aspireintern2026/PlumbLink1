@@ -1,307 +1,357 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PlumbLink Login Portal</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="/images/aspirecodelogo.jpeg" type="image/jpeg">
+  <title>PlumbLink - Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --navy: #001f3f;
+      --teal: #008080;
+      --light-teal: #e0f0f0;
+      --white: #ffffff;
+      --bg: #f8f9fa;
+      --text: #333333;
+      --text-light: #555555;
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      --radius: 12px;
+    }
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-<style>
-/* ===============================
-   FROSTED GLASS UI (UPGRADED)
-================================ */
-*{margin:0;padding:0;box-sizing:border-box;font-family:"Poppins",sans-serif;}
-body{
-  background:linear-gradient(135deg,#2a9d66 0%,#1f7a4d 100%);
-  min-height:100vh;display:flex;align-items:center;justify-content:center;
-  padding:20px;
-}
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      color: var(--text);
+    }
 
-/* LOGIN CARD */
-.login-box{
-  width:100%;max-width:430px;
-  background:rgba(255,255,255,0.14);
-  backdrop-filter:blur(18px);
-  border-radius:20px;
-  padding:40px 30px;
-  color:#fff;text-align:center;
-  box-shadow:0 18px 55px rgba(0,0,0,0.35);
-  animation:fadeIn .6s ease;
-  border:1px solid rgba(255,255,255,0.2);
-}
-@keyframes fadeIn{
-  from{opacity:0;transform:translateY(25px);}
-  to{opacity:1;transform:translateY(0);}
-}
+    .login-wrapper {
+      width: 100%;
+      max-width: 960px;
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      display: flex;
+    }
 
-/* LOGO */
-.logo{font-size:2.2rem;font-weight:700;margin-bottom:25px;letter-spacing:1px;}
+    .left-side {
+      flex: 1;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--teal) 100%);
+      color: white;
+      padding: 70px 50px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+    }
 
-/* ROLE BUTTONS */
-.role-tabs{
-  display:flex;gap:12px;margin-bottom:28px;
-}
-.role-btn{
-  flex:1;padding:12px;border-radius:12px;
-  border:2px solid rgba(255,255,255,0.3);
-  cursor:pointer;transition:.35s;font-weight:500;background:rgba(255,255,255,0.08);
-}
-.role-btn.active{
-  background:#fff;color:#2a9d66;font-weight:700;transform:scale(1.05);box-shadow:0 8px 16px rgba(0,0,0,0.2);
-}
+    .left-side h2 {
+      font-size: 2.1rem;
+      margin-bottom: 1rem;
+    }
 
-/* FORM SECTION */
-.form-section{display:none;text-align:left;}
-.form-section.active{display:block;}
-.form-section h3{text-align:center;margin-bottom:18px;}
+    .left-side p {
+      font-size: 1.05rem;
+      opacity: 0.92;
+      line-height: 1.7;
+      max-width: 420px;
+      margin: 0 auto;
+    }
 
-/* INPUT */
-.input-box{margin-bottom:16px;position:relative;}
-.input-box input{
-  width:100%;padding:13px 14px;border-radius:12px;
-  background:rgba(255,255,255,0.25);border:2px solid rgba(255,255,255,0.3);
-  color:#fff;font-size:15px;outline:none;transition:.3s;font-weight:500;
-}
-.input-box input::placeholder{color:#f4f4f4;opacity:0.8;}
-.input-box input:focus{border-color:rgba(255,255,255,0.6);background:rgba(255,255,255,0.35);box-shadow:0 0 8px rgba(255,255,255,0.2);}
+    .right-side {
+      flex: 1;
+      padding: 70px 50px;
+      background: white;
+    }
 
-/* SHOW PASSWORD */
-.show-pass{
-  position:absolute;right:12px;top:12px;font-size:13px;
-  cursor:pointer;color:#fff;opacity:0.8;
-}
-/* LOGIN BUTTON */
-.btn{
-  width:100%;padding:14px;border-radius:12px;margin-top:10px;
-  background:#fff;color:#2a9d66;font-weight:700;border:none;
-  cursor:pointer;font-size:16px;transition:.3s;box-shadow:0 8px 20px rgba(0,0,0,0.15);
-}
-.btn:hover{background:#ffe6d9;transform:translateY(-2px);box-shadow:0 10px 26px rgba(0,0,0,0.2);}
-.btn:active{transform:translateY(0);}
-.btn:hover{background:#ffe6d9;}
+    .logo {
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: var(--navy);
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
 
-.loading{
-  display:none;
-  color:#fff;
-  margin-top:10px;
-  text-align:center;
-  font-size:14px;
-}
-</style>
+    .tab-bar {
+      display: flex;
+      border-bottom: 2px solid #e0e0e0;
+      margin-bottom: 2rem;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 16px;
+      text-align: center;
+      font-weight: 500;
+      color: #666;
+      cursor: pointer;
+      position: relative;
+      transition: color 0.3s;
+    }
+
+    .tab.active {
+      color: var(--teal);
+      font-weight: 600;
+    }
+
+    .tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--teal);
+    }
+
+    .form-section {
+      display: none;
+    }
+
+    .form-section.active {
+      display: block;
+    }
+
+    .form-group {
+      margin-bottom: 1.6rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.6rem;
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: #444;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.25s;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--teal);
+      box-shadow: 0 0 0 3px rgba(0,128,128,0.12);
+    }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-top: 0.8rem;
+    }
+
+    .btn-primary {
+      background: var(--teal);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #006666;
+    }
+
+    .btn-secondary {
+      background: var(--light-teal);
+      color: var(--teal);
+      border: 1px solid var(--teal);
+    }
+
+    .btn-secondary:hover {
+      background: #d0e8e8;
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .demo-info {
+      margin-top: 1.5rem;
+      font-size: 0.85rem;
+      color: #666;
+      text-align: center;
+    }
+
+    .otp-container {
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #eee;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .login-wrapper { flex-direction: column; }
+      .left-side, .right-side { padding: 50px 30px; }
+      .left-side { border-radius: 0; }
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="login-box">
-
-  <div style="text-align:center;margin-bottom:20px;">
-    <img src="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=400&h=300&fit=crop" alt="PlumbLink" style="width:100%;max-width:300px;border-radius:12px;box-shadow:0 8px 20px rgba(0,0,0,0.25);">
-  </div>
-  <div class="logo">PlumbLink Login</div>
-
-  <!-- ROLE TABS -->
-  <div class="role-tabs">
-    <div class="role-btn active" onclick="switchRole('admin',this)">Admin</div>
-    <div class="role-btn" onclick="switchRole('customer',this)">Customer</div>
-    <div class="role-btn" onclick="switchRole('plumber',this)">Plumber</div>
-  </div>
-
-  <!-- ADMIN LOGIN -->
-  <div id="admin" class="form-section active">
-    <h3>Admin Login</h3>
-    <div style="background:rgba(255,255,255,0.08);padding:10px;border-radius:8px;margin-bottom:16px;font-size:13px;color:#f4f4f4">
-      <strong>Demo:</strong> admin123@gmail.com / admin123
+  <div class="login-wrapper">
+    <div class="left-side">
+      <h2>Welcome to PlumbLink</h2>
+      <p>Professional access for Admins, Customers & Plumbers — secure, fast, and role-based.</p>
     </div>
 
-    <div class="input-box">
-      <input id="admin-email" placeholder="Admin Email">
-    </div>
+    <div class="right-side">
+      <div class="logo">PlumbLink</div>
 
-    <div class="input-box">
-      <input id="admin-pass" type="password" placeholder="Password">
-      <span class="show-pass" onclick="togglePass('admin-pass',this)">Show</span>
-    </div>
-
-    <button class="btn" onclick="login('admin')">Login</button>
-    <div class="loading" id="load-admin">Logging in...</div>
-  </div>
-
-  <!-- CUSTOMER LOGIN -->
-  <div id="customer" class="form-section">
-    <h3>Customer Login (Mobile + OTP)</h3>
-    <div style="background:rgba(255,255,255,0.08);padding:10px;border-radius:8px;margin-bottom:16px;font-size:13px;color:#f4f4f4">
-      <strong>Demo:</strong> Use any mobile, click <em>Request OTP</em>, then copy OTP from server logs
-    </div>
-
-    <div class="input-box">
-      <input id="cus-mobile" placeholder="Mobile number (e.g. +911234567890)">
-    </div>
-
-    <div style="display:flex;gap:10px;margin-bottom:12px;">
-      <button class="btn" style="flex:1;" onclick="requestOtp()">Request OTP</button>
-      <button class="btn" style="flex:1;background:#fff;color:#2a9d66;" onclick="showOtpField()">Enter OTP</button>
-    </div>
-
-    <div id="otpRow" style="display:none;">
-      <div class="input-box">
-        <input id="cus-otp" placeholder="Enter OTP">
+      <div class="tab-bar">
+        <div class="tab active" data-tab="admin" onclick="switchTab('admin', this)">Admin</div>
+        <div class="tab" data-tab="customer" onclick="switchTab('customer', this)">Customer</div>
+        <div class="tab" data-tab="plumber" onclick="switchTab('plumber', this)">Plumber</div>
       </div>
-      <div class="input-box">
-        <input id="cus-name" placeholder="Your name (optional)">
+
+      <!-- Admin Login -->
+      <div id="admin" class="form-section active">
+        <div class="form-group">
+          <label>Email Address</label>
+          <input id="admin-email" type="email" placeholder="admin@plumblink.com" required />
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input id="admin-password" type="password" placeholder="••••••••" required />
+        </div>
+        <button class="btn btn-primary" onclick="login('admin')">Login as Admin</button>
+        <div class="demo-info">Demo: admin@plumblink.com / admin123</div>
       </div>
-      <button class="btn" onclick="verifyOtp()">Verify OTP & Login</button>
-      <div class="loading" id="load-customer">Verifying...</div>
+
+      <!-- Customer Login -->
+      <div id="customer" class="form-section">
+        <form id="customerForm">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input id="cust-name" type="text" placeholder="Your full name" required />
+          </div>
+          <div class="form-group">
+            <label>Mobile Number</label>
+            <input id="cust-phone" type="tel" placeholder="+91 98765 43210" required />
+          </div>
+
+          <div class="otp-container hidden" id="otpArea">
+            <div class="form-group">
+              <label>OTP</label>
+              <input id="cust-otp" type="text" placeholder="Enter 6-digit OTP" maxlength="6" />
+            </div>
+            <button type="submit" class="btn btn-primary">Login as Customer</button>
+          </div>
+
+          <button type="button" class="btn btn-secondary" id="sendOtp">Send OTP</button>
+        </form>
+        <div class="demo-info">Demo: any number → OTP is always <strong>123456</strong></div>
+      </div>
+
+      <!-- Plumber Login -->
+      <div id="plumber" class="form-section">
+        <div class="form-group">
+          <label>Email Address</label>
+          <input id="plumber-email" type="email" placeholder="plumber@plumblink.com" required />
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input id="plumber-password" type="password" placeholder="••••••••" required />
+        </div>
+        <button class="btn btn-primary" onclick="login('plumber')">Login as Plumber</button>
+        <div class="demo-info">Demo: plumber@plumblink.com / plumb123</div>
+      </div>
     </div>
   </div>
 
-  <!-- PLUMBER LOGIN -->
-  <div id="plumber" class="form-section">
-    <h3>Plumber Login</h3>
-    <div style="background:rgba(255,255,255,0.08);padding:10px;border-radius:8px;margin-bottom:16px;font-size:13px;color:#f4f4f4">
-      <strong>Demo:</strong> plumber123@gmail.com / plumb123
-    </div>
+  <script>
+    // Switch tabs
+    function switchTab(tabId, el) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
 
-    <div class="input-box">
-      <input id="plmb-email" placeholder="Plumber Email">
-    </div>
-
-    <div class="input-box">
-      <input id="plmb-pass" type="password" placeholder="Password">
-      <span class="show-pass" onclick="togglePass('plmb-pass',this)">Show</span>
-    </div>
-
-    <button class="btn" onclick="login('plumber')">Login</button>
-    <div class="loading" id="load-plumber">Logging in...</div>
-  </div>
-
-</div>
-
-<script>
-/* SWITCH ROLE */
-function switchRole(role, btn){
-  document.querySelectorAll('.form-section').forEach(f=>f.classList.remove('active'));
-  document.getElementById(role).classList.add('active');
-
-  document.querySelectorAll('.role-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-}
-
-/* SHOW PASSWORD */
-function togglePass(id, el){
-  const field = document.getElementById(id);
-  field.type = field.type === "password" ? "text" : "password";
-  el.textContent = field.type === "text" ? "Hide" : "Show";
-}
-
-const API_BASE_URL = "http://localhost:5000";
-
-/* LOGIN / OTP SCRIPTS */
-async function login(role){
-  // Admin & plumber use email/password as before
-  let email, pass, loader;
-
-  if(role === "admin"){
-    email = document.getElementById("admin-email").value.trim();
-    pass = document.getElementById("admin-pass").value.trim();
-    loader = document.getElementById("load-admin");
-  }
-  if(role === "plumber"){
-    email = document.getElementById("plmb-email").value.trim();
-    pass = document.getElementById("plmb-pass").value.trim();
-    loader = document.getElementById("load-plumber");
-  }
-
-  if(!email || !pass){
-    alert("Enter email & password");
-    return;
-  }
-
-  loader.style.display = "block";
-
-  try {
-    const res = await fetch(API_BASE_URL + "/auth/login", {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({ email: email, password: pass })
-    });
-
-    const data = await res.json();
-    loader.style.display = "none";
-
-    if(data.token){
-      saveSession(data.token, data.user);
-    } else {
-      alert(data.error || "Invalid credentials");
+      document.querySelectorAll('.form-section').forEach(s => s.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
     }
 
-  } catch(err){
-    loader.style.display = "none";
-    console.error("Login error:", err);
-    alert("Backend not reachable: " + err.message);
-  }
-}
+    // Login function with correct redirects
+    function login(role) {
+      let email, password;
 
-function showOtpField(){
-  document.getElementById('otpRow').style.display = 'block';
-}
+      if (role === 'admin') {
+        email = document.getElementById('admin-email').value.trim();
+        password = document.getElementById('admin-password').value;
+      } else if (role === 'plumber') {
+        email = document.getElementById('plumber-email').value.trim();
+        password = document.getElementById('plumber-password').value;
+      }
 
-async function requestOtp(){
-  const mobile = document.getElementById('cus-mobile').value.trim();
-  const name = document.getElementById('cus-name') ? document.getElementById('cus-name').value.trim() : '';
-  if(!mobile){ alert('Enter mobile number'); return; }
+      if (!email || !password) {
+        alert("Please fill in all fields");
+        return;
+      }
 
-  const btnLoader = document.getElementById('load-customer');
-  btnLoader.style.display = 'block';
+      // Demo login (instant, no server needed)
+      if (role === 'admin' && email === 'admin@plumblink.com' && password === 'admin123') {
+        localStorage.setItem('user_role', 'admin');
+        window.location.href = 'dashboard-admin.html';  // ← Correct admin page
+        return;
+      }
 
-  try{
-    const res = await fetch(API_BASE_URL + '/auth/request-otp', {
-      method: 'POST', headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ mobile: mobile, name: name })
-    });
-    const data = await res.json();
-    btnLoader.style.display = 'none';
-    if(res.ok){
-      alert('OTP generated (check server logs). Click Enter OTP to continue.');
-      showOtpField();
-    } else {
-      alert(data.error || 'Failed to request OTP');
+      if (role === 'plumber' && email === 'plumber@plumblink.com' && password === 'plumb123') {
+        localStorage.setItem('user_role', 'plumber');
+        localStorage.setItem('plumber_id', '42');
+        window.location.href = 'plumberapp.html';
+        return;
+      }
+
+      alert("Invalid credentials for demo. Use the demo emails/passwords above.");
     }
-  } catch(e){ btnLoader.style.display='none'; alert('Backend not reachable'); }
-}
 
-async function verifyOtp(){
-  const mobile = document.getElementById('cus-mobile').value.trim();
-  const otp = document.getElementById('cus-otp').value.trim();
-  const name = document.getElementById('cus-name') ? document.getElementById('cus-name').value.trim() : '';
-  const loader = document.getElementById('load-customer');
-  if(!mobile || !otp){ alert('Enter mobile and OTP'); return; }
-  loader.style.display = 'block';
+    // Customer OTP Login (Demo)
+    const sendOtpBtn = document.getElementById('sendOtp');
+    const customerForm = document.getElementById('customerForm');
+    const otpArea = document.getElementById('otpArea');
 
-  try{
-    const res = await fetch(API_BASE_URL + '/auth/verify-otp', {
-      method: 'POST', headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ mobile: mobile, otp: otp, name: name })
+    sendOtpBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('cust-name').value.trim();
+      const phone = document.getElementById('cust-phone').value.trim();
+      if (!name || !phone) {
+        alert("Please enter name and phone");
+        return;
+      }
+      otpArea.classList.remove('hidden');
+      alert('Demo OTP sent: 123456');
     });
-    const data = await res.json();
-    loader.style.display = 'none';
-    if(res.ok && data.token){
-      saveSession(data.token, data.user);
-    } else {
-      alert(data.error || 'OTP verification failed');
-    }
-  } catch(e){ loader.style.display='none'; alert('Backend not reachable'); }
-}
 
-function saveSession(token, user){
-  localStorage.setItem('token', token);
-  localStorage.setItem('user', JSON.stringify(user));
-
-  // Redirect based on role
-  if(user.role === 'admin') window.location.href = 'dashboard-admin.html';
-  else if(user.role === 'plumber') window.location.href = 'dashboard plumber.html';
-  else window.location.href = 'dashboard.html';
-}
-</script>
+    customerForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const otp = document.getElementById('cust-otp').value;
+      if (otp === '123456') {
+        localStorage.setItem('user_role', 'customer');
+        localStorage.setItem('customer_name', document.getElementById('cust-name').value);
+        window.location.href = 'dashboard.html';  // Customer dashboard
+      } else {
+        alert('Invalid OTP. Use 123456 for demo.');
+      }
+    });
+  </script>
 </body>
 </html>
