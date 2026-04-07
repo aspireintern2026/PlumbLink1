@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": "../.."
+		},
+		{
+			"path": "../../../FRONTEND"
+		},
+		{
+			"path": "../../../images"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "FRONTEND",
+		"powershell.cwd": "BACKEND"
+	}
+}

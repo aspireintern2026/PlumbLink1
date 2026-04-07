@@ -1,0 +1,10 @@
+BACKEND/.env
+BACKEND/.venv/
+BACKEND/venv/
+BACKEND/.vscode/
+BACKEND/.pytest_cache/
+BACKEND/.mypy_cache/
+BACKEND/.git.backup/
+BACKEND/**/__pycache__/
+BACKEND/**/*.py[cod]
+BACKEND/instance/*.db

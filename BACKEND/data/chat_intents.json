@@ -1,0 +1,39 @@
+{
+  "intents": [
+    {
+      "name": "greeting",
+      "examples": ["hi", "hello", "hey", "good morning", "good evening"],
+      "responses": ["Hi — how can I help with your plumbing today?", "Hello! Tell me what's wrong and I'll help you book a plumber."]
+    },
+    {
+      "name": "book_plumber",
+      "examples": ["book a plumber", "i need a plumber", "can you send a plumber", "book appointment", "i need someone for a leak"],
+      "responses": ["I can help book a plumber. What's the issue and your preferred time?", "Sure — please tell me the problem (e.g. leak, clogged drain) and when you'd like the plumber to arrive."]
+    },
+    {
+      "name": "inquire_price",
+      "examples": ["how much", "price", "cost", "estimate"],
+      "responses": ["Prices vary by job. For a quick estimate, tell me the issue and location, and I'll provide a rough range.", "Typical small repairs start around ₹500–₹1500; complex jobs cost more. Tell me the issue for a better estimate."]
+    },
+    {
+      "name": "cancel_booking",
+      "examples": ["cancel my booking", "i want to cancel", "cancel appointment"],
+      "responses": ["Please provide your booking ID and I'll try to cancel it.", "I can request a cancellation — share the order/booking ID and I'll handle it."]
+    },
+    {
+      "name": "operating_hours",
+      "examples": ["are you open", "hours", "working time", "24/7"],
+      "responses": ["We operate 24/7 for emergencies. Routine appointments are typically scheduled between 8:00–20:00.", "Emergency support is available all day; standard service hours are 8 AM to 8 PM."]
+    },
+    {
+      "name": "thanks",
+      "examples": ["thanks", "thank you", "thx"],
+      "responses": ["You're welcome — glad to help!", "Anytime! Let me know if you need anything else."]
+    },
+    {
+      "name": "fallback",
+      "examples": [],
+      "responses": ["Sorry, I didn't get that. Could you rephrase?", "I can help with bookings, pricing, and emergency info — what would you like?"]
+    }
+  ]
+}
